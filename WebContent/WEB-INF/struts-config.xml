@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts 
+Configuration 1.3//EN" "http://struts.apache.org/dtds/struts-config_1_3.dtd">
+<struts-config>
+	<form-beans>
+
+
+		<!-- BAT DAU FORM CHO TRANG ADMIN -->
+		<!-- Dang nhap vao trang admin -->
+		<form-bean name="loginForm" type="form.admin.LoginForm" />
+
+		<!-- Quản lý tài khoản -->
+		<form-bean name="accountListForm" type="form.admin.account.AccountListForm" />
+		<form-bean name="accountForm" type="form.admin.account.AccountForm" />
+		<form-bean name="deleteForm" type="form.admin.account.DeleteForm" />
+		<!-- KET THUC FORM CHO TRANG ADMIN -->
+
+
+		<!-- BAT DAU FORM CHO TRANG HOME -->
+		<!-- Trang chu, xem bai viet, tim kiem -->
+		<form-bean name="homeViewForm" type="form.home.HomeViewForm" />
+		<form-bean name="viewThreadForm" type="form.home.ViewThreadForm" />
+		<form-bean name="searchThreadForm" type="form.home.SearchThreadForm" />
+		<!-- Dang nhap, dang ky -->
+		<!-- KET THUC FORM CHO TRANG HOME -->
+
+	</form-beans>
+	<action-mappings>
+
+		<!-- BAT DAU ACTION CHO TRANG ADMIN -->
+		<!-- KET THUC QUAN LY TAI KHOAN -->
+		<!-- Dang nhap -->
+		<action input="/admin/login.jsp" name="loginForm" path="/admin/login-action"
+			scope="request" type="action.admin.LoginAction">
+			<forward name="success" path="/admin/account-action.do"
+				redirect="true" />
+			<forward name="failed" path="/admin/login.jsp" />
+		</action>
+
+		<!-- Liet ke danh sach account -->
+		<action input="/admin/login.jsp" name="accountListForm" path="/admin/account-action"
+			scope="request" type="action.admin.account.AccountListAction">
+			<forward name="listAccounts" path="/admin/account.jsp" />
+		</action>
+
+		<!-- Xoa account -->
+		<action input="/admin/login.jsp" name="deleteForm"
+			path="/admin/delete-account-action" scope="request"
+			type="action.admin.account.DeleteAccountAction">
+			<forward name="deletedAccount" path="/admin/account-action.do"
+				redirect="true" />
+		</action>
+
+		<!-- Them moi account -->
+		<action input="/admin/login.jsp" name="accountForm"
+			path="/admin/add-account-action" scope="request"
+			type="action.admin.account.AddAccountAction" validate="true">
+			<forward name="addAccount" path="/admin/addaccount.jsp" />
+			<forward name="addedAccount" path="/admin/account-action.do"
+				redirect="true" />
+		</action>
+
+		<!-- Sua account -->
+		<action input="/admin/login.jsp" name="accountForm"
+			path="/admin/edit-account-action" scope="request"
+			type="action.admin.account.EditAccountAction" validate="true">
+			<forward name="editAccount" path="/admin/editaccount.jsp" />
+			<forward name="editedAccount" path="/admin/account-action.do"
+				redirect="true" />
+		</action>
+		<!-- KET THUC QUAN LY TAI KHOAN -->
+		<!-- KET THUC ACTION CHO TRANG ADMIN -->
+
+
+		<!-- BAT DAU ACTION CHO TRANG CHU -->
+		<!-- Xem trang chu -->
+		<action input="/index.jsp" name="homeViewForm" path="/home"
+			scope="request" type="action.home.ShowHomeAction" validate="true">
+			<forward name="home" path="/home.jsp" />
+		</action>
+
+		<!-- Xem bai viet -->
+		<action input="/index.jsp" name="viewThreadForm" path="/view-thread-action"
+			scope="request" type="action.home.ViewThreadAction" validate="true">
+			<forward name="viewThread" path="/viewthread.jsp" />
+		</action>
+
+		<!-- Tim kiem -->
+		<action input="/search.jsp" name="searchThreadForm" path="/search-thread"
+			scope="request" type="action.home.SearchThreadAction">
+		</action>
+		<!-- KET THUC ACTION CHO TRANG CHU -->
+
+
+	</action-mappings>
+	<message-resources parameter="static.ApplicationResources" />
+
+</struts-config>
