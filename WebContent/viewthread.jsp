@@ -88,7 +88,7 @@
 	<br>
 	<br>
 	<!--Navbar-->
-	<div class="container container-white" >
+	<div class="container container-white">
 		<bean:define id="thread" name="viewThreadForm" property="thread"></bean:define>
 
 		<h2 class="text-center">
@@ -147,7 +147,34 @@
 								</div>
 							</logic:iterate>
 						</div>
-				<!-- 		<div class="row">
+						<br><br>
+						
+				<div class="breadcrumb flat" style="width: 100%; margin-top: 10px;">
+					<a style="border: 1px solid #ddd;"><i class="fa fa-home"
+						aria-hidden="true" style="font-size: 35px;"></i></a> <a class="active"
+						href="#"> Bình luận</a>
+				</div>
+		<div class="modal-body">
+
+			<div class="md-form">
+				  <input type="text" id="form2"
+					class="form-control"> <label for="form2">Bình luận</label>
+			</div>
+
+			<div class="md-form">
+				<div class="star-rating" itemprop="aggregateRating" itemscope=""
+					itemtype="http://schema.org/AggregateRating">
+					<span class="fill"></span><span class="fill"></span><span
+						class="fill"></span><span class="fill"></span><span class="half"></span>(
+					<strong itemprop="reviewCount">5</strong> )
+				</div>
+				<label for="form2">Điểm</label>
+			</div>
+			<div class="text-center">
+				<button class="btn btn-primary btn-lg green">Đăng bình luận</button>
+			</div>
+		</div>
+						<!-- 		<div class="row">
 							<div id="maps" class="z-depth-1" style="height: 400px;"></div>
 							<div id="map2s" class="z-depth-1" style="height: 400px;"></div>
 						</div> -->
@@ -342,7 +369,7 @@
 		<br>
 	</div>
 
- 	<jsp:include page="footer.jsp" />
+	<jsp:include page="footer.jsp" />
 	<script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
 	<script type="text/javascript" src="js/tether.min.js"></script>
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
