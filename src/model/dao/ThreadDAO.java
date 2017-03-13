@@ -312,6 +312,69 @@ public class ThreadDAO {
 		return temp;
 	}
 
+	public ArrayList<Thread> getRelateThreadsByThread(Thread thread) {
+
+		// Mở kết nối
+		connect();
+
+		// Lưu kết quả truy vấn
+		ResultSet rs = null;
+
+		// Lưu thông tin account
+		ArrayList<Thread> temp = new ArrayList<Thread>();
+		try {
+			int categoryId = 0;
+			// Câu lệnh truy vấn
+			String sql = "select categoryId from Thread where threadId = ?";
+			PreparedStatement pr = connection.prepareStatement(sql); 
+
+			// Truyền các biến vào câu lệnh để thực thi
+			pr.setInt(1, thread.getThreadId()); 
+			rs = pr.executeQuery();
+
+			if (rs.next()) {
+				categoryId = rs.getInt("categoryId");
+			}
+			
+			
+			DecimalFormat numberFormat = new DecimalFormat("#.##");
+			sql = "select * from  Thread where categoryId = ?  order by threadId OFFSET 0 ROWS FETCH NEXT 6 ROWS ONLY";
+
+			pr = connection.prepareStatement(sql); 
+
+			// Truyền các biến vào câu lệnh để thực thi
+			pr.setInt(1, categoryId); 
+			rs = pr.executeQuery();
+
+			while (rs.next()) {
+				Thread threadTemp = new Thread(rs.getInt("threadId"), rs.getInt("categoryId"), rs.getInt("accountId"),
+						rs.getString("name"), rs.getString("address"), rs.getDouble("latitude"),
+						rs.getDouble("longitude"), rs.getString("content"), rs.getLong("price"),
+						rs.getInt("electricFee"), rs.getInt("waterFee"), rs.getInt("otherFee"), rs.getInt("area"),
+						rs.getBoolean("wifi"), rs.getBoolean("waterHeater"), rs.getBoolean("conditioner"),
+						rs.getBoolean("fridge"), rs.getBoolean("attic"), rs.getBoolean("camera"),
+						rs.getString("waterSource"), rs.getString("direction"), rs.getInt("numOfToilets"),
+						rs.getInt("numOfPeople"), rs.getInt("object"), rs.getInt("villageId"), rs.getString("created"),
+						rs.getInt("viewed"), rs.getInt("status"), rs.getString("imageThumb"));
+				if (threadTemp.getPrice() > 1000000) {
+					threadTemp.setPriceString(
+							numberFormat.format(((double) (threadTemp.getPrice() / (1.0 * 1000000)))) + " triệu ");
+				} else if (threadTemp.getPrice() > 1000) {
+					threadTemp.setPriceString((threadTemp.getPrice() / 1000) + " ngàn ");
+				}
+				temp.add(threadTemp);
+			}
+
+			// Đóng kết nối
+			pr.close();
+			connection.close();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return temp;
+	}
+
 	public ArrayList<Thread> searchBy(Thread thread) {
 
 		// Mở kết nối

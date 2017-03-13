@@ -1,4 +1,4 @@
-
+Ôªø
 
 create database QLPT1
 
@@ -7,19 +7,19 @@ use QLPT1
 go
 
 
---T?o b?ng t?nh v‡ thÍm d? li?u m?u
+--Tao bang tanh v√† them
 create table Province
 (
 	provinceId smallint identity(1,1),
 	name nvarchar(50),
 	constraint pk_Province primary key (provinceId)
 )
---DBCC CHECKIDENT (Province, RESEED, 0);  --–˝a ch? s? provinceId v? 1
-INSERT INTO Province(name) VALUES(N'Qu?ng Ng?i');
-INSERT INTO Province(name) VALUES(N'–‡ N?ng');
+--DBCC CHECKIDENT (Province, RESEED, 0);  --Reset id ve 1
+INSERT INTO Province(name) VALUES(N'Qu·∫£ng Ng√£i');
+INSERT INTO Province(name) VALUES(N'√ê√† N·∫µng');
 
 
---T?o b?ng huy?n v‡ thÍm d? li?u m?u
+--Tao bang huyen
 create table District
 (
 	districtId smallint identity(1,1),
@@ -30,12 +30,12 @@ create table District
 	REFERENCES Province(provinceId)
 )
 --DBCC CHECKIDENT (District, RESEED, 0); 
-INSERT INTO District(provinceId, name) VALUES(1, N'Sın T?nh');
-INSERT INTO District(provinceId, name) VALUES(1, N'Tr‡ B?ng');
-INSERT INTO District(provinceId, name) VALUES(2, N'Ng? H‡nh Sın');
+INSERT INTO District(provinceId, name) VALUES(1, N'S∆°n T·ªãnh');
+INSERT INTO District(provinceId, name) VALUES(1, N'Tr√† B·ªìng');
+INSERT INTO District(provinceId, name) VALUES(2, N'Ng≈© H√†nh S∆°n');
 
 
---T?o b?ng x? v‡ thÍm d? li?u m?u
+--Tao bang xa
 create table Village
 (
 	villageId int identity(1,1),
@@ -46,29 +46,29 @@ create table Village
 	REFERENCES District(districtId)
 )
 --DBCC CHECKIDENT (Village, RESEED, 0); 
-INSERT INTO Village(districtId, name) VALUES(1, N'T?nh B?nh');
-INSERT INTO Village(districtId, name) VALUES(1, N'T?nh Sın');
-INSERT INTO Village(districtId, name) VALUES(1, N'T?nh Tr‡');
-INSERT INTO Village(districtId, name) VALUES(1, N'T?nh Sın');
-INSERT INTO Village(districtId, name) VALUES(1, N'T?nh B?c');
-INSERT INTO Village(districtId, name) VALUES(1, N'T?nh Thi?n');
-INSERT INTO Village(districtId, name) VALUES(1, N'T?nh H?a');
-INSERT INTO Village(districtId, name) VALUES(2, N'Tr‡ B?nh');
-INSERT INTO Village(districtId, name) VALUES(2, N'Tr‡ Xu‚n');
-INSERT INTO Village(districtId, name) VALUES(2, N'Tr‡ H?i');
-INSERT INTO Village(districtId, name) VALUES(2, N'Tr‡ –˙');
-INSERT INTO Village(districtId, name) VALUES(2, N'Tr‡ Cao');
-INSERT INTO Village(districtId, name) VALUES(2, N'Tr‡ H?i');
-INSERT INTO Village(districtId, name) VALUES(3, N'Ho‡ H?i');
-INSERT INTO Village(districtId, name) VALUES(3, N'Ho‡ Vang');
-INSERT INTO Village(districtId, name) VALUES(3, N'Ho‡ Tan');
-INSERT INTO Village(districtId, name) VALUES(3, N'Ho‡ H?p');
-INSERT INTO Village(districtId, name) VALUES(3, N'Ho‡ Thu?n');
-INSERT INTO Village(districtId, name) VALUES(3, N'Ho‡ B?nh');
-INSERT INTO Village(districtId, name) VALUES(3, N'Ho‡ Xu‚n');
+INSERT INTO Village(districtId, name) VALUES(1, N'T·ªãnh B√¨nh');
+INSERT INTO Village(districtId, name) VALUES(1, N'T·ªãnh S∆°n');
+INSERT INTO Village(districtId, name) VALUES(1, N'T·ªãnh Tr√†');
+INSERT INTO Village(districtId, name) VALUES(1, N'T·ªãnh S∆°n');
+INSERT INTO Village(districtId, name) VALUES(1, N'T·ªãnh B·∫Øc');
+INSERT INTO Village(districtId, name) VALUES(1, N'T·ªãnh Thi·ªán');
+INSERT INTO Village(districtId, name) VALUES(1, N'T·ªãnh H√≤a');
+INSERT INTO Village(districtId, name) VALUES(2, N'Tr√† B√¨nh');
+INSERT INTO Village(districtId, name) VALUES(2, N'Tr√† Xu√¢n');
+INSERT INTO Village(districtId, name) VALUES(2, N'Tr√† H·ª£i');
+INSERT INTO Village(districtId, name) VALUES(2, N'Tr√† √ê√∫');
+INSERT INTO Village(districtId, name) VALUES(2, N'Tr√† Cao');
+INSERT INTO Village(districtId, name) VALUES(2, N'Tr√† H·ª£i');
+INSERT INTO Village(districtId, name) VALUES(3, N'Ho√† H·∫£i');
+INSERT INTO Village(districtId, name) VALUES(3, N'Ho√† Vang');
+INSERT INTO Village(districtId, name) VALUES(3, N'Ho√† Tan');
+INSERT INTO Village(districtId, name) VALUES(3, N'Ho√† H·ª£p');
+INSERT INTO Village(districtId, name) VALUES(3, N'Ho√† Thu·∫≠n');
+INSERT INTO Village(districtId, name) VALUES(3, N'Ho√† B√¨nh');
+INSERT INTO Village(districtId, name) VALUES(3, N'Ho√† Xu√¢n');
 
 
---T?o b?ng lo?i tin v‡ thÍm d? li?u m?u
+--Tao bang loai tin
 Create table Category
 (
 	categoryId smallint identity(1,1) ,
@@ -76,14 +76,14 @@ Create table Category
 	constraint pk_Category primary key (categoryId)
 )
 --DBCC CHECKIDENT (Category, RESEED, 0); 
-INSERT INTO Category(name) VALUES(N'Cho thuÍ ph?ng tr?');
-INSERT INTO Category(name) VALUES(N'Nh‡ cho thuÍ');
-INSERT INTO Category(name) VALUES(N'Cho thuÍ c„n h?');
-INSERT INTO Category(name) VALUES(N'Cho thuÍ m?t b?ng');
-INSERT INTO Category(name) VALUES(N'T?m ng˝?i ? ghÈp');
+INSERT INTO Category(name) VALUES(N'Cho thu√™ ph√≤ng tr·ªç');
+INSERT INTO Category(name) VALUES(N'Nh√† cho thu√™');
+INSERT INTO Category(name) VALUES(N'Cho thu√™ cƒÉn h·ªô');
+INSERT INTO Category(name) VALUES(N'Cho thu√™ m·∫∑t b·∫±ng');
+INSERT INTO Category(name) VALUES(N'T√¨m ng∆∞·ªùi ·ªü gh√©p');
 
 
---T?o b?ng account v‡ thÍm d? li?u m?u
+--Tao bang account
 Create table Account
 (
 	accountId int identity(1,1),
@@ -97,7 +97,7 @@ Create table Account
 	constraint pk_Account primary key (accountId),
 	CONSTRAINT fk_Category_Account FOREIGN KEY (categoryId)
 	REFERENCES Category(categoryId),
-	CONSTRAINT uc_Account UNIQUE (email) --T?o unique email(r‡ng bu?c khÙng ˝?c tr˘ng d? li?u)
+	CONSTRAINT uc_Account UNIQUE (email) --Tao unique email(rang buoc email khong duoc trung du lieu)
 )
 --DBCC CHECKIDENT (Account, RESEED, 0); 
 --Insert admin account
@@ -152,24 +152,24 @@ create table Thread
 	address nvarchar(500),
 	latitude decimal(10,8),
 	longitude decimal(11,8),
-	content nvarchar(4000), -- mÙ t?
-	price money, --gi· ph?ng
-	electricFee money, -- phÌ i?n
-	waterFee money, -- phÌ n˝?c
-	otherFee money, -- ph? phÌ
-	area int, --di?n tÌch
+	content nvarchar(4000), -- mo ta
+	price money, --gia phong
+	electricFee money, -- phi dien
+	waterFee money, -- phi nuoc
+	otherFee money, -- phu phi
+	area int, --dien tich
 	wifi bit,
-	waterHeater bit, -- m·y n˝?c nÛng
-	conditioner bit, -- i?u h?a
-	fridge bit, --t? l?nh
-	attic bit, -- g·c x?p
+	waterHeater bit, -- may nuoc nong
+	conditioner bit, -- dieu hoa
+	fridge bit, --tu lanh
+	attic bit, -- gac xep
 	camera bit,
-	waterSource tinyint, -- ngu?n n˝?c
-	direction nvarchar(100), -- h˝?ng phongf
-	numOfToilets smallint, -- s? toilet
-	numOfPeople smallint, -- s? ng˝?i cho phÈp
-	object tinyint, -- ?i t˝?ng (nam, n?, ..)
-	villageId int, -- m? x?
+	waterSource tinyint, -- nguon nuoc
+	direction nvarchar(100), -- huong phong
+	numOfToilets smallint, -- so toilet
+	numOfPeople smallint, -- so nguoi cho phep
+	object tinyint, -- doi tuong
+	villageId int, -- ma xa
 	created date, 
 	viewed int,
 	status tinyint,

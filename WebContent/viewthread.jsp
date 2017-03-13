@@ -88,7 +88,7 @@
 	<br>
 	<br>
 	<!--Navbar-->
-	<div class="container container-white">
+	<div class="container container-white" >
 		<bean:define id="thread" name="viewThreadForm" property="thread"></bean:define>
 
 		<h2 class="text-center">
@@ -147,10 +147,10 @@
 								</div>
 							</logic:iterate>
 						</div>
-						<div class="row">
-							<div id="map" class="z-depth-1"></div>
-							<div id="map2" class="z-depth-1"></div>
-						</div>
+				<!-- 		<div class="row">
+							<div id="maps" class="z-depth-1" style="height: 400px;"></div>
+							<div id="map2s" class="z-depth-1" style="height: 400px;"></div>
+						</div> -->
 					</div>
 				</div>
 				<!--/.Rotating card-->
@@ -265,80 +265,84 @@
 				</div>
 			</div>
 		</div>
-		<br>	<!--Slide new start -->
-					<div class="breadcrumb flat">
-						<a style="border: 1px solid #ddd;"><i class="fa fa-home"
-							aria-hidden="true" style="font-size: 35px;"></i></a> <a
-							class="active" href="#"> Bài viết liên quan</a>
-					</div>
-					<div class="row">
-						<!--Carousel Wrapper-->
-						<logic:iterate name="viewThreadForm" property="relateThreads" id="threadRelated">
-							<!--Card-->
-							<div class=" col-lg-4 col-md-6">
-								<div class="card card-cascade hoverable"
-									style="margin-top: 40px;">
-									<!--Card image-->
-									<!--Card image-->
-									<div class="view overlay hm-white-slight"
-										style="margin-top: -15px; width: 90%; margin-left: 5%; min-height: 200px; max-height: 200px;">
-										<img class="img-fluid"
-											src="<bean:write name="threadRelated" property="imageThumb" />"
-											style="border-radius: 3px; width: auto; min-height: 200px;"
-											style=" ">
-										<div class="mask waves-effect waves-light"></div>
-										<div class="mask waves-effect waves-light"></div>
-									</div>
+		<!--Slide new start -->
+		<div class="breadcrumb flat">
+			<a style="border: 1px solid #ddd;"><i class="fa fa-home"
+				aria-hidden="true" style="font-size: 35px;"></i></a> <a class="active"
+				href="#"> Bài viết liên quan</a>
+		</div>
+		<div class="row">
+			<div class="row">
+				<!--Carousel Wrapper-->
+				<logic:iterate name="viewThreadForm" property="relateThreads"
+					id="threadRelated">
+					<!--Card-->
+					<div class=" col-lg-4 col-md-6">
+						<div class="card card-cascade hoverable" style="margin-top: 40px;">
+							<!--Card image-->
+							<!--Card image-->
+							<div class="view overlay hm-white-slight"
+								style="margin-top: -15px; width: 90%; margin-left: 5%; min-height: 200px; max-height: 200px;">
+								<img class="img-fluid"
+									src="<bean:write name="threadRelated" property="imageThumb" />"
+									style="border-radius: 3px; width: auto; min-height: 200px;"
+									style=" ">
+								<div class="mask waves-effect waves-light"></div>
+								<div class="mask waves-effect waves-light"></div>
+							</div>
 
-									<!--/Card image-->
-									<!--Card content-->
-									<div class="card-block">
-										<!--Social shares button-->
-										<a class="activator" style="margin-top: 10px;"><i
-											class="fa fa-eye" aria-hidden="true"></i> 1232</a>
-										<!--Title-->
-										<div class="star-rating" itemprop="aggregateRating"
-											itemscope="" itemtype="http://schema.org/AggregateRating">
-											<span class="fill"></span><span class="fill"></span><span
-												class="fill"></span><span class="fill"></span><span
-												class="half"></span>( <strong itemprop="reviewCount">5</strong>
-											)
-										</div>
-									</div>
-									<div class="card-block text-center" style="margin-top: -35px;">
-										<!--Title-->
-										<h4 class="card-title">
-											<strong>Giá: <bean:write name="threadRelated"
-													property="priceString" />
-											</strong>
-										</h4>
-										<h5>
-											Diện tích:
-											<bean:write name="threadRelated" property="area" />
-											m&#178;
-										</h5>
-										<p class="card-text truncase-detail">
-											<bean:write name="threadRelated" property="name" />
-										</p>
-										<bean:define id="threadId" name="threadRelated" property="threadId"></bean:define>
-										<html:link styleClass="btn btn-success btn-fb"
-											action="/view-thread-action?threadId=${threadId}">Xem</html:link>
-
-										<!--Facebook-->
-										<a type="button" class="btn-floating btn-small btn-fb"><i
-											class="fa fa-compress"></i></a>
-										<!--Twitter-->
-									</div>
-									<!--/.Card content-->
+							<!--/Card image-->
+							<!--Card content-->
+							<div class="card-block">
+								<!--Social shares button-->
+								<a class="activator" style="margin-top: 10px;"><i
+									class="fa fa-eye" aria-hidden="true"></i> 1232</a>
+								<!--Title-->
+								<div class="star-rating" itemprop="aggregateRating" itemscope=""
+									itemtype="http://schema.org/AggregateRating">
+									<span class="fill"></span><span class="fill"></span><span
+										class="fill"></span><span class="fill"></span><span
+										class="half"></span>( <strong itemprop="reviewCount">5</strong>
+									)
 								</div>
 							</div>
-							<!--/.Card-->
-						</logic:iterate>
+							<div class="card-block text-center" style="margin-top: -35px;">
+								<!--Title-->
+								<h4 class="card-title">
+									<strong>Giá: <bean:write name="threadRelated"
+											property="priceString" />
+									</strong>
+								</h4>
+								<h5>
+									Diện tích:
+									<bean:write name="threadRelated" property="area" />
+									m&#178;
+								</h5>
+								<p class="card-text truncase-detail">
+									<bean:write name="threadRelated" property="name" />
+								</p>
+								<bean:define id="threadId" name="threadRelated"
+									property="threadId"></bean:define>
+								<html:link styleClass="btn btn-success btn-fb"
+									action="/view-thread-action?threadId=${threadId}">Xem</html:link>
+
+								<!--Facebook-->
+								<a type="button" class="btn-floating btn-small btn-fb"><i
+									class="fa fa-compress"></i></a>
+								<!--Twitter-->
+							</div>
+							<!--/.Card content-->
+						</div>
 					</div>
+					<!--/.Card-->
+				</logic:iterate>
+			</div>
+
+		</div>
+		<br>
 	</div>
 
-				
-	<jsp:include page="footer.jsp" />
+ 	<jsp:include page="footer.jsp" />
 	<script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
 	<script type="text/javascript" src="js/tether.min.js"></script>
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
@@ -401,7 +405,6 @@
 	</script>
 	<script>
 		var panorama;
-		
  		function initPano() {
 			panorama = new google.maps.StreetViewPanorama(document
 					.getElementById('map'), {

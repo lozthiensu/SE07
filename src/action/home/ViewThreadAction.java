@@ -42,8 +42,9 @@ public class ViewThreadAction extends Action {
 		viewThreadForm.setCategories(categories);
 		viewThreadForm.setImages(imageBO.getListByThread(thread));
 		viewThreadForm.setImages360(imageBO.getList360ByThread(thread));
-		viewThreadForm.setRelateThreads(threadBO.getListByCategory(new Category(thread.getCategoryId(), null)));
+		viewThreadForm.setRelateThreads(threadBO.getRelateThreadsByThread(thread));
 		Log.in(imageBO.getListByThread(thread));
+		Log.in("Related " + viewThreadForm.getRelateThreads());
 		return mapping.findForward("viewThread");
 	}
 }

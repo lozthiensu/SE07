@@ -28,4 +28,9 @@ public class ThreadBO {
 	public Thread getById(Thread thread) {
 		return threadDAO.getById(thread);
 	}
+
+	public ArrayList<Thread> getRelateThreadsByThread(Thread thread) {
+		// TODO Auto-generated method stub
+		return threadDAO.getRelateThreadsByThread(thread);
+	}
 }

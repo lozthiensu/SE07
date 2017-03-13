@@ -85,12 +85,14 @@ body {
 	margin-top: 20px;
 	height: 400px;
 	width: 100%;
+    background-color: #ccc;
 }
 
 #map2 {
 	margin-top: 20px;
 	height: 400px;
 	width: 100%;
+    background-color: #ccc;
 }
 
 .owl-carousel .owl-item {
