@@ -11,7 +11,10 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import com.google.gson.Gson;
+
 import form.home.SearchThreadForm;
+import jdk.nashorn.internal.parser.JSONParser;
 import model.bean.Thread;
 import model.bo.ThreadBO;
 import statics.Log;
@@ -35,17 +38,11 @@ public class SearchThreadAction extends Action {
 		
 		ArrayList<Thread> threads = null;
 		threads = threadBO.searchBy(thread);
-		String result = "";
-		for (Thread threadTemp : threads) {
-			Log.in(threadTemp.toJSONString());
-			if(result != "")
-				result += ", ";
-			result += threadTemp.toJSONString();
-		}
-		result = "[" + result + "]";
-		out.println(result);
-		
-		
+
+		Gson gson = new Gson();
+		String json = gson.toJson(threads);
+
+		out.println(json);
 		out.flush();
 		return null;
 	}

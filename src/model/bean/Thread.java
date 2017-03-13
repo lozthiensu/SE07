@@ -30,6 +30,7 @@ public class Thread {
 	int viewed;
 	int status;
 	String imageThumb;
+	String priceString;
 
 	public Thread() {
 		super();
@@ -304,35 +305,12 @@ public class Thread {
 		this.imageThumb = imageThumb;
 	}
 
-	public String toJSONString() {
-		return "{\"threadId\":\"" + threadId
-				+ "\", \"categoryId\":\"" + categoryId
-				+ "\", \"accountId\":\"" + accountId
-				+ "\", \"name\":\"" + name 
-				+ "\", \"address\":\"" + address
-				+ "\", \"latitude\":\"" + latitude
-				+ "\", \"longitude\":\"" + longitude
-				+ "\", \"content\":\"" + content 
-				+ "\", \"price\":\"" + price
-				+ "\", \"electricFee\":\"" + electricFee
-				+ "\", \"waterFee\":\"" + waterFee 
-				+ "\", \"otherFee\":\"" + otherFee
-				+ "\", \"area\":\"" + area 
-				+ "\", \"wifi\":\"" + wifi 
-				+ "\", \"waterHeater\":\"" + waterHeater
-				+ "\", \"conditioner\":\"" + conditioner 
-				+ "\", \"fridge\":\"" + fridge 
-				+ "\", \"attic\":\"" + attic
-				+ "\", \"camera\":\"" + camera 
-				+ "\", \"waterSource\":\"" + waterSource
-				+ "\", \"direction\":\"" + direction
-				+ "\", \"numOfToilets\":\"" + numOfToilets
-				+ "\", \"numOfPeople\":\"" + numOfPeople 
-				+ "\", \"object\":\"" + object
-				+ "\", \"villageId\":\"" + villageId 
-				+ "\", \"created\":\"" + created 
-				+ "\", \"viewed\":\"" + viewed
-				+ "\", \"status\":\"" + status 
-				+ "\", \"imageThumb\":\"" + imageThumb + "\"}";
+	public String getPriceString() {
+		return priceString;
 	}
+
+	public void setPriceString(String priceString) {
+		this.priceString = priceString;
+	}
+
 }

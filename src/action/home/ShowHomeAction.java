@@ -33,13 +33,14 @@ public class ShowHomeAction extends Action {
 		//BO để tương tác vs csdl
 		CategoryBO categoryBO = new CategoryBO();
 		ThreadBO threadBO = new ThreadBO();
-		
+		Log.in("�dkjbasdkjasbdjkbasd");
 		ArrayList<Category> categories = new ArrayList<Category>();
 		ArrayList<CategoryWithThread> categoryWithThreads = new ArrayList<CategoryWithThread>();
 		categories = categoryBO.getList();
 		for (Category category : categories) {
 			ArrayList<Thread> threads = threadBO.getListByCategory(category);
-			categoryWithThreads.add(new CategoryWithThread(category.getCategoryId(), category.getName(), threads));
+			if(threads.size() > 0)
+				categoryWithThreads.add(new CategoryWithThread(category.getCategoryId(), category.getName(), threads));
 		}
 		homeViewForm.setCategories(categories);
 		

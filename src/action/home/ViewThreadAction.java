@@ -16,6 +16,7 @@ import model.bean.Category;
 import model.bean.CategoryWithThread;
 import model.bean.Thread;
 import model.bo.CategoryBO;
+import model.bo.ImageBO;
 import model.bo.ThreadBO;
 import statics.Log;
 
@@ -30,6 +31,7 @@ public class ViewThreadAction extends Action {
 		// BO để tương tác vs csdl
 		CategoryBO categoryBO = new CategoryBO();
 		ThreadBO threadBO = new ThreadBO();
+		ImageBO imageBO = new ImageBO();
  
 		Thread thread = new Thread();
 		thread.setThreadId(viewThreadForm.getThreadId());
@@ -38,7 +40,10 @@ public class ViewThreadAction extends Action {
 		ArrayList<Category> categories = new ArrayList<Category>();
 		categories = categoryBO.getList();
 		viewThreadForm.setCategories(categories);
-
+		viewThreadForm.setImages(imageBO.getListByThread(thread));
+		viewThreadForm.setImages360(imageBO.getList360ByThread(thread));
+		viewThreadForm.setRelateThreads(threadBO.getListByCategory(new Category(thread.getCategoryId(), null)));
+		Log.in(imageBO.getListByThread(thread));
 		return mapping.findForward("viewThread");
 	}
 }

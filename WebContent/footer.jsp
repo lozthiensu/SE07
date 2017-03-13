@@ -18,9 +18,6 @@
 			<div class="col-md-4 col-md-offset-1">
 				<h5 class="title">TÌM TRỌ ONLINE</h5>
 				<br> <img src="image/logo.png" height="35px;" /> <br> <br>
-				<ul>
-					<li><a href="#!">Phát triển bởi SE07</a></li>
-				</ul>
 			</div>
 			<!--/.First column-->
 
@@ -31,9 +28,6 @@
 				<h5 class="title">GIỚI THIỆU</h5>
 				<p>Chúng tôi luôn cố gắng đem lại những thông tin nhanh chóng và
 					chính xác cho mọi người.</p>
-				<p>Rất mong nhận được sự ủng hộ giúp đỡ của mọi người cùng nhau
-					xây dựng một kênh thông tin truyền thông về nhà trọ tốt nhất Việt
-					Nam.</p>
 			</div>
 			<!--/.Second column-->
 
@@ -45,7 +39,7 @@
 	<!--Copyright-->
 	<div class="footer-copyright">
 		<div class="container-fluid">
-			© 2017 Copyright: <a href="#"> SE07 </a>
+			© 2017 Copyright <a href="#"> SE07 </a>
 
 		</div>
 	</div>

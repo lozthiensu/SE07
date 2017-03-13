@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import model.bean.Category;
@@ -53,18 +54,26 @@ public class ThreadDAO {
 			rs = pr.executeQuery();
 
 			try {
+				DecimalFormat numberFormat = new DecimalFormat("#.##");
 				while (rs.next()) {
-					// Thêm vào arraylist temp
-					temp.add(new Thread(rs.getInt("threadId"), rs.getInt("categoryId"), rs.getInt("accountId"),
+					Thread threadTemp = new Thread(rs.getInt("threadId"), rs.getInt("categoryId"), rs.getInt("accountId"),
 							rs.getString("name"), rs.getString("address"), rs.getDouble("latitude"),
 							rs.getDouble("longitude"), rs.getString("content"), rs.getLong("price"),
 							rs.getInt("electricFee"), rs.getInt("waterFee"), rs.getInt("otherFee"), rs.getInt("area"),
 							rs.getBoolean("wifi"), rs.getBoolean("waterHeater"), rs.getBoolean("conditioner"),
 							rs.getBoolean("fridge"), rs.getBoolean("attic"), rs.getBoolean("camera"),
 							rs.getString("waterSource"), rs.getString("direction"), rs.getInt("numOfToilets"),
-							rs.getInt("numOfPeople"), rs.getInt("object"), rs.getInt("villageId"),
-							rs.getString("created"), rs.getInt("viewed"), rs.getInt("status"), rs.getString("imageThumb")));
+							rs.getInt("numOfPeople"), rs.getInt("object"), rs.getInt("villageId"), rs.getString("created"),
+							rs.getInt("viewed"), rs.getInt("status"), rs.getString("imageThumb"));
+					if (threadTemp.getPrice() > 1000000) {
+						threadTemp.setPriceString(
+								numberFormat.format(((double) (threadTemp.getPrice() / (1.0 * 1000000)))) + " triệu ");
+					} else if (threadTemp.getPrice() > 1000) {
+						threadTemp.setPriceString((threadTemp.getPrice() / 1000) + " ngàn ");
+					}
+					temp.add(threadTemp);
 				}
+
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -97,18 +106,26 @@ public class ThreadDAO {
 			rs = pr.executeQuery();
 
 			try {
+				DecimalFormat numberFormat = new DecimalFormat("#.##");
 				while (rs.next()) {
-					// Thêm vào arraylist temp
-					temp.add(new Thread(rs.getInt("threadId"), rs.getInt("categoryId"), rs.getInt("accountId"),
+					Thread threadTemp = new Thread(rs.getInt("threadId"), rs.getInt("categoryId"), rs.getInt("accountId"),
 							rs.getString("name"), rs.getString("address"), rs.getDouble("latitude"),
 							rs.getDouble("longitude"), rs.getString("content"), rs.getLong("price"),
 							rs.getInt("electricFee"), rs.getInt("waterFee"), rs.getInt("otherFee"), rs.getInt("area"),
 							rs.getBoolean("wifi"), rs.getBoolean("waterHeater"), rs.getBoolean("conditioner"),
 							rs.getBoolean("fridge"), rs.getBoolean("attic"), rs.getBoolean("camera"),
 							rs.getString("waterSource"), rs.getString("direction"), rs.getInt("numOfToilets"),
-							rs.getInt("numOfPeople"), rs.getInt("object"), rs.getInt("villageId"),
-							rs.getString("created"), rs.getInt("viewed"), rs.getInt("status"), rs.getString("imageThumb")));
+							rs.getInt("numOfPeople"), rs.getInt("object"), rs.getInt("villageId"), rs.getString("created"),
+							rs.getInt("viewed"), rs.getInt("status"), rs.getString("imageThumb"));
+					if (threadTemp.getPrice() > 1000000) {
+						threadTemp.setPriceString(
+								numberFormat.format(((double) (threadTemp.getPrice() / (1.0 * 1000000)))) + " triệu ");
+					} else if (threadTemp.getPrice() > 1000) {
+						threadTemp.setPriceString((threadTemp.getPrice() / 1000) + " ngàn ");
+					}
+					temp.add(threadTemp);
 				}
+
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -255,9 +272,8 @@ public class ThreadDAO {
 		// Lưu thông tin account
 		ArrayList<Thread> temp = new ArrayList<Thread>();
 		try {
-
 			// Câu lệnh truy vấn
-			String sql = "select * from  Thread where categoryId = ?";
+			String sql = "select * from  Thread where categoryId = ?  order by threadId OFFSET 0 ROWS FETCH NEXT 6 ROWS ONLY";
 			PreparedStatement pr = connection.prepareStatement(sql);
 
 			// Truyền tham số
@@ -265,11 +281,10 @@ public class ThreadDAO {
 
 			// Thực hiện
 			rs = pr.executeQuery();
-			int dem = 0;
-			// Lấy kết quả đưa vào accountData
+			
+			DecimalFormat numberFormat = new DecimalFormat("#.##");
 			while (rs.next()) {
-				dem++;
-				temp.add(new Thread(rs.getInt("threadId"), rs.getInt("categoryId"), rs.getInt("accountId"),
+				Thread threadTemp = new Thread(rs.getInt("threadId"), rs.getInt("categoryId"), rs.getInt("accountId"),
 						rs.getString("name"), rs.getString("address"), rs.getDouble("latitude"),
 						rs.getDouble("longitude"), rs.getString("content"), rs.getLong("price"),
 						rs.getInt("electricFee"), rs.getInt("waterFee"), rs.getInt("otherFee"), rs.getInt("area"),
@@ -277,9 +292,15 @@ public class ThreadDAO {
 						rs.getBoolean("fridge"), rs.getBoolean("attic"), rs.getBoolean("camera"),
 						rs.getString("waterSource"), rs.getString("direction"), rs.getInt("numOfToilets"),
 						rs.getInt("numOfPeople"), rs.getInt("object"), rs.getInt("villageId"), rs.getString("created"),
-						rs.getInt("viewed"), rs.getInt("status"), rs.getString("imageThumb")));
+						rs.getInt("viewed"), rs.getInt("status"), rs.getString("imageThumb"));
+				if (threadTemp.getPrice() > 1000000) {
+					threadTemp.setPriceString(
+							numberFormat.format(((double) (threadTemp.getPrice() / (1.0 * 1000000)))) + " triệu ");
+				} else if (threadTemp.getPrice() > 1000) {
+					threadTemp.setPriceString((threadTemp.getPrice() / 1000) + " ngàn ");
+				}
+				temp.add(threadTemp);
 			}
-			Log.in("Co " + dem + " bai viet trong danh muc");
 
 			// Đóng kết nối
 			pr.close();
@@ -291,7 +312,6 @@ public class ThreadDAO {
 		return temp;
 	}
 
-
 	public ArrayList<Thread> searchBy(Thread thread) {
 
 		// Mở kết nối
@@ -301,22 +321,22 @@ public class ThreadDAO {
 		ResultSet rs = null;
 		String filter = "";
 		int count = 0;
-		if(thread.isWifi() == true){
-			if(count == 0)
+		if (thread.isWifi() == true) {
+			if (count == 0)
 				filter += " WHERE ";
 			count++;
 			filter += "wifi = 1";
 		}
-		if(thread.isWaterHeater() == true){
-			if(count == 0)
+		if (thread.isWaterHeater() == true) {
+			if (count == 0)
 				filter += " WHERE ";
 			else
 				filter += " AND  ";
 			count++;
 			filter += " waterHeater = 1";
 		}
-		if(thread.isConditioner() == true){
-			if(count == 0)
+		if (thread.isConditioner() == true) {
+			if (count == 0)
 				filter += " WHERE ";
 			else
 				filter += " AND  ";
@@ -333,11 +353,10 @@ public class ThreadDAO {
 
 			// Thực hiện
 			rs = pr.executeQuery();
-			int dem = 0;
 			// Lấy kết quả đưa vào accountData
+			DecimalFormat numberFormat = new DecimalFormat("#.##");
 			while (rs.next()) {
-				dem++;
-				temp.add(new Thread(rs.getInt("threadId"), rs.getInt("categoryId"), rs.getInt("accountId"),
+				Thread threadTemp = new Thread(rs.getInt("threadId"), rs.getInt("categoryId"), rs.getInt("accountId"),
 						rs.getString("name"), rs.getString("address"), rs.getDouble("latitude"),
 						rs.getDouble("longitude"), rs.getString("content"), rs.getLong("price"),
 						rs.getInt("electricFee"), rs.getInt("waterFee"), rs.getInt("otherFee"), rs.getInt("area"),
@@ -345,9 +364,15 @@ public class ThreadDAO {
 						rs.getBoolean("fridge"), rs.getBoolean("attic"), rs.getBoolean("camera"),
 						rs.getString("waterSource"), rs.getString("direction"), rs.getInt("numOfToilets"),
 						rs.getInt("numOfPeople"), rs.getInt("object"), rs.getInt("villageId"), rs.getString("created"),
-						rs.getInt("viewed"), rs.getInt("status"), rs.getString("imageThumb")));
+						rs.getInt("viewed"), rs.getInt("status"), rs.getString("imageThumb"));
+				if (threadTemp.getPrice() > 1000000) {
+					threadTemp.setPriceString(
+							numberFormat.format(((double) (threadTemp.getPrice() / (1.0 * 1000000)))) + " triệu ");
+				} else if (threadTemp.getPrice() > 1000) {
+					threadTemp.setPriceString((threadTemp.getPrice() / 1000) + " ngàn ");
+				}
+				temp.add(threadTemp);
 			}
-			Log.in("Co " + dem + " bai viet trong danh muc");
 
 			// Đóng kết nối
 			pr.close();

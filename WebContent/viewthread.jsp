@@ -24,10 +24,43 @@
 
 	<jsp:include page="header.jsp" />
 
+	<nav class="navbar navbar-toggleable-md fixed-top" id="menuBeauti"
+		style="background-color: #fff; box-shadow: none;">
+	<div class="container" style="opacity: 1;">
+		<button class="navbar-toggler navbar-toggler-right" type="button"
+			data-toggle="collapse" data-target="#navbarNav1"
+			aria-controls="navbarNav1" aria-expanded="false"
+			aria-label="Toggle navigation">
+			<i class="fa fa-bars" aria-hidden="true"
+				style="color: #fff; font-size: 30px;"></i>
+		</button>
+		<a class="navbar-brand" href="#"> <strong><img
+				src="image/logo.png" height="30px;" /></strong>
+		</a>
+		<div class="collapse navbar-collapse" id="navbarNav1">
+			<ul class="navbar-nav mr-auto hidden-lg-up">
+				<logic:iterate name="viewThreadForm" property="categories" id="item">
+					<li class="nav-item"><a class="nav-link btn-right-menu-main">
+							<i class="fa fa-folder-open-o" aria-hidden="true"></i> <bean:write
+								name="item" property="name" />
+					</a></li>
+				</logic:iterate>
+			</ul>
+			<ul class="navbar-nav ml-auto">
+				<li class="nav-item"><a class="nav-link btn-right-menu-main"
+					data-toggle="modal" data-target="#modal-register">Đăng ký</a></li>
+				<li class="nav-item"><a class="nav-link  btn-right-menu-main"
+					data-toggle="modal" data-target="#modal-login">Đăng nhập</a></li>
+			</ul>
+		</div>
+	</div>
+	</nav>
+	<!-- End WOWSlider.com BODY section -->
 	<br>
-	<br>
+	<!--Navbar-->
 	<div class="container">
-		<nav class="navbar navbar-toggleable-md navbar-dark green">
+		<nav
+			class="navbar navbar-toggleable-md navbar-dark green custom-nav-view-thread hidden-md-down">
 		<button class="navbar-toggler navbar-toggler-right" type="button"
 			data-toggle="collapse" data-target="#navbarNav1"
 			aria-controls="navbarNav1" aria-expanded="false"
@@ -38,13 +71,15 @@
 			<ul class="navbar-nav mr-auto">
 
 				<logic:iterate name="viewThreadForm" property="categories" id="item">
-					<li class="nav-item"><a class="nav-link"><bean:write
+					<li class="nav-item"><a class="nav-link"> <i
+							class="fa fa-folder-open-o" aria-hidden="true"></i> <bean:write
 								name="item" property="name" /></a></li>
 				</logic:iterate>
 
 			</ul>
 			<ul class="navbar-nav ml-auto">
-				<li class="nav-item"><a class="nav-link">Tìm kiếm</a></li>
+				<li class="nav-item"><a class="nav-link"><i
+						class="fa fa-search" aria-hidden="true"></i> Tìm kiếm</a></li>
 			</ul>
 		</div>
 		</nav>
@@ -52,280 +87,257 @@
 	</div>
 	<br>
 	<br>
-	<br>
 	<!--Navbar-->
 	<div class="container container-white">
 		<bean:define id="thread" name="viewThreadForm" property="thread"></bean:define>
-		<br> <br>
+
 		<h2 class="text-center">
 			<bean:write name="thread" property="name" />
 		</h2>
 		<br>
 		<div class="row">
 			<div class="col-lg-9">
-				<div class="row">
-					<div class="col-lg-8">
-						<h1>Mô tả thông tin</h1>
-					</div>
-					<div class="col-lg-4 text-right">
-						<button type="button"
-							class="btn btn-success waves-effect waves-light">Còn
-							phòng</button>
-					</div>
+				<div class="breadcrumb flat" style="width: 100%; margin-top: 10px;">
+					<a style="border: 1px solid #ddd;"><i class="fa fa-home"
+						aria-hidden="true" style="font-size: 35px;"></i></a> <a class="active"
+						href="#"> Thông tin chi tiết</a>
 				</div>
 				<div class="card-wrapper">
 					<div id="card-1" class="card-rotating effect__click">
 						<!--Back Side-->
+						<br> <br> <br>
 						<div class="text-left">
 							<!--Content-->
-							<hr>
 							<p>
 								<bean:write name="thread" property="content" />
 							</p>
 						</div>
 						<!--/.Back Side-->
 						<div class="row">
-							<div class="col-lg-3">
-								<a href="image/1.jpg" data-lightbox="example-set"
-									data-title="Click the right half of the image to move forward.">
-									<img class="img-fluid" src="image/1.jpg" alt="" />
-								</a>
-							</div>
-							<div class="col-lg-3">
-								<a href="image/2.jpg" data-lightbox="example-set"
-									data-title="Or press the right arrow on your keyboard."><img
-									class="img-fluid" src="image/2.jpg" alt="" /></a>
-							</div>
-							<div class="col-lg-3">
-								<a href="image/3.jpg" data-lightbox="example-set"
-									data-title="The next image in the set is preloaded as you're viewing."><img
-									class="img-fluid" src="image/3.jpg" alt="" /></a>
-							</div>
-							<div class="col-lg-3">
-								<a href="image/4.jpg" data-lightbox="example-set"
-									data-title="Click anywhere outside the image or the X to the right to close."><img
-									class="img-fluid" src="image/4.jpg" alt="" /></a>
-							</div>
+							<logic:iterate name="viewThreadForm" property="images" id="item">
+								<div class="col-lg-3">
+									<a href="<bean:write
+											name="item" property="src" />"
+										data-lightbox="example-set"
+										data-title="<bean:write
+											name="item" property="content" />">
+										<img class="img-fluid"
+										src="<bean:write
+											name="item" property="src" />"
+										alt="<bean:write
+											name="item" property="content" />" />
+									</a>
+								</div>
+							</logic:iterate>
 						</div>
-						<div id="map" class="z-depth-1"></div>
-						<div id="map2" class="z-depth-1"></div>
+						<div class="row">
+							<logic:iterate name="viewThreadForm" property="images360"
+								id="item">
+								<div class="col-lg-3">
+									<a
+										onclick="changeImage360('<bean:write
+											name="item" property="src" />', '<bean:write
+											name="item" property="content" />')">
+										<img class="img-fluid"
+										src="<bean:write
+											name="item" property="src" />"
+										alt="<bean:write
+											name="item" property="content" />" />
+									</a>
+								</div>
+							</logic:iterate>
+						</div>
+						<div class="row">
+							<div id="map" class="z-depth-1"></div>
+							<div id="map2" class="z-depth-1"></div>
+						</div>
 					</div>
 				</div>
 				<!--/.Rotating card-->
 			</div>
 			<div class="col-lg-3">
-				<div class="row">
-					<div class="card card-cascade hoverable" style="margin-top: 0px;">
-						<div class="text-center">
-							<a class="btn btn-outline-success btn-rounded waves-effect">Thông
-								số</a>
-						</div>
-						<!--/Card image-->
-						<!--Card content-->
-						<div class="card-block text-center">
-							<!--Title-->
-							<h4 class="card-title">
-								<strong>Giá: <bean:write name="thread" property="price" />
-									đ
-								</strong>
-							</h4>
-							<h5 class="card-title">
-								<strong>Gọi: <bean:write name="thread" property="price" /></strong>
+				<div class="card card-cascade hoverable" style="margin-top: 0px;">
+					<div class="text-center">
+						<button type="button"
+							class="btn btn-success waves-effect waves-light">Còn
+							phòng</button>
+					</div>
+					<!--/Card image-->
+					<!--Card content-->
+					<div class="card-block text-center">
+						<!--Title-->
+						<h4 class="card-title">
+							<strong>Giá: <bean:write name="thread" property="price" />
+								đ
+							</strong>
+						</h4>
+						<h5 class="card-title">
+							<strong>Gọi: <bean:write name="thread" property="price" /></strong>
+						</h5>
+						<span class="text-left">
+							<h5>
+								<font color="#607d8b">Ngày đăng:</font>
+								<bean:write name="thread" property="created" />
 							</h5>
-							<span class="text-left">
-								<h5>
-									<font color="#607d8b">Ngày đăng:</font>
-									<bean:write name="thread" property="created" />
-								</h5>
-								<h5>
-									<font color="#607d8b">Lượt xem:</font> <bean:write name="thread" property="viewed" />
-								</h5>
-								<h5>
-									<font color="#607d8b">Lượt đánh giá:</font> <bean:write name="thread" property="viewed" />
-								</h5>
-								<h5>
-									<font color="#607d8b">Địa chỉ:</font> <bean:write name="thread" property="address" />
-								</h5>
-								<h5>
-									<font color="#607d8b">Giá điện:</font><bean:write name="thread" property="electricFee" /> đ/kí
-								</h5>
-								<h5>
-									<font color="#607d8b">Giá nước:</font> <bean:write name="thread" property="waterFee" /> đ/m&sup3;
-								</h5>
-								<h5>
-									<font color="#607d8b">Phụ phí:</font> <bean:write name="thread" property="otherFee" /> đ
-								</h5>
-								<h5>
-									<font color="#607d8b">Diện tích:</font> <bean:write name="thread" property="area" /> m&#178;
-								</h5>
-								<h5>
-									<font color="#607d8b">Wifi:</font> <bean:write name="thread" property="wifi" />
-								</h5>
-								<h5>
-									<font color="#607d8b">Máy nước nóng:</font> <bean:write name="thread" property="waterHeater" />
-								</h5>
-								<h5>
-									<font color="#607d8b">Điều hòa:</font> <bean:write name="thread" property="conditioner" />
-								</h5>
-								<h5>
-									<font color="#607d8b">Tủ lạnh:</font> <bean:write name="thread" property="fridge" />
-								</h5>
-								<h5>
-									<font color="#607d8b">Gác xếp:</font> <bean:write name="thread" property="attic" />
-								</h5>
-								<h5>
-									<font color="#607d8b">Số toilet:</font> <bean:write name="thread" property="numOfToilets" />
-								</h5>
-								<h5>
-									<font color="#607d8b">Camera an ninh:</font> <bean:write name="thread" property="camera" />
-								</h5>
-								<h5>
-									<font color="#607d8b">Nguồn nước:</font> <bean:write name="thread" property="waterSource" />
-								</h5>
-								<h5>
-									<font color="#607d8b">Hướng phòng:</font> <bean:write name="thread" property="direction" />
-								</h5>
-								<h5>
-									<font color="#607d8b">Tỉnh:</font> <bean:write name="thread" property="villageId" />
-								</h5>
-								<h5>
-									<font color="#607d8b">Quân/Huyện:</font> <bean:write name="thread" property="villageId" />
-								</h5>
-								<h5>
-									<font color="#607d8b">Xã:</font> <bean:write name="thread" property="villageId" />
-								</h5>
-							</span>
-						</div>
+							<h5>
+								<font color="#607d8b">Lượt xem:</font>
+								<bean:write name="thread" property="viewed" />
+							</h5>
+							<h5>
+								<font color="#607d8b">Lượt đánh giá:</font>
+								<bean:write name="thread" property="viewed" />
+							</h5>
+							<h5>
+								<font color="#607d8b">Địa chỉ:</font>
+								<bean:write name="thread" property="address" />
+							</h5>
+							<h5>
+								<font color="#607d8b">Giá điện:</font>
+								<bean:write name="thread" property="electricFee" />
+								đ/kí
+							</h5>
+							<h5>
+								<font color="#607d8b">Giá nước:</font>
+								<bean:write name="thread" property="waterFee" />
+								đ/m&sup3;
+							</h5>
+							<h5>
+								<font color="#607d8b">Phụ phí:</font>
+								<bean:write name="thread" property="otherFee" />
+								đ
+							</h5>
+							<h5>
+								<font color="#607d8b">Diện tích:</font>
+								<bean:write name="thread" property="area" />
+								m&#178;
+							</h5>
+							<h5>
+								<font color="#607d8b">Wifi:</font>
+								<bean:write name="thread" property="wifi" />
+							</h5>
+							<h5>
+								<font color="#607d8b">Máy nước nóng:</font>
+								<bean:write name="thread" property="waterHeater" />
+							</h5>
+							<h5>
+								<font color="#607d8b">Điều hòa:</font>
+								<bean:write name="thread" property="conditioner" />
+							</h5>
+							<h5>
+								<font color="#607d8b">Tủ lạnh:</font>
+								<bean:write name="thread" property="fridge" />
+							</h5>
+							<h5>
+								<font color="#607d8b">Gác xếp:</font>
+								<bean:write name="thread" property="attic" />
+							</h5>
+							<h5>
+								<font color="#607d8b">Số toilet:</font>
+								<bean:write name="thread" property="numOfToilets" />
+							</h5>
+							<h5>
+								<font color="#607d8b">Camera an ninh:</font>
+								<bean:write name="thread" property="camera" />
+							</h5>
+							<h5>
+								<font color="#607d8b">Nguồn nước:</font>
+								<bean:write name="thread" property="waterSource" />
+							</h5>
+							<h5>
+								<font color="#607d8b">Hướng phòng:</font>
+								<bean:write name="thread" property="direction" />
+							</h5>
+							<h5>
+								<font color="#607d8b">Tỉnh:</font>
+								<bean:write name="thread" property="villageId" />
+							</h5>
+							<h5>
+								<font color="#607d8b">Quân/Huyện:</font>
+								<bean:write name="thread" property="villageId" />
+							</h5>
+							<h5>
+								<font color="#607d8b">Xã:</font>
+								<bean:write name="thread" property="villageId" />
+							</h5>
+						</span>
 						<!--/.Card content-->
 					</div>
 				</div>
 			</div>
 		</div>
-		<br>
-		<div class="row" style="margin-top: 300px;">
-			<!--Slide new start -->
-			<div class="slide-new">
-				<h1 class="h1-title">Nhà trọ liên quan</h1>
-				<!--Carousel Wrapper-->
-				<div id="nha-cho-thue" class="carousel slide carousel-multi-item"
-					style="margin-top: -83px;" data-ride="carousel">
-					<!--Controls-->
-					<a class="btn-floating btn-small carousel-preview"
-						href="#nha-cho-thue" data-slide="prev"><i
-						class="fa fa-chevron-left"></i></a> <a
-						class="btn-floating btn-small carousel-next" href="#nha-cho-thue"
-						data-slide="next"><i class="fa fa-chevron-right"></i></a>
-					<!--/.Controls-->
-					<!--Indicators-->
-					<ol class="carousel-indicators">
-						<li data-target="#nha-cho-thue" data-slide-to="0" class="active"></li>
-						<li data-target="#nha-cho-thue" data-slide-to="1"></li>
-						<li data-target="#nha-cho-thue" data-slide-to="2"></li>
-					</ol>
-					<!--/.Indicators-->
-					<!--Slides-->
-					<div class="carousel-inner" role="listbox">
-						<!--First slide-->
-						<div class="carousel-item active">
-							<div class="col-md-4">
-								<!--Card-->
-								<div class="card card-cascade hoverable"
-									style="margin-top: 40px;">
-									<!--Card image-->
-									<div class="view overlay hm-white-slight"
-										style="border-radius: 10px; margin-top: -20px; width: 90%; margin-left: 5%; box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .16), 0 2px 10px 0 rgba(0, 0, 0, .12);">
-										<img src="image/4.jpg" class="img-fluid"
-											style="border-radius: 10px; width: 100%;"> <a href="#!">
-											<div class="mask waves-effect waves-light"></div>
-										</a>
-									</div>
-									<!--/Card image-->
-									<!--Card content-->
-									<div class="card-block text-center">
-										<!--Title-->
-										<h4 class="card-title">
-											<strong>Giá: 2.000.000 đ</strong>
-										</h4>
-										<h5>Diện tích: 40 m&#178;</h5>
-										<p class="card-text truncase-detail">Phòng rộng, thoáng
-											mát, sạch sẽ, tiện nghi đầy đủ.</p>
-										<button type="button" class="btn btn-success">Chi
-											tiết</button>
-									</div>
-									<!--/.Card content-->
-								</div>
-								<!--/.Card-->
-							</div>
-							<div class="col-md-4 hidden-sm-down">
-								<!--Card-->
-								<div class="card card-cascade hoverable"
-									style="margin-top: 40px;">
-									<!--Card image-->
-									<div class="view overlay hm-white-slight"
-										style="border-radius: 10px; margin-top: -20px; width: 90%; margin-left: 5%; box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .16), 0 2px 10px 0 rgba(0, 0, 0, .12);">
-										<img src="image/6.jpg" class="img-fluid"
-											style="border-radius: 10px; width: 100%;"> <a href="#!">
-											<div class="mask waves-effect waves-light"></div>
-										</a>
-									</div>
-									<!--/Card image-->
-									<!--Card content-->
-									<div class="card-block text-center">
-										<!--Title-->
-										<h4 class="card-title">
-											<strong>Giá: 1.000.000 đ</strong>
-										</h4>
-										<h5>Diện tích: 20 m&#178;</h5>
-										<p class="card-text truncase-detail">Phòng thích hợp cho
-											sinh viên, có wifi, 2 toilet, an ninh đảm bảo.</p>
-										<button type="button" class="btn btn-success">Chi
-											tiết</button>
-									</div>
-									<!--/.Card content-->
-								</div>
-								<!--/.Card-->
-							</div>
-							<div class="col-md-4 hidden-sm-down">
-								<!--Card-->
-								<div class="card card-cascade hoverable"
-									style="margin-top: 40px;">
-									<!--Card image-->
-									<div class="view overlay hm-white-slight"
-										style="border-radius: 10px; margin-top: -20px; width: 90%; margin-left: 5%; box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .16), 0 2px 10px 0 rgba(0, 0, 0, .12);">
-										<img src="image/6.jpg" class="img-fluid"
-											style="border-radius: 10px; width: 100%;"> <a href="#!">
-											<div class="mask waves-effect waves-light"></div>
-										</a>
-									</div>
-									<!--/Card image-->
-									<!--Card content-->
-									<div class="card-block text-center">
-										<!--Title-->
-										<h4 class="card-title">
-											<strong>Giá: 1.500.000 đ</strong>
-										</h4>
-										<h5>Diện tích: 25 m&#178;</h5>
-										<p class="card-text truncase-detail">Cho thuê phòng trọ
-											quận 7 hẻm 156 huỳnh tấn phát gần khu chế xuất tân thuận, các
-											trường đại học maketing, đại học nguyễn tất thành, đại học
-											luật…</p>
-										<button type="button" class="btn btn-success">Chi
-											tiết</button>
-									</div>
-									<!--/.Card content-->
-								</div>
-								<!--/.Card-->
-							</div>
-						</div>
-						<!--/.First slide-->
+		<br>	<!--Slide new start -->
+					<div class="breadcrumb flat">
+						<a style="border: 1px solid #ddd;"><i class="fa fa-home"
+							aria-hidden="true" style="font-size: 35px;"></i></a> <a
+							class="active" href="#"> Bài viết liên quan</a>
 					</div>
-					<!--/.Slides-->
-				</div>
-			</div>
-			<!--Slide new end -->
-		</div>
+					<div class="row">
+						<!--Carousel Wrapper-->
+						<logic:iterate name="viewThreadForm" property="relateThreads" id="threadRelated">
+							<!--Card-->
+							<div class=" col-lg-4 col-md-6">
+								<div class="card card-cascade hoverable"
+									style="margin-top: 40px;">
+									<!--Card image-->
+									<!--Card image-->
+									<div class="view overlay hm-white-slight"
+										style="margin-top: -15px; width: 90%; margin-left: 5%; min-height: 200px; max-height: 200px;">
+										<img class="img-fluid"
+											src="<bean:write name="threadRelated" property="imageThumb" />"
+											style="border-radius: 3px; width: auto; min-height: 200px;"
+											style=" ">
+										<div class="mask waves-effect waves-light"></div>
+										<div class="mask waves-effect waves-light"></div>
+									</div>
+
+									<!--/Card image-->
+									<!--Card content-->
+									<div class="card-block">
+										<!--Social shares button-->
+										<a class="activator" style="margin-top: 10px;"><i
+											class="fa fa-eye" aria-hidden="true"></i> 1232</a>
+										<!--Title-->
+										<div class="star-rating" itemprop="aggregateRating"
+											itemscope="" itemtype="http://schema.org/AggregateRating">
+											<span class="fill"></span><span class="fill"></span><span
+												class="fill"></span><span class="fill"></span><span
+												class="half"></span>( <strong itemprop="reviewCount">5</strong>
+											)
+										</div>
+									</div>
+									<div class="card-block text-center" style="margin-top: -35px;">
+										<!--Title-->
+										<h4 class="card-title">
+											<strong>Giá: <bean:write name="threadRelated"
+													property="priceString" />
+											</strong>
+										</h4>
+										<h5>
+											Diện tích:
+											<bean:write name="threadRelated" property="area" />
+											m&#178;
+										</h5>
+										<p class="card-text truncase-detail">
+											<bean:write name="threadRelated" property="name" />
+										</p>
+										<bean:define id="threadId" name="threadRelated" property="threadId"></bean:define>
+										<html:link styleClass="btn btn-success btn-fb"
+											action="/view-thread-action?threadId=${threadId}">Xem</html:link>
+
+										<!--Facebook-->
+										<a type="button" class="btn-floating btn-small btn-fb"><i
+											class="fa fa-compress"></i></a>
+										<!--Twitter-->
+									</div>
+									<!--/.Card content-->
+								</div>
+							</div>
+							<!--/.Card-->
+						</logic:iterate>
+					</div>
 	</div>
 
+				
 	<jsp:include page="footer.jsp" />
 	<script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
 	<script type="text/javascript" src="js/tether.min.js"></script>
@@ -333,6 +345,127 @@
 	<script type="text/javascript" src="js/mdb.min.js"></script>
 	<script type="text/javascript" src="js/owl.carousel.min.js"></script>
 	<script type="text/javascript" src="js/lightbox-plus-jquery.min.js"></script>
+	<script>
+		var stick = function() {
+			var size = $(window).width();
+			var doc = document.documentElement;
+			var top = (window.pageYOffset || doc.scrollTop)
+					- (doc.clientTop || 0);
+			if (size > 1003) {
+				$("#menuBeauti").css({
+					'position' : "fixed",
+					'width' : "100%"
+				});
+				if (top > 60) {
+					$("#menuBeauti")
+							.css("background-color", "rgba(0,0,0,0.75)");
+				} else {
+					$("#menuBeauti").css("background-color", "rgba(0,0,0,0)");
+				}
+			} else {
+				$("#menuBeauti").css({
+					'position' : "absolute",
+					'width' : "100%",
+					"background-color" : "rgba(0,0,0,0.75)"
+				});
+			}
+		}
+		$(window).scroll(function() {
+			stick();
+		});
+		$(document).ready(
+				function() {
+					var size = $(window).width();
+					var doc = document.documentElement;
+					var top = (window.pageYOffset || doc.scrollTop)
+							- (doc.clientTop || 0);
+					if (size > 1003) {
+						$("#menuBeauti").css({
+							'position' : "fixed"
+						});
+						if (top > 60) {
+							$("#menuBeauti").css("background-color",
+									"rgba(0,0,0,0.75)");
+						} else {
+							$("#menuBeauti").css("background-color",
+									"rgba(0,0,0,0)");
+						}
+					} else {
+						$("#menuBeauti").css({
+							'position' : "absolute",
+							'width' : "100%",
+							"background-color" : "rgba(0,0,0,0.75)"
+						});
+					}
+				});
+	</script>
+	<script>
+		var panorama;
+		
+ 		function initPano() {
+			panorama = new google.maps.StreetViewPanorama(document
+					.getElementById('map'), {
+				pano : 'reception',
+				visible : true,
+				panoProvider : getCustomPanorama,
+			    zoom: 0
+			});
+		}
+
+		function getCustomPanoramaTileUrl(pano, zoom, tileX, tileY) {
+			return readCookie('activeSrcImage360');
+		}
+
+		function getCustomPanorama(pano, zoom, tileX, tileY) {
+			return {
+				location : {
+					pano : pano,
+					description : readCookie('activeNameImage360'),
+				    zoom: 0
+				},
+				links : [],
+				copyright : 'Imagery (c) 2010 Google',
+				tiles : {
+					tileSize : new google.maps.Size(1024, 512),
+					worldSize : new google.maps.Size(1024, 512),
+					centerHeading : 105,
+					getTileUrl : getCustomPanoramaTileUrl,
+				    zoom: 0
+				}
+			};
+		}
+		
+		function changeImage360(src, content){
+			console.log(src);console.log(content);
+			createCookie('activeSrcImage360',src,1);
+			createCookie('activeNameImage360',content,1);
+		    panorama.setPano(src);
+		}
+
+		function initMap() {
+			var uluru = {
+				lat : parseFloat('<bean:write name="thread" property="latitude" />'),
+				lng :  parseFloat('<bean:write name="thread" property="longitude" />')
+			};
+			var map = new google.maps.Map(document.getElementById('map2'), {
+				zoom : 16,
+				center : uluru
+			});
+			var marker = new google.maps.Marker({
+				position : uluru,
+				map : map
+			});
+		}
+
+		function initialize() {
+			initPano();
+			initMap();
+		}
+	</script>
+	<script async defer
+		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-H_xa-vjvVRk59cgxAFSBHwj2huBV-B4&callback=initialize">
+		
+	</script>
 </body>
 
 </html>

@@ -14,6 +14,7 @@ public class ViewThreadForm extends ActionForm {
 	Account account;
 	Thread thread;
 	ArrayList<Image> images;
+	ArrayList<Image> images360;
 	ArrayList<Category> categories;
 	ArrayList<model.bean.Thread> relateThreads;
 
@@ -63,6 +64,14 @@ public class ViewThreadForm extends ActionForm {
 
 	public void setImages(ArrayList<Image> images) {
 		this.images = images;
+	}
+
+	public ArrayList<Image> getImages360() {
+		return images360;
+	}
+
+	public void setImages360(ArrayList<Image> images360) {
+		this.images360 = images360;
 	}
 
 	public ArrayList<Category> getCategories() {

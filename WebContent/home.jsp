@@ -18,72 +18,87 @@
 <link href="css//owl.carousel.css" rel="stylesheet">
 <link href="css/owl.theme.css" rel="stylesheet">
 <link href="css/style-view.css" rel="stylesheet">
+<!-- Start WOWSlider.com HEAD section -->
+<link rel="stylesheet" type="text/css" href="engine1/style.css" />
+<script type="text/javascript" src="engine1/jquery.js"></script>
+<!-- End WOWSlider.com HEAD section -->
 </head>
 <body>
 
 	<jsp:include page="header.jsp" />
-	<!--Carousel Wrapper-->
-	<div class="container-fluid"
-		style="margin-left: -15px; margin-right: -15px;">
-		<div id="carousel-example-2" class="carousel slide carousel-fade"
-			data-ride="carousel">
-			<!--Indicators-->
-			<ol class="carousel-indicators">
-				<li data-target="#carousel-example-2" data-slide-to="0"
-					class="active"></li>
-				<li data-target="#carousel-example-2" data-slide-to="1"></li>
-				<li data-target="#carousel-example-2" data-slide-to="2"></li>
-			</ol>
-			<!--/.Indicators-->
-			<!--Slides-->
 
-			<%
-				int first = 0;
-			%>
-			<div class="carousel-inner" role="listbox">
-				<logic:iterate name="homeViewForm" property="viewHighest" id="item">
-					<%
-						first++;
-					%>
-					<div
-						class="carousel-item <%if (first == 1)
-					out.println("active");%> ">
-						<div class="view hm-black-light">
-							<img src="<bean:write name="item" property="imageThumb" />"
-								alt="First slide">
-						</div>
-						<div class="carousel-caption">
-							<h3 class="h3-responsive">
-								<bean:write name="item" property="name" />
-							</h3>
-							<p>
-								Giá:
-								<bean:write name="item" property="price" />
-								đ
-							</p>
-						</div>
-					</div>
+
+	<nav class="navbar navbar-toggleable-md blur-bgimage fixed-top"
+		id="menuBeauti">
+	<div class="container" style="opacity: 1;">
+		<button class="navbar-toggler navbar-toggler-right" type="button"
+			data-toggle="collapse" data-target="#navbarNav1"
+			aria-controls="navbarNav1" aria-expanded="false"
+			aria-label="Toggle navigation">
+			<i class="fa fa-bars" aria-hidden="true"
+				style="color: #fff; font-size: 30px;"></i>
+		</button>
+		<a class="navbar-brand" href="#"> <strong><img
+				src="image/logo.png" height="30px;" /></strong>
+		</a>
+		<div class="collapse navbar-collapse" id="navbarNav1">
+			<ul class="navbar-nav mr-auto hidden-lg-up">
+				<logic:iterate name="homeViewForm" property="categories" id="item">
+					<li class="nav-item"><a class="nav-link btn-right-menu-main">
+							<i class="fa fa-folder-open-o" aria-hidden="true"></i> <bean:write
+								name="item" property="name" />
+					</a></li>
 				</logic:iterate>
-			</div>
-			<!--/.Slides-->
-			<!--Controls-->
-			<a class="carousel-control-prev" href="#carousel-example-2"
-				role="button" data-slide="prev"> <span
-				class="carousel-control-prev-icon" aria-hidden="true"></span> <span
-				class="sr-only">Previous</span>
-			</a> <a class="carousel-control-next" href="#carousel-example-2"
-				role="button" data-slide="next"> <span
-				class="carousel-control-next-icon" aria-hidden="true"></span> <span
-				class="sr-only">Next</span>
-			</a>
-			<!--/.Controls-->
+			</ul>
+			<ul class="navbar-nav ml-auto">
+				<li class="nav-item"><a class="nav-link btn-right-menu-main"
+					data-toggle="modal" data-target="#modal-register">Đăng ký</a></li>
+				<li class="nav-item"><a class="nav-link  btn-right-menu-main"
+					data-toggle="modal" data-target="#modal-login">Đăng nhập</a></li>
+			</ul>
 		</div>
 	</div>
+	</nav>
+	<!--Carousel Wrapper-->
+	<!-- Start WOWSlider.com BODY section -->
+	<div id="wowslider-container1">
+		<div class="ws_images ">
+			<ul>
+				<logic:iterate name="homeViewForm" property="viewHighest" id="item">
+					<li><img class="blur-bgimage"
+						src="<bean:write name="item" property="imageThumb" />"
+						alt="<bean:write name="item" property="name" />"
+						title="<bean:write name="item" property="name" />"
+						id="wows1_<bean:write name="item" property="threadId" />" /></li>
+				</logic:iterate>
 
+			</ul>
+		</div>
+		<div class="ws_bullets">
+			<div>
+				<logic:iterate name="homeViewForm" property="viewHighest" id="item">
+					<a href="#" title="<bean:write name="item" property="name" />"><span><img
+							src="<bean:write name="item" property="imageThumb" />"
+							alt="<bean:write name="item" property="name" />" />1</span></a>
+				</logic:iterate>
+
+			</div>
+		</div>
+		<div class="ws_script" style="position: absolute; left: -99%">
+			<a href="http://wowslider.com">bootstrap slider</a> by WOWSlider.com
+			v8.7
+		</div>
+		<div class="ws_shadow"></div>
+	</div>
+	<script type="text/javascript" src="engine1/wowslider.js"></script>
+	<script type="text/javascript" src="engine1/script.js"></script>
+
+	<!-- End WOWSlider.com BODY section -->
 	<br>
-	<br>
+	<!--Navbar-->
 	<div class="container">
-		<nav class="navbar navbar-toggleable-md navbar-dark green">
+		<nav
+			class="navbar navbar-toggleable-md navbar-dark green custom-nav-home hidden-md-down">
 		<button class="navbar-toggler navbar-toggler-right" type="button"
 			data-toggle="collapse" data-target="#navbarNav1"
 			aria-controls="navbarNav1" aria-expanded="false"
@@ -94,22 +109,22 @@
 			<ul class="navbar-nav mr-auto">
 
 				<logic:iterate name="homeViewForm" property="categories" id="item">
-					<li class="nav-item"><a class="nav-link"><bean:write
+					<li class="nav-item"><a class="nav-link"> <i
+							class="fa fa-folder-open-o" aria-hidden="true"></i> <bean:write
 								name="item" property="name" /></a></li>
 				</logic:iterate>
 
 			</ul>
 			<ul class="navbar-nav ml-auto">
-				<li class="nav-item"><a href="search.jsp" class="nav-link">Tìm kiếm</a></li>
+				<li class="nav-item"><a class="nav-link"><i
+						class="fa fa-search" aria-hidden="true"></i> Tìm kiếm</a></li>
 			</ul>
 		</div>
 		</nav>
 
 	</div>
-	<br>
-	<br>
-	<br>
-	<!--Navbar-->
+
+	<!-- another version - flat style with animated hover effect -->
 
 	<div class="container container-white">
 		<div class="row">
@@ -118,34 +133,51 @@
 				<logic:iterate name="homeViewForm" property="categoryWithThreads"
 					id="item">
 					<!--Slide new start -->
-					<div class="slide-new">
-						<h1 class="h1-title">
-							<bean:write name="item" property="name" />
-						</h1>
+					<div class="breadcrumb flat">
+						<a style="border: 1px solid #ddd;"><i class="fa fa-home"
+							aria-hidden="true" style="font-size: 35px;"></i></a> <a
+							class="active" href="#"> <bean:write name="item"
+								property="name" /></a>
+					</div>
+					<div class="row">
 						<!--Carousel Wrapper-->
-						<div
-							id="owl-demo-<bean:write name="item" property="categoryId" />"
-							class="owl-carousel">
-							<logic:iterate name="item" property="threads" id="thread">
-								<!--Card-->
+						<logic:iterate name="item" property="threads" id="thread">
+							<!--Card-->
+							<div class=" col-lg-4 col-md-6">
 								<div class="card card-cascade hoverable"
 									style="margin-top: 40px;">
 									<!--Card image-->
+									<!--Card image-->
 									<div class="view overlay hm-white-slight"
-										style="border-radius: 10px; margin-top: -20px; width: 90%; margin-left: 5%; box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .16), 0 2px 10px 0 rgba(0, 0, 0, .12);">
+										style="margin-top: -15px; width: 90%; margin-left: 5%; min-height: 200px; max-height: 200px;">
 										<img class="img-fluid"
 											src="<bean:write name="thread" property="imageThumb" />"
-											style="border-radius: 10px; width: 100%;"> <a href="#!">
-											<div class="mask waves-effect waves-light"></div>
-										</a>
+											style="border-radius: 3px; width: auto; min-height: 200px;"
+											style=" ">
+										<div class="mask waves-effect waves-light"></div>
+										<div class="mask waves-effect waves-light"></div>
 									</div>
+
 									<!--/Card image-->
 									<!--Card content-->
-									<div class="card-block text-center">
+									<div class="card-block">
+										<!--Social shares button-->
+										<a class="activator" style="margin-top: 10px;"><i
+											class="fa fa-eye" aria-hidden="true"></i> 1232</a>
+										<!--Title-->
+										<div class="star-rating" itemprop="aggregateRating"
+											itemscope="" itemtype="http://schema.org/AggregateRating">
+											<span class="fill"></span><span class="fill"></span><span
+												class="fill"></span><span class="fill"></span><span
+												class="half"></span>( <strong itemprop="reviewCount">5</strong>
+											)
+										</div>
+									</div>
+									<div class="card-block text-center" style="margin-top: -35px;">
 										<!--Title-->
 										<h4 class="card-title">
 											<strong>Giá: <bean:write name="thread"
-													property="price" /> đ
+													property="priceString" />
 											</strong>
 										</h4>
 										<h5>
@@ -154,18 +186,22 @@
 											m&#178;
 										</h5>
 										<p class="card-text truncase-detail">
-											<bean:write name="thread" property="content" />
+											<bean:write name="thread" property="name" />
 										</p>
 										<bean:define id="threadId" name="thread" property="threadId"></bean:define>
-										<html:link styleClass="btn btn-success"
-											action="/view-thread-action?threadId=${threadId}">Chi
-											tiết</html:link>
+										<html:link styleClass="btn btn-success btn-fb"
+											action="/view-thread-action?threadId=${threadId}">Xem</html:link>
+
+										<!--Facebook-->
+										<a type="button" class="btn-floating btn-small btn-fb"><i
+											class="fa fa-compress"></i></a>
+										<!--Twitter-->
 									</div>
 									<!--/.Card content-->
 								</div>
-								<!--/.Card-->
-							</logic:iterate>
-						</div>
+							</div>
+							<!--/.Card-->
+						</logic:iterate>
 					</div>
 				</logic:iterate>
 
@@ -179,36 +215,57 @@
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="js/mdb.min.js"></script>
 	<script type="text/javascript" src="js/owl.carousel.min.js"></script>
-	<logic:iterate name="homeViewForm" property="categoryWithThreads"
-		id="cwt">
-		<script>
-			$(document).ready(function() {
-				var str = '<bean:write name="cwt" property="categoryId" />';
-				$("#owl-demo-" + str).owlCarousel({
-					loop : true,
-					margin : 10,
-					navigation : true,
-					responsiveClass : true,
-					responsive : {
-						0 : {
-							items : 1,
-							nav : true
-						},
-						600 : {
-							items : 3,
-							nav : true
-						},
-						1000 : {
-							items : 6,
-							nav : true,
-							nav : true,
-							margin : 20
+	<script>
+		var stick = function() {
+			var size = $(window).width();
+			var doc = document.documentElement;
+			var top = (window.pageYOffset || doc.scrollTop)
+					- (doc.clientTop || 0);
+			if (size > 1003) {
+				$("#menuBeauti").css({
+					'position' : "fixed",
+					'width' : "100%"
+				});
+				if (top > 360) {
+					$("#menuBeauti")
+							.css("background-color", "rgba(0,0,0,0.75)");
+				} else {
+					$("#menuBeauti").css("background-color", "rgba(0,0,0,0.1)");
+				}
+			} else {
+				$("#menuBeauti").css({
+					'position' : "absolute",
+					'width' : "100%"
+				});
+			}
+		}
+		$(window).scroll(function() {
+			stick();
+		});
+		$(document).ready(
+				function() {
+					var size = $(window).width();
+					var doc = document.documentElement;
+					var top = (window.pageYOffset || doc.scrollTop)
+							- (doc.clientTop || 0);
+					if (size > 1003) {
+						$("#menuBeauti").css({
+							'position' : "fixed"
+						});
+						if (top > 360) {
+							$("#menuBeauti").css("background-color",
+									"rgba(0,0,0,0.75)");
+						} else {
+							$("#menuBeauti").css("background-color",
+									"rgba(0,0,0,0.1)");
 						}
+					} else {
+						$("#menuBeauti").css({
+							'position' : "absolute"
+						});
 					}
 				});
-			});
-		</script>
-	</logic:iterate>
+	</script>
 </body>
 
 </html>
