@@ -55,6 +55,7 @@
 	<div class="modal-dialog" role="document">
 		<!--Content-->
 		<div class="modal-content">
+
 			<!--Header-->
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal"
@@ -67,18 +68,23 @@
 			</div>
 			<!--Body-->
 			<div class="modal-body">
-				<div class="md-form">
-					<i class="fa fa-envelope prefix"></i> <input type="text" id="form2"
-						class="form-control"> <label for="form2">Email</label>
-				</div>
+				<form action="#">
+					<div class="md-form">
+						<i class="fa fa-envelope prefix"></i> <input type="text"
+							id="emailLog" class="form-control"> <label for="form2">Email</label>
+					</div>
 
-				<div class="md-form">
-					<i class="fa fa-lock prefix"></i> <input type="password" id="form3"
-						class="form-control"> <label for="form3">Mật khẩu</label>
-				</div>
-				<div class="text-center">
-					<button class="btn btn-primary btn-lg green">Đăng nhập</button>
-				</div>
+					<div class="md-form">
+						<i class="fa fa-lock prefix"></i> <input type="password"
+							id="passwordLog" class="form-control"> <label for="form3">Mật
+							khẩu</label>
+					</div>
+					<div class="text-center">
+						<button type="submit" class="btn btn-primary btn-lg green"
+							onclick="loginAjax();">Đăng nhập</button>
+					</div>
+				</form>
+
 			</div>
 			<!--Footer-->
 			<div class="modal-footer">
@@ -95,6 +101,12 @@
 	</div>
 </div>
 <!-- Modal Register -->
+<script>
+	/* $.validator.addMethod('emailReg', function(value) {
+		return /^((\d{5}-\d{4})|(\d{5})|([A-Z]\d[A-Z]\s\d[A-Z]\d))$/
+				.test(value);
+	}, 'Please enter a valid US or Canadian postal code.'); */
+</script>
 <div class="modal fade modal-ext" id="modal-register" tabindex="-1"
 	role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog" role="document">
@@ -112,37 +124,183 @@
 			</div>
 			<!--Body-->
 			<div class="modal-body">
-				<div class="md-form">
-					<i class="fa fa-envelope prefix"></i> <input type="text" id="form2"
-						class="form-control"> <label for="form2">Email</label>
-				</div>
+				<form action="#">
+					<div class="md-form">
+						<i class="fa fa-envelope prefix"></i> <input type="text"
+							id="emailReg"
+							pattern="/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/"
+							class="form-control"> <label for="form2">Email</label><span
+							id="labelEmail"></span>
+					</div>
 
-				<div class="md-form">
-					<i class="fa fa-lock prefix"></i> <input type="password" id="form3"
-						class="form-control"> <label for="form3">Mật khẩu</label>
-				</div>
+					<div class="md-form">
+						<i class="fa fa-lock prefix"></i> <input type="password"
+							id="passwordReg" class="form-control"> <label for="form3">Mật
+							khẩu</label>
+					</div>
 
-				<div class="md-form">
-					<i class="fa fa-lock prefix"></i> <input type="password" id="form4"
-						class="form-control"> <label for="form4">Nhập lại
-						mật khẩu</label>
-				</div>
+					<div class="md-form">
+						<i class="fa fa-lock prefix"></i> <input type="password"
+							id="re-passwordReg" class="form-control"> <label
+							for="form4">Nhập lại mật khẩu</label>
+					</div>
 
-				<div class="text-center">
-					<button class="btn btn-primary btn-lg green">Đăng ký</button>
-				</div>
+					<div class="text-center">
+						<button onclick="return registerAjax();" type="submit"
+							class="btn btn-primary btn-lg green">Đăng ký</button>
+					</div>
+				</form>
 			</div>
 			<!--Footer-->
 			<div class="modal-footer">
-				<div class="options">
-					<p>
-						Đã có tài khoản? <a href="#">Đăng nhập</a>
-					</p>
+				<div class="row">
+					<div class="col-md-6">
+						<div class="options">
+							<p>
+								Đã có tài khoản? <a href="#">Đăng nhập</a>
+							</p>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<button type="button" class="btn btn-warning ml-auto"
+							data-dismiss="modal">Đóng</button>
+					</div>
 				</div>
-				<button type="button" class="btn btn-warning ml-auto"
-					data-dismiss="modal">Đóng</button>
+
 			</div>
 		</div>
 		<!--/.Content-->
 	</div>
 </div>
+
+<link href="css/sweetalert.css" rel="stylesheet">
+<script type="text/javascript" src="js/sweetalert.min.js"></script>
+<script>
+	/* START CHECK PASSS REGISTER */
+	var passwordReg = document.getElementById("passwordReg"), re_passwordReg = document
+			.getElementById("re-passwordReg");
+	function validatePassword() {
+		if (passwordReg.value != passwordReg.value) {
+			passwordReg.setCustomValidity("Mật khẩu không khớp");
+		} else {
+			passwordReg.setCustomValidity('');
+		}
+	}
+	passwordReg.onchange = validatePassword;
+	passwordReg.onkeyup = validatePassword;
+	/* END CHECK PASSS REGISTER */
+	function registerAjax() {
+		email = $("#emailReg").val();
+		password = $("#passwordReg").val();
+		re_password = $("#re-passwordReg").val();
+
+		if (email.length < 1) {
+			showError("Email không được bỏ trống hoặc quá ngắn");
+			return false;
+		} else if (password.length < 1) {
+			showError("Mật khẩu không được bỏ trống hoặc quá ngắn");
+			return false;
+		}
+		$.ajax({
+			type : "POST",
+			url : "/Mock_SE7/home-account-action.do",
+			data : "email=" + email + "&password=" + password
+					+ "&action=register",
+			success : function(res) {
+				if (res == "success") {
+					log("tc");
+					showSuccess("Đăng ký thành công");
+					return true;
+				} else {
+					log("tb");
+					showError("Đăng ký thất bại");
+					return false;
+				}
+			},
+			error : function(e) {
+				alert('Error: ' + e);
+			}
+		});
+	}
+	function loginAjax() {
+		email = $("#emailLog").val();
+		password = $("#passwordLog").val();
+
+		$
+				.ajax({
+					type : "POST",
+					url : "/Mock_SE7/home-account-action.do",
+					data : "email=" + email + "&password=" + password
+							+ "&action=login",
+					success : function(res) {
+						if (res == "success") {
+							showSuccess("Đăng nhập thành công");
+							createCookie("email", email, 1);
+							createCookie("password", password, 1);
+							$("#welcomeText").html("Chào " + email);
+							$("#modal-login").modal('hide');
+							$("#btnReg").hide();
+							$("#btnLog").hide();
+							$("#imgAva").show();
+							$("#menuAcc").show();
+							
+							return true;
+						} else {
+							showError("Đăng nhập thất bại");
+							$("#welcomeText").html("");
+							return false;
+						}
+					},
+					error : function(e) {
+						alert('Error: ' + e);
+					}
+				});
+	}
+
+	function checkEmail() {
+		log("check email");
+		email = $("#emailReg").val();
+		$.ajax({
+			type : "POST",
+			url : "/Mock_SE7/home-account-action.do",
+			data : "email=" + email + "&action=checkEmail",
+			success : function(res) {
+				if (res == "success") {
+					log("tc");
+					$("#labelEmail").html("");
+					return true;
+				} else {
+					log("tb");
+					$("#labelEmail").html("Email đã tồn tại");
+					return false;
+				}
+			},
+			error : function(e) {
+				alert('Error: ' + e);
+			}
+		});
+	}
+	function logout(){
+		eraseCookie("email");
+		eraseCookie("password");
+		$("#welcomeText").html("");
+		$("#btnReg").show();
+		$("#btnLog").show();
+		$("#imgAva").hide();
+		$("#menuAcc").hide();
+	}
+	$(document).ready(function() {
+		$("#emailReg").keypress(function() {
+			checkEmail();
+		});
+		$("#emailReg").keyup(function() {
+			checkEmail();
+		});
+	});
+	function showError(text) {
+		sweetAlert("Lỗi", text, "error");
+	}
+	function showSuccess(text) {
+		sweetAlert("Thành công", text, "success");
+	}
+</script>

@@ -27,7 +27,6 @@
 
 	<jsp:include page="header.jsp" />
 
-
 	<nav class="navbar navbar-toggleable-md blur-bgimage fixed-top"
 		id="menuBeauti">
 	<div class="container" style="opacity: 1;">
@@ -51,9 +50,18 @@
 				</logic:iterate>
 			</ul>
 			<ul class="navbar-nav ml-auto">
-				<li class="nav-item"><a class="nav-link btn-right-menu-main"
+				<img src="img/avatar.jpg" alt="Hình đại diện"
+					class="rounded-circle" style="width: 40px; height: 40px; display: none;" id="imgAva">
+					<li class="nav-item dropdown btn-group" id="menuAcc" style="display: none;"><a
+						class="nav-link dropdown-toggle btn-right-menu-main" id="dropdownMenu1"
+						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span id="welcomeText"></span></a>
+						<div class="dropdown-menu dropdown dropdown-menu-right"
+							aria-labelledby="dropdownMenu1">
+							<a class="dropdown-item" onclick="logout();">Đăng xuất</a>
+						</div></li>
+				<li class="nav-item" id="btnReg"><a class="nav-link btn-right-menu-main"
 					data-toggle="modal" data-target="#modal-register">Đăng ký</a></li>
-				<li class="nav-item"><a class="nav-link  btn-right-menu-main"
+				<li class="nav-item" id="btnLog"><a class="nav-link  btn-right-menu-main"
 					data-toggle="modal" data-target="#modal-login">Đăng nhập</a></li>
 			</ul>
 		</div>
@@ -116,7 +124,7 @@
 
 			</ul>
 			<ul class="navbar-nav ml-auto">
-				<li class="nav-item"><a class="nav-link"><i
+				<li class="nav-item"><a class="nav-link" href="tim-kiem.do"><i
 						class="fa fa-search" aria-hidden="true"></i> Tìm kiếm</a></li>
 			</ul>
 		</div>

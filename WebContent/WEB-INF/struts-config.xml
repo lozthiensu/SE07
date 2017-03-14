@@ -22,6 +22,7 @@ Configuration 1.3//EN" "http://struts.apache.org/dtds/struts-config_1_3.dtd">
 		<form-bean name="viewThreadForm" type="form.home.ViewThreadForm" />
 		<form-bean name="searchThreadForm" type="form.home.SearchThreadForm" />
 		<!-- Dang nhap, dang ky -->
+		<form-bean name="accountHomeForm" type="form.home.AccountHomeForm" />
 		<!-- KET THUC FORM CHO TRANG HOME -->
 
 	</form-beans>
@@ -89,6 +90,12 @@ Configuration 1.3//EN" "http://struts.apache.org/dtds/struts-config_1_3.dtd">
 		<action input="/search.jsp" name="searchThreadForm" path="/search-thread"
 			scope="request" type="action.home.SearchThreadAction">
 		</action>
+		
+		<!-- Dang ky, dang nhap, kiem tra email -->
+		<action input="/search.jsp" name="accountHomeForm" path="/home-account-action"
+			scope="request" type="action.home.AccountAction">
+		</action>
+		
 		<!-- KET THUC ACTION CHO TRANG CHU -->
 
 

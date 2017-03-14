@@ -102,7 +102,7 @@
 						aria-hidden="true" style="font-size: 35px;"></i></a> <a class="active"
 						href="#"> Thông tin chi tiết</a>
 				</div>
-				<div class="card-wrapper">
+				<div class="">
 					<div id="card-1" class="card-rotating effect__click">
 						<!--Back Side-->
 						<br> <br> <br>
@@ -147,37 +147,41 @@
 								</div>
 							</logic:iterate>
 						</div>
-						<br><br>
-						
-				<div class="breadcrumb flat" style="width: 100%; margin-top: 10px;">
-					<a style="border: 1px solid #ddd;"><i class="fa fa-home"
-						aria-hidden="true" style="font-size: 35px;"></i></a> <a class="active"
-						href="#"> Bình luận</a>
-				</div>
-		<div class="modal-body">
+						<br>
+						<br>
 
-			<div class="md-form">
-				  <input type="text" id="form2"
-					class="form-control"> <label for="form2">Bình luận</label>
-			</div>
+						<div class="breadcrumb flat"
+							style="width: 100%; margin-top: 10px;">
+							<a style="border: 1px solid #ddd;"><i class="fa fa-home"
+								aria-hidden="true" style="font-size: 35px;"></i></a> <a
+								class="active" href="#"> Bình luận</a>
+						</div>
+						<div class="modal-body">
 
-			<div class="md-form">
-				<div class="star-rating" itemprop="aggregateRating" itemscope=""
-					itemtype="http://schema.org/AggregateRating">
-					<span class="fill"></span><span class="fill"></span><span
-						class="fill"></span><span class="fill"></span><span class="half"></span>(
-					<strong itemprop="reviewCount">5</strong> )
-				</div>
-				<label for="form2">Điểm</label>
-			</div>
-			<div class="text-center">
-				<button class="btn btn-primary btn-lg green">Đăng bình luận</button>
-			</div>
-		</div>
-						<!-- 		<div class="row">
-							<div id="maps" class="z-depth-1" style="height: 400px;"></div>
-							<div id="map2s" class="z-depth-1" style="height: 400px;"></div>
-						</div> -->
+							<div class="md-form">
+								<input type="text" id="form2" class="form-control"> <label
+									for="form2">Bình luận</label>
+							</div>
+
+							<div class="md-form">
+								<div class="star-rating" itemprop="aggregateRating" itemscope=""
+									itemtype="http://schema.org/AggregateRating">
+									<span class="fill"></span><span class="fill"></span><span
+										class="fill"></span><span class="fill"></span><span
+										class="half"></span>( <strong itemprop="reviewCount">5</strong>
+									)
+								</div>
+								<label for="form2">Điểm</label>
+							</div>
+							<div class="text-center">
+								<button class="btn btn-primary btn-lg green">Đăng bình
+									luận</button>
+							</div>
+						</div>
+						<div class="row">
+							<div id="map" class="z-depth-1"></div>
+							<div id="map2" class="z-depth-1"></div>
+						</div>
 					</div>
 				</div>
 				<!--/.Rotating card-->
@@ -293,7 +297,7 @@
 			</div>
 		</div>
 		<!--Slide new start -->
-		<div class="breadcrumb flat">
+		<div class="breadcrumb flat" style="clear:both;">
 			<a style="border: 1px solid #ddd;"><i class="fa fa-home"
 				aria-hidden="true" style="font-size: 35px;"></i></a> <a class="active"
 				href="#"> Bài viết liên quan</a>

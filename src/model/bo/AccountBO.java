@@ -13,14 +13,14 @@ public class AccountBO {
 		return accountDAO.getListAccount(page);
 	}
 
-	//Xóa tài khoản
+	// Xóa tài khoản
 	public void deleteAccount(Account account) {
 		accountDAO.deleteAccount(account);
 	}
 
 	// Tạo tài khoản account
-	public void addAccount(Account account) {
-		accountDAO.addAccount(account);
+	public boolean addAccount(Account account) {
+		return accountDAO.addAccount(account);
 	}
 
 	// Lấy thông tin tài khoản có accountId =
@@ -31,6 +31,14 @@ public class AccountBO {
 	// Sửa thông tin tài khoản
 	public void editAccount(Account account) {
 		accountDAO.editAccount(account);
+	}
+
+	public boolean checkEmail(Account account) {
+		return accountDAO.checkEmail(account);
+	}
+
+	public boolean checkLogin(Account account) {
+		return accountDAO.checkLogin(account);
 	}
 
 }
