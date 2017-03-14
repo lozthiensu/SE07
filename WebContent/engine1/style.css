@@ -391,20 +391,20 @@ _:-ms-input-placeholder, :root #wowslider-container1 a.ws_prev > span:before {li
 	bottom:0;
 	margin-right: 30px;
 }#wowslider-container1 .ws-title{
-	font: 3.6em 'Montserrat', sans-serif;
-	max-width: 30%;
-	position: absolute;
-	left: 20%;
-	margin-right:10em;
-	z-index: 50;
-	bottom: 0;
-	top: auto;
-	opacity: 1;
+    font: 1.6em 'Montserrat', sans-serif;
+    max-width: 80%;
+    position: absolute;
+    left: 20%;
+    margin-right: 10em;
+    z-index: 50;
+    bottom: 50px;
+    top: auto;
+    opacity: 1;
 }
 #wowslider-container1 .ws-title div,#wowslider-container1 .ws-title span{
 	display:inline-block;
 	padding: 0.6em 0.8em;
-	background-color: rgba(255,255,255,0.3);
+	background-color: rgba(0,0,0,0.5);
 	color: #fff;
 }
 #wowslider-container1 .ws-title div{

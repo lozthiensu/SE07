@@ -48,10 +48,12 @@ public class AccountAction extends Action {
 				Log.in("thanh bai");
 			}
 		} else if (action.equals("login")) {
-			if(accountBO.checkLogin(account) == true){
-				out.print("success");
+			int accountId = accountBO.checkLogin(account);
+			if( accountId > 0){
+				Log.in(accountId);
+				out.print(accountId);
 			}else {
-				out.print("failed");
+				out.print("-1");
 			}
 		} else if (action.equals("checkEmail")) {
 			if(accountBO.checkEmail(account) == true){

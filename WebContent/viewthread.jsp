@@ -18,14 +18,14 @@
 <link href="css//owl.carousel.css" rel="stylesheet">
 <link href="css/owl.theme.css" rel="stylesheet">
 <link href="css/style-view.css" rel="stylesheet">
-<link href="css/lightbox.min.css" rel="stylesheet">
+<!-- <link href="css/lightbox.min.css" rel="stylesheet"> -->
 </head>
 <body>
 
 	<jsp:include page="header.jsp" />
 
-	<nav class="navbar navbar-toggleable-md fixed-top" id="menuBeauti"
-		style="background-color: #fff; box-shadow: none;">
+	<nav class="navbar navbar-toggleable-md blur-bgimage fixed-top"
+		id="menuBeauti">
 	<div class="container" style="opacity: 1;">
 		<button class="navbar-toggler navbar-toggler-right" type="button"
 			data-toggle="collapse" data-target="#navbarNav1"
@@ -47,10 +47,23 @@
 				</logic:iterate>
 			</ul>
 			<ul class="navbar-nav ml-auto">
-				<li class="nav-item"><a class="nav-link btn-right-menu-main"
-					data-toggle="modal" data-target="#modal-register">Đăng ký</a></li>
-				<li class="nav-item"><a class="nav-link  btn-right-menu-main"
-					data-toggle="modal" data-target="#modal-login">Đăng nhập</a></li>
+				<img src="img/avatar.jpg" alt="Hình đại diện" class="rounded-circle"
+					style="width: 40px; height: 40px; display: none;" id="imgAva">
+				<li class="nav-item dropdown btn-group" id="menuAcc"
+					style="display: none;"><a
+					class="nav-link dropdown-toggle btn-right-menu-main"
+					id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true"
+					aria-expanded="false"><span id="welcomeText"></span></a>
+					<div class="dropdown-menu dropdown dropdown-menu-right"
+						aria-labelledby="dropdownMenu1">
+						<a class="dropdown-item" onclick="logout();">Đăng xuất</a>
+					</div></li>
+				<li class="nav-item" id="btnReg"><a
+					class="nav-link btn-right-menu-main" data-toggle="modal"
+					data-target="#modal-register">Đăng ký</a></li>
+				<li class="nav-item" id="btnLog"><a
+					class="nav-link  btn-right-menu-main" data-toggle="modal"
+					data-target="#modal-login">Đăng nhập</a></li>
 			</ul>
 		</div>
 	</div>
@@ -147,9 +160,13 @@
 								</div>
 							</logic:iterate>
 						</div>
-						<br>
-						<br>
+						<br> <br>
 
+
+						<div class="row">
+							<div id="map" class="z-depth-1"></div>
+							<div id="map2" class="z-depth-1"></div>
+						</div>
 						<div class="breadcrumb flat"
 							style="width: 100%; margin-top: 10px;">
 							<a style="border: 1px solid #ddd;"><i class="fa fa-home"
@@ -158,33 +175,117 @@
 						</div>
 						<div class="modal-body">
 
-							<div class="md-form">
-								<input type="text" id="form2" class="form-control"> <label
-									for="form2">Bình luận</label>
-							</div>
+							<section> <!--Leave a reply form-->
+							<div class="reply-form">
+								<p class="text-center" id="welcomeToRate">(Chức năng yêu cầu
+									đăng nhập)</p>
 
-							<div class="md-form">
-								<div class="star-rating" itemprop="aggregateRating" itemscope=""
-									itemtype="http://schema.org/AggregateRating">
-									<span class="fill"></span><span class="fill"></span><span
-										class="fill"></span><span class="fill"></span><span
-										class="half"></span>( <strong itemprop="reviewCount">5</strong>
-									)
+								<!--Third row-->
+								<div class="row">
+									<!--Image column-->
+									<div class="col-sm-2 col-12">
+										<img src="img/avatar1.jpg" style="height: 100px;">
+									</div>
+									<!--/.Image column-->
+
+									<!--Content column-->
+									<div class="col-sm-10 col-12">
+										<div class="md-form">
+											<textarea type="text" id="newContentRate" class="md-textarea"
+												length="200" maxlength="200"></textarea>
+											<label for="form8">Nội dung</label>
+											<div class="form-inline">
+
+												<fieldset class="form-group">
+													<input name="newScoreRate" type="radio" id="radio1"
+														checked="checked" value="1"> <label for="radio1">Rất
+														tệ</label>
+												</fieldset>
+
+												<fieldset class="form-group">
+													<input name="newScoreRate" type="radio" id="radio2"
+														value="2"> <label for="radio2">Tệ</label>
+												</fieldset>
+
+												<fieldset class="form-group">
+													<input name="newScoreRate" type="radio" id="radio3"
+														value="3"> <label for="radio3">Bình thường</label>
+												</fieldset>
+
+												<fieldset class="form-group">
+													<input name="newScoreRate" type="radio" id="radio4"
+														value="4"> <label for="radio4">Tốt</label>
+												</fieldset>
+												<fieldset class="form-group">
+													<input name="newScoreRate" type="radio" id="radio5"
+														value="5"> <label for="radio5">Rất tốt</label>
+												</fieldset>
+
+											</div>
+										</div>
+
+									</div>
+
+									<div class="text-center">
+										<button class="btn btn-primary" onclick="return submitRate();"
+											id="btnAddRate">Gửi bình luận</button>
+									</div>
+									<!--/.Content column-->
+
 								</div>
-								<label for="form2">Điểm</label>
+								<!--/.Third row-->
 							</div>
-							<div class="text-center">
-								<button class="btn btn-primary btn-lg green">Đăng bình
-									luận</button>
-							</div>
-						</div>
-						<div class="row">
-							<div id="map" class="z-depth-1"></div>
-							<div id="map2" class="z-depth-1"></div>
+							<!--/.Leave a reply form--> </section>
 						</div>
 					</div>
 				</div>
 				<!--/.Rotating card-->
+
+				<!-- START COMMENTS -->
+				<!--Main wrapper-->
+				<div class="comments-list text-left">
+					<div class="section-heading">
+						<h3>
+							Số bình luận<span class="badge blue" id="ratesCountAjax"><bean:write
+									name="viewThreadForm" property="ratesCount" /></span>
+						</h3>
+					</div>
+					<!--First row-->
+					<div id="listRate">
+						<logic:iterate name="viewThreadForm" property="rates" id="item">
+							<div class="row">
+								<!--Image column-->
+								<div class="col-sm-2 col-12">
+									<img src="<bean:write name="item" property="accountImage" />"
+										style="height: 100px;">
+								</div>
+								<!--/.Image column-->
+								<!--Content column-->
+								<div class="col-sm-10 col-12">
+									<a><h3 class="user-name">
+											<bean:write name="item" property="accountName" />
+										</h3></a>
+									<div class="card-data">
+										<ul>
+											<li class="comment-date"><i class="fa fa-clock-o"></i> <bean:write
+													name="item" property="created" /></li>
+										</ul>
+									</div>
+									<p class="comment-text"
+										style="word-wrap: break-word; word-break: break-all;">
+										<bean:write name="item" property="content" />
+									</p>
+								</div>
+								<!--/.Content column-->
+							</div>
+						</logic:iterate>
+					</div>
+
+					<!--/.First row-->
+				</div>
+				<!--/.Main wrapper-->
+				<!-- END COMMENTS -->
+
 			</div>
 			<div class="col-lg-3">
 				<div class="card card-cascade hoverable" style="margin-top: 0px;">
@@ -297,7 +398,7 @@
 			</div>
 		</div>
 		<!--Slide new start -->
-		<div class="breadcrumb flat" style="clear:both;">
+		<div class="breadcrumb flat" style="clear: both;">
 			<a style="border: 1px solid #ddd;"><i class="fa fa-home"
 				aria-hidden="true" style="font-size: 35px;"></i></a> <a class="active"
 				href="#"> Bài viết liên quan</a>
@@ -373,13 +474,14 @@
 		<br>
 	</div>
 
-	<jsp:include page="footer.jsp" />
 	<script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
 	<script type="text/javascript" src="js/tether.min.js"></script>
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="js/mdb.min.js"></script>
 	<script type="text/javascript" src="js/owl.carousel.min.js"></script>
-	<script type="text/javascript" src="js/lightbox-plus-jquery.min.js"></script>
+	<!-- <script type="text/javascript" src="js/lightbox-plus-jquery.min.js"></script> -->
+
+	<jsp:include page="footer.jsp" />
 	<script>
 		var stick = function() {
 			var size = $(window).width();
@@ -408,33 +510,108 @@
 		$(window).scroll(function() {
 			stick();
 		});
-		$(document).ready(
-				function() {
-					var size = $(window).width();
-					var doc = document.documentElement;
-					var top = (window.pageYOffset || doc.scrollTop)
-							- (doc.clientTop || 0);
-					if (size > 1003) {
-						$("#menuBeauti").css({
-							'position' : "fixed"
-						});
-						if (top > 60) {
-							$("#menuBeauti").css("background-color",
-									"rgba(0,0,0,0.75)");
-						} else {
-							$("#menuBeauti").css("background-color",
-									"rgba(0,0,0,0)");
-						}
-					} else {
-						$("#menuBeauti").css({
-							'position' : "absolute",
-							'width' : "100%",
-							"background-color" : "rgba(0,0,0,0.75)"
-						});
-					}
-				});
+		$(document).ready(function() {
+			$('#btnAddRate').prop('disabled', true); //TO DISABLED
+			email = readCookie('email');
+			log(email);
+			if (email != undefined && email.length > 6) {
+				$('#btnAddRate').prop('disabled', false); //TO DISABLED
+				$("#welcomeToRate").html("");	
+			}else{
+				$('#btnAddRate').prop('disabled', true); //TO DISABLED
+				$("#welcomeToRate").html("Chức năng yêu cầu đăng nhập");
+			}	
+		});
 	</script>
 	<script>
+		function submitRate(){
+			content = $("#newContentRate").val();
+			score = parseInt($('input[name=newScoreRate]:checked').val());
+			threadId = parseInt('<bean:write name="thread" property="threadId" />');
+			email = readCookie("email");
+			password = readCookie("password");
+			accountId = readCookie("accountId");
+			var errorStr = "";
+			var erorFlag = false;
+			if(content.length < 10){
+				errorStr = "Nội dung phải nhiều hơn 10 kí tự";
+				erorFlag = true; 
+			}
+			if(isNaN(score) == true){
+				if(errorStr.length < 10){
+					errorStr = "Chưa chọn chất lượng";
+				}else{
+					errorStr += ", chưa chọn chất lượng";
+				}
+				erorFlag = true; 
+			}
+			if(erorFlag == true){
+				showError(errorStr);
+				return false;
+			}
+			var rate = {
+				threadId: threadId,
+				content: content,
+				score: score,
+				accountId: accountId
+			};
+			log(rate);
+			$.ajax({
+				type : "POST",
+				url : "/Mock_SE7/home-rate-action.do",
+				data : "threadId=" + threadId + "&content=" + content + "&score=" + score + "&accountId=" + accountId + "&email=" + email + "&password=" + password + "&action=addNew",
+				success : function(res) {
+					log(res);
+					var obj = JSON.parse(res);
+					log(obj);
+					if (obj != undefined) {
+						$("#newContentRate").val("");
+						$('input[name=newScoreRate]:checked').prop('checked', false);
+						var n = obj.length;
+						var stringResults = '';
+						for (var i = 0; i < n; i++) {
+							log("Dan in ra: " + i);
+							stringResults +=''+
+						'<div class="row">'+
+							'<div class="col-sm-2 col-12">'+
+							'<img src='+obj[i].accountImage+' style="height: 100px;">'+
+							'</div>'+
+							'<div class="col-sm-10 col-12">'+
+								'<a><h3 class="user-name">'+
+								obj[i].accountName +
+									'</h3></a>'+
+								'<div class="card-data">'+
+									'<ul>'+
+										'<li class="comment-date"><i class="fa fa-clock-o"></i> '+obj[i].created+'</li>'+
+									'</ul>'+
+								'</div>'+
+								'<p class="comment-text">'+
+								obj[i].content+
+								'</p>'+
+							'</div>' +
+						'</div>';
+						}
+						$('#listRate').html(stringResults);
+						$('#ratesCountAjax').html(n);
+					}else{
+						showError("Lỗi không xác định");
+					}
+					/* if (res == "success") {
+						log("tc");
+						$("#labelEmail").html("");
+						return true;
+					} else {
+						log("tb");
+						$("#labelEmail").html("Email đã tồn tại");
+						return false;
+					} */
+				},
+				error : function(e) {
+					showError("Lỗi không xác định " + e);
+				}
+			});
+			
+		}
 		var panorama;
  		function initPano() {
 			panorama = new google.maps.StreetViewPanorama(document

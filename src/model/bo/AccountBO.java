@@ -37,7 +37,7 @@ public class AccountBO {
 		return accountDAO.checkEmail(account);
 	}
 
-	public boolean checkLogin(Account account) {
+	public int checkLogin(Account account) {
 		return accountDAO.checkLogin(account);
 	}
 

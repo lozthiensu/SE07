@@ -1,30 +1,43 @@
-package model.bean;
+package form.home;
 
-public class Rate {
+import java.util.ArrayList;
+
+import org.apache.struts.action.ActionForm;
+
+import model.bean.Rate;
+
+public class RateHomeForm extends ActionForm {
 	int rateId;
 	int threadId;
 	int accountId;
+	int accountEmail; 
 	String created;
 	String accountName;
 	String accountImage;
 	String content;
-	int score;
+	int score; 
+	String email; 
+	String password; 
 
-	public Rate() {
-		super();
+	String action;
+
+	public RateHomeForm() {
+		super(); 
 	}
 
-	public Rate(int rateId, int threadId, int accountId, String created, String accountName, String accountImage,
-			String content, int score) {
+	public RateHomeForm(int rateId, int threadId, int accountId, int accountEmail, String created, String accountName,
+			String accountImage, String content, int score, String action) {
 		super();
 		this.rateId = rateId;
 		this.threadId = threadId;
 		this.accountId = accountId;
+		this.accountEmail = accountEmail;
 		this.created = created;
 		this.accountName = accountName;
 		this.accountImage = accountImage;
 		this.content = content;
 		this.score = score;
+		this.action = action;
 	}
 
 	public int getRateId() {
@@ -49,6 +62,30 @@ public class Rate {
 
 	public void setAccountId(int accountId) {
 		this.accountId = accountId;
+	}
+
+	public int getAccountEmail() {
+		return accountEmail;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public void setAccountEmail(int accountEmail) {
+		this.accountEmail = accountEmail;
 	}
 
 	public String getCreated() {
@@ -91,4 +128,12 @@ public class Rate {
 		this.score = score;
 	}
 
+	public String getAction() {
+		return action;
+	}
+
+	public void setAction(String action) {
+		this.action = action;
+	}
+	
 }

@@ -303,17 +303,17 @@ public class AccountDAO {
 		return true;
 	}
 	// Kiểm tra đăng nhập với đối tượng loginAccount
-		public boolean checkLogin(Account account) {
+		public int checkLogin(Account account) {
 
 			// Mở kết nối
 			connect();
-
+			int accountId = -1;
 			// Khai báo biến rs để chứa kết quả
 			ResultSet rs = null;
 			try {
 
 				// Câu lẹnh kiểm tra đăng nhập
-				String sql = "select name from Account where email = ? AND password = ?";
+				String sql = "select accountId from Account where email = ? AND password = ?";
 				PreparedStatement pr = connection.prepareStatement(sql);
 
 				// Truyền các biến vào câu lệnh để thực thi
@@ -324,7 +324,8 @@ public class AccountDAO {
 				if (rs.next()) {
 					// Nếu kết quả trả về khác null, đăng nhập thành công, return
 					// true
-					return true;
+					accountId = rs.getInt("accountId");
+					return accountId;
 				}
 
 				// Đóng kết nối
@@ -334,7 +335,7 @@ public class AccountDAO {
 				e.printStackTrace();
 			}
 			// Đăng nhập thất bại, return false
-			return false;
+			return accountId;
 
 		}
 }

@@ -7,6 +7,7 @@ import org.apache.struts.action.ActionForm;
 import model.bean.Account;
 import model.bean.Category;
 import model.bean.Image;
+import model.bean.Rate;
 import model.bean.Thread;
 
 public class ViewThreadForm extends ActionForm {
@@ -15,6 +16,8 @@ public class ViewThreadForm extends ActionForm {
 	Thread thread;
 	ArrayList<Image> images;
 	ArrayList<Image> images360;
+	ArrayList<Rate> rates;
+	int ratesCount;
 	ArrayList<Category> categories;
 	ArrayList<model.bean.Thread> relateThreads;
 
@@ -72,6 +75,22 @@ public class ViewThreadForm extends ActionForm {
 
 	public void setImages360(ArrayList<Image> images360) {
 		this.images360 = images360;
+	}
+
+	public ArrayList<Rate> getRates() {
+		return rates;
+	}
+
+	public void setRates(ArrayList<Rate> rates) {
+		this.rates = rates;
+	}
+
+	public int getRatesCount() {
+		return ratesCount;
+	}
+
+	public void setRatesCount(int ratesCount) {
+		this.ratesCount = ratesCount;
 	}
 
 	public ArrayList<Category> getCategories() {

@@ -233,17 +233,22 @@
 					data : "email=" + email + "&password=" + password
 							+ "&action=login",
 					success : function(res) {
-						if (res == "success") {
+						var accountId = 0;
+						accountId = parseInt(res);
+						log(accountId);
+						if (accountId >= 0) {
 							showSuccess("Đăng nhập thành công");
 							createCookie("email", email, 1);
 							createCookie("password", password, 1);
+							createCookie("accountId", accountId, 1);
 							$("#welcomeText").html("Chào " + email);
 							$("#modal-login").modal('hide');
 							$("#btnReg").hide();
 							$("#btnLog").hide();
 							$("#imgAva").show();
 							$("#menuAcc").show();
-							
+							$('#btnAddRate').prop('disabled', false); //TO DISABLED
+							$("#welcomeToRate").html("");	
 							return true;
 						} else {
 							showError("Đăng nhập thất bại");
@@ -280,7 +285,7 @@
 			}
 		});
 	}
-	function logout(){
+	function logout() {
 		eraseCookie("email");
 		eraseCookie("password");
 		$("#welcomeText").html("");
@@ -288,6 +293,8 @@
 		$("#btnLog").show();
 		$("#imgAva").hide();
 		$("#menuAcc").hide();
+		$('#btnAddRate').prop('disabled', true); //TO DISABLED
+		$("#welcomeToRate").html("Chức năng yêu cầu đăng nhập");
 	}
 	$(document).ready(function() {
 		$("#emailReg").keypress(function() {
@@ -296,6 +303,27 @@
 		$("#emailReg").keyup(function() {
 			checkEmail();
 		});
+
+		/* If login success, show avatar, hide button reg, log */
+		email = readCookie('email');
+		log(email);
+		if (email != undefined && email.length > 6) {
+			$("#welcomeText").html("Chào " + email);
+			$("#imgAva").show();
+			$("#menuAcc").show();
+			$("#btnReg").hide();
+			$("#btnLog").hide();
+			$('#btnAddRate').prop('disabled', false); //TO DISABLED
+			$("#welcomeToRate").html("");	
+		} else {
+			$("#btnReg").show();
+			$("#btnLog").show();
+			$("#imgAva").hide();
+			$("#menuAcc").hide(); 
+			$("#welcomeText").html("");
+			$('#btnAddRate').prop('disabled', true); //TO DISABLED
+			$("#welcomeToRate").html("Chức năng yêu cầu đăng nhập");
+		}
 	});
 	function showError(text) {
 		sweetAlert("Lỗi", text, "error");

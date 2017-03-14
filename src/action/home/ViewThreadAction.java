@@ -14,9 +14,11 @@ import form.home.HomeViewForm;
 import form.home.ViewThreadForm;
 import model.bean.Category;
 import model.bean.CategoryWithThread;
+import model.bean.Rate;
 import model.bean.Thread;
 import model.bo.CategoryBO;
 import model.bo.ImageBO;
+import model.bo.RateBO;
 import model.bo.ThreadBO;
 import statics.Log;
 
@@ -32,6 +34,7 @@ public class ViewThreadAction extends Action {
 		CategoryBO categoryBO = new CategoryBO();
 		ThreadBO threadBO = new ThreadBO();
 		ImageBO imageBO = new ImageBO();
+		RateBO rateBO = new RateBO();
  
 		Thread thread = new Thread();
 		thread.setThreadId(viewThreadForm.getThreadId());
@@ -43,8 +46,15 @@ public class ViewThreadAction extends Action {
 		viewThreadForm.setImages(imageBO.getListByThread(thread));
 		viewThreadForm.setImages360(imageBO.getList360ByThread(thread));
 		viewThreadForm.setRelateThreads(threadBO.getRelateThreadsByThread(thread));
+		
+		ArrayList<Rate> rates = rateBO.getListByThread(thread);
+		viewThreadForm.setRates(rates);
+		viewThreadForm.setRatesCount(rates.size());
+		
 		Log.in(imageBO.getListByThread(thread));
+		Log.in("Rate " + viewThreadForm.getRates());
 		Log.in("Related " + viewThreadForm.getRelateThreads());
+		
 		return mapping.findForward("viewThread");
 	}
 }
