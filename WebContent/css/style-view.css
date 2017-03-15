@@ -356,3 +356,44 @@ footer.page-footer {
 	background-color: #3E4551;
 	color: #fff;
 }
+
+
+
+.score {
+  display: inline-block;
+  font-family: Wingdings;
+  font-size: 30px;
+  color: #ccc;
+  position: relative;
+}
+.score::before,
+.score::after {
+  content: "\2605\2605\2605\2605\2605";
+  display: block;
+}
+.score::after {
+  color: gold;
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+}
+
+.score.s0::after {
+  width: 0%;
+}
+.score.s1::after {
+  width: 20%;
+}
+.score.s2::after {
+  width: 40%;
+}
+.score.s3::after {
+  width: 60%;
+}
+.score.s4::after {
+  width: 80%;
+}
+.score.s5::after {
+  width: 100%;
+}

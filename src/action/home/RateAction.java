@@ -57,13 +57,11 @@ public class RateAction extends Action {
 					out.print(json);
 					Log.in("Add rate thanh cong");
 				} else {
-					rates.add(new Rate());
 					String json = gson.toJson(rates);
 					out.print(json);
 					Log.in("Add rate that bai");
 				}
 			} else {
-				rates.add(new Rate());
 				String json = gson.toJson(rates);
 				out.print(json);
 				Log.in("Dang nhap that bai");

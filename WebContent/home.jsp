@@ -177,13 +177,8 @@
 										<a class="activator" style="margin-top: 10px;"><i
 											class="fa fa-eye" aria-hidden="true"></i> 1232</a>
 										<!--Title-->
-										<div class="star-rating" itemprop="aggregateRating"
-											itemscope="" itemtype="http://schema.org/AggregateRating">
-											<span class="fill"></span><span class="fill"></span><span
-												class="fill"></span><span class="fill"></span><span
-												class="half"></span>( <strong itemprop="reviewCount">5</strong>
-											)
-										</div>
+											<span class="score s<bean:write name="thread" property="avgScoreInt" />" style="margin-top: -15px;"></span>
+											(<strong itemprop="reviewCount"><bean:write name="thread" property="avgScore" /></strong>)
 									</div>
 									<div class="card-block text-center" style="margin-top: -35px;">
 										<!--Title-->

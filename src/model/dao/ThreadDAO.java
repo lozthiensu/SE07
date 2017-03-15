@@ -56,15 +56,16 @@ public class ThreadDAO {
 			try {
 				DecimalFormat numberFormat = new DecimalFormat("#.##");
 				while (rs.next()) {
-					Thread threadTemp = new Thread(rs.getInt("threadId"), rs.getInt("categoryId"), rs.getInt("accountId"),
-							rs.getString("name"), rs.getString("address"), rs.getDouble("latitude"),
-							rs.getDouble("longitude"), rs.getString("content"), rs.getLong("price"),
-							rs.getInt("electricFee"), rs.getInt("waterFee"), rs.getInt("otherFee"), rs.getInt("area"),
-							rs.getBoolean("wifi"), rs.getBoolean("waterHeater"), rs.getBoolean("conditioner"),
-							rs.getBoolean("fridge"), rs.getBoolean("attic"), rs.getBoolean("camera"),
-							rs.getString("waterSource"), rs.getString("direction"), rs.getInt("numOfToilets"),
-							rs.getInt("numOfPeople"), rs.getInt("object"), rs.getInt("villageId"), rs.getString("created"),
-							rs.getInt("viewed"), rs.getInt("status"), rs.getString("imageThumb"));
+					Thread threadTemp = new Thread(rs.getInt("threadId"), rs.getInt("categoryId"),
+							rs.getInt("accountId"), rs.getString("name"), rs.getString("address"),
+							rs.getDouble("latitude"), rs.getDouble("longitude"), rs.getString("content"),
+							rs.getLong("price"), rs.getInt("electricFee"), rs.getInt("waterFee"), rs.getInt("otherFee"),
+							rs.getInt("area"), rs.getBoolean("wifi"), rs.getBoolean("waterHeater"),
+							rs.getBoolean("conditioner"), rs.getBoolean("fridge"), rs.getBoolean("attic"),
+							rs.getBoolean("camera"), rs.getString("waterSource"), rs.getString("direction"),
+							rs.getInt("numOfToilets"), rs.getInt("numOfPeople"), rs.getInt("object"),
+							rs.getInt("villageId"), rs.getString("created"), rs.getInt("viewed"), rs.getInt("status"),
+							rs.getString("imageThumb"));
 					if (threadTemp.getPrice() > 1000000) {
 						threadTemp.setPriceString(
 								numberFormat.format(((double) (threadTemp.getPrice() / (1.0 * 1000000)))) + " triệu ");
@@ -108,15 +109,16 @@ public class ThreadDAO {
 			try {
 				DecimalFormat numberFormat = new DecimalFormat("#.##");
 				while (rs.next()) {
-					Thread threadTemp = new Thread(rs.getInt("threadId"), rs.getInt("categoryId"), rs.getInt("accountId"),
-							rs.getString("name"), rs.getString("address"), rs.getDouble("latitude"),
-							rs.getDouble("longitude"), rs.getString("content"), rs.getLong("price"),
-							rs.getInt("electricFee"), rs.getInt("waterFee"), rs.getInt("otherFee"), rs.getInt("area"),
-							rs.getBoolean("wifi"), rs.getBoolean("waterHeater"), rs.getBoolean("conditioner"),
-							rs.getBoolean("fridge"), rs.getBoolean("attic"), rs.getBoolean("camera"),
-							rs.getString("waterSource"), rs.getString("direction"), rs.getInt("numOfToilets"),
-							rs.getInt("numOfPeople"), rs.getInt("object"), rs.getInt("villageId"), rs.getString("created"),
-							rs.getInt("viewed"), rs.getInt("status"), rs.getString("imageThumb"));
+					Thread threadTemp = new Thread(rs.getInt("threadId"), rs.getInt("categoryId"),
+							rs.getInt("accountId"), rs.getString("name"), rs.getString("address"),
+							rs.getDouble("latitude"), rs.getDouble("longitude"), rs.getString("content"),
+							rs.getLong("price"), rs.getInt("electricFee"), rs.getInt("waterFee"), rs.getInt("otherFee"),
+							rs.getInt("area"), rs.getBoolean("wifi"), rs.getBoolean("waterHeater"),
+							rs.getBoolean("conditioner"), rs.getBoolean("fridge"), rs.getBoolean("attic"),
+							rs.getBoolean("camera"), rs.getString("waterSource"), rs.getString("direction"),
+							rs.getInt("numOfToilets"), rs.getInt("numOfPeople"), rs.getInt("object"),
+							rs.getInt("villageId"), rs.getString("created"), rs.getInt("viewed"), rs.getInt("status"),
+							rs.getString("imageThumb"));
 					if (threadTemp.getPrice() > 1000000) {
 						threadTemp.setPriceString(
 								numberFormat.format(((double) (threadTemp.getPrice() / (1.0 * 1000000)))) + " triệu ");
@@ -273,7 +275,7 @@ public class ThreadDAO {
 		ArrayList<Thread> temp = new ArrayList<Thread>();
 		try {
 			// Câu lệnh truy vấn
-			String sql = "select * from  Thread where categoryId = ?  order by threadId OFFSET 0 ROWS FETCH NEXT 6 ROWS ONLY";
+			String sql = "select Thread.*, temp.avgScore from Thread inner join (select Thread.threadId, avg(Cast(Rate.score as Float)) as avgScore, avg(Rate.score) as avgScoreInt from Thread left join Rate on Thread.threadId = Rate.threadId group by Thread.threadId) temp on Thread.threadId = temp.threadId where categoryId = ?  order by Thread.threadId OFFSET 0 ROWS FETCH NEXT 6 ROWS ONLY";
 			PreparedStatement pr = connection.prepareStatement(sql);
 
 			// Truyền tham số
@@ -281,7 +283,7 @@ public class ThreadDAO {
 
 			// Thực hiện
 			rs = pr.executeQuery();
-			
+
 			DecimalFormat numberFormat = new DecimalFormat("#.##");
 			while (rs.next()) {
 				Thread threadTemp = new Thread(rs.getInt("threadId"), rs.getInt("categoryId"), rs.getInt("accountId"),
@@ -299,6 +301,13 @@ public class ThreadDAO {
 				} else if (threadTemp.getPrice() > 1000) {
 					threadTemp.setPriceString((threadTemp.getPrice() / 1000) + " ngàn ");
 				}
+				DecimalFormat df = new DecimalFormat("#.#");
+				String valueStr = df.format(rs.getFloat("avgScore"));
+				valueStr = valueStr.replace(',', '.');
+
+				Log.in(df.format(rs.getFloat("avgScore")) + " " + valueStr);
+				threadTemp.setAvgScore(Float.parseFloat(valueStr));
+				threadTemp.setAvgScoreInt((int)threadTemp.getAvgScore());
 				temp.add(threadTemp);
 			}
 
@@ -326,24 +335,23 @@ public class ThreadDAO {
 			int categoryId = 0;
 			// Câu lệnh truy vấn
 			String sql = "select categoryId from Thread where threadId = ?";
-			PreparedStatement pr = connection.prepareStatement(sql); 
+			PreparedStatement pr = connection.prepareStatement(sql);
 
 			// Truyền các biến vào câu lệnh để thực thi
-			pr.setInt(1, thread.getThreadId()); 
+			pr.setInt(1, thread.getThreadId());
 			rs = pr.executeQuery();
 
 			if (rs.next()) {
 				categoryId = rs.getInt("categoryId");
 			}
-			
-			
+
 			DecimalFormat numberFormat = new DecimalFormat("#.##");
 			sql = "select * from  Thread where categoryId = ?  order by threadId OFFSET 0 ROWS FETCH NEXT 6 ROWS ONLY";
 
-			pr = connection.prepareStatement(sql); 
+			pr = connection.prepareStatement(sql);
 
 			// Truyền các biến vào câu lệnh để thực thi
-			pr.setInt(1, categoryId); 
+			pr.setInt(1, categoryId);
 			rs = pr.executeQuery();
 
 			while (rs.next()) {

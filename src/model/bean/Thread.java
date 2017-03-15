@@ -31,6 +31,8 @@ public class Thread {
 	int status;
 	String imageThumb;
 	String priceString;
+	float avgScore;
+	int avgScoreInt;
 
 	public Thread() {
 		super();
@@ -312,5 +314,22 @@ public class Thread {
 	public void setPriceString(String priceString) {
 		this.priceString = priceString;
 	}
+
+	public float getAvgScore() {
+		return avgScore;
+	}
+
+	public void setAvgScore(float avgScore) {
+		this.avgScore = avgScore;
+	}
+
+	public int getAvgScoreInt() {
+		return avgScoreInt;
+	}
+
+	public void setAvgScoreInt(int avgScoreInt) {
+		this.avgScoreInt = avgScoreInt;
+	}
+	
 
 }

@@ -265,9 +265,13 @@
 									<a><h3 class="user-name">
 											<bean:write name="item" property="accountName" />
 										</h3></a>
-									<div class="card-data">
+									<div class="card-data" style="padding: 0px;">
 										<ul>
-											<li class="comment-date"><i class="fa fa-clock-o"></i> <bean:write
+											<li class="comment-date"><i class="fa fa-commenting"
+												aria-hidden="true"></i>
+												<span class="score s<bean:write name="item" property="score" />"></span>
+											</li>
+											<li class="comment-date" style="    float: right;"><i class="fa fa-clock-o"></i> <bean:write
 													name="item" property="created" /></li>
 										</ul>
 									</div>
@@ -479,6 +483,8 @@
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="js/mdb.min.js"></script>
 	<script type="text/javascript" src="js/owl.carousel.min.js"></script>
+	<script type="text/javascript" src="js/jquery.raty-fa.js"></script>
+
 	<!-- <script type="text/javascript" src="js/lightbox-plus-jquery.min.js"></script> -->
 
 	<jsp:include page="footer.jsp" />
@@ -580,9 +586,12 @@
 								'<a><h3 class="user-name">'+
 								obj[i].accountName +
 									'</h3></a>'+
-								'<div class="card-data">'+
+								'<div class="card-data" style="padding:0px;">'+
 									'<ul>'+
-										'<li class="comment-date"><i class="fa fa-clock-o"></i> '+obj[i].created+'</li>'+
+										'<li class="comment-date"><i class="fa fa-commenting" aria-hidden="true"></i>'+
+										'<span class="score s'+obj[i].score+'"></span>'+
+										'</li>'+
+										'<li class="comment-date" style="    float: right;"><i class="fa fa-clock-o"></i>'+obj[i].created+'</li>'+
 									'</ul>'+
 								'</div>'+
 								'<p class="comment-text">'+
