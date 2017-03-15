@@ -30,4 +30,9 @@ public class Province {
 		this.name = name;
 	}
 
+	@Override
+	public String toString() {
+		return "Province [provinceId=" + provinceId + ", name=" + name + "]";
+	}
+
 }

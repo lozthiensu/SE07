@@ -17,10 +17,15 @@ Configuration 1.3//EN" "http://struts.apache.org/dtds/struts-config_1_3.dtd">
 
 
 		<!-- BAT DAU FORM CHO TRANG HOME -->
-		<!-- Trang chu, xem bai viet, tim kiem -->
+		<!-- Trang chu -->
 		<form-bean name="homeViewForm" type="form.home.HomeViewForm" />
+		<!-- Xem bai viet -->
 		<form-bean name="viewThreadForm" type="form.home.ViewThreadForm" />
+		<!-- Tim kiem -->
+		<form-bean name="searchForm" type="form.home.SearchForm" />
 		<form-bean name="searchThreadForm" type="form.home.SearchThreadForm" />
+		<!-- Xem danh muc -->
+		<form-bean name="viewCategoryForm" type="form.home.ViewCategoryForm" />
 		<!-- Dang nhap, dang ky -->
 		<form-bean name="accountHomeForm" type="form.home.AccountHomeForm" />
 		<!-- Dang nhap, dang ky -->
@@ -88,7 +93,11 @@ Configuration 1.3//EN" "http://struts.apache.org/dtds/struts-config_1_3.dtd">
 			<forward name="viewThread" path="/viewthread.jsp" />
 		</action>
 
-		<!-- Tim kiem -->
+		<!-- Tim kiem --> 
+		<action input="/search.jsp" name="searchForm" path="/search"
+			scope="request" type="action.home.SearchAction">
+			<forward name="search" path="/search.jsp" />
+		</action>
 		<action input="/search.jsp" name="searchThreadForm" path="/search-thread"
 			scope="request" type="action.home.SearchThreadAction">
 		</action>
@@ -101,6 +110,12 @@ Configuration 1.3//EN" "http://struts.apache.org/dtds/struts-config_1_3.dtd">
 		<!-- Rate -->
 		<action input="/viewthread.jsp" name="rateHomeForm" path="/home-rate-action"
 			scope="request" type="action.home.RateAction">
+		</action>
+		
+		<!-- Category -->
+		<action input="/index.jsp" name="viewCategoryForm" path="/view-category-action"
+			scope="request" type="action.home.ViewCategoryAction">
+			<forward name="viewCategory" path="/category.jsp" />
 		</action>
 		
 		<!-- KET THUC ACTION CHO TRANG CHU -->

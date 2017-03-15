@@ -17,12 +17,12 @@ public class ThreadBO {
 		return threadDAO.getListMostView();
 	}
 
-	public ArrayList<Thread> getListByCategory(Category category) {
-		return threadDAO.getListByCategory(category);
+	public ArrayList<Thread> getListByCategory(Category category, int page) {
+		return threadDAO.getListByCategory(category, page);
 	}
 
-	public ArrayList<Thread> searchBy(Thread thread) {
-		return threadDAO.searchBy(thread);
+	public ArrayList<Thread> searchBy(Thread thread, int page) {
+		return threadDAO.searchBy(thread, page);
 	}
 
 	public Thread getById(Thread thread) {

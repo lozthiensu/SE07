@@ -68,7 +68,6 @@
 			</div>
 			<!--Body-->
 			<div class="modal-body">
-				<form action="#">
 					<div class="md-form">
 						<i class="fa fa-envelope prefix"></i> <input type="text"
 							id="emailLog" class="form-control"> <label for="form2">Email</label>
@@ -80,10 +79,9 @@
 							khẩu</label>
 					</div>
 					<div class="text-center">
-						<button type="submit" class="btn btn-primary btn-lg green"
+						<button class="btn btn-primary btn-lg green"
 							onclick="loginAjax();">Đăng nhập</button>
 					</div>
-				</form>
 
 			</div>
 			<!--Footer-->
@@ -123,8 +121,7 @@
 				</h3>
 			</div>
 			<!--Body-->
-			<div class="modal-body">
-				<form action="#">
+			<div class="modal-body"> 
 					<div class="md-form">
 						<i class="fa fa-envelope prefix"></i> <input type="text"
 							id="emailReg"
@@ -146,10 +143,8 @@
 					</div>
 
 					<div class="text-center">
-						<button onclick="return registerAjax();" type="submit"
-							class="btn btn-primary btn-lg green">Đăng ký</button>
-					</div>
-				</form>
+						<button onclick="return registerAjax();" class="btn btn-primary btn-lg green">Đăng ký</button>
+					</div> 
 			</div>
 			<!--Footer-->
 			<div class="modal-footer">

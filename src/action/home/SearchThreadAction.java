@@ -15,35 +15,84 @@ import com.google.gson.Gson;
 
 import form.home.SearchThreadForm;
 import jdk.nashorn.internal.parser.JSONParser;
+import model.bean.District;
+import model.bean.Province;
 import model.bean.Thread;
+import model.bean.Village;
+import model.bo.DistrictBO;
 import model.bo.ThreadBO;
+import model.bo.VillageBO;
 import statics.Log;
 
 public class SearchThreadAction extends Action {
 	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
+
 		SearchThreadForm searchThreadForm = (SearchThreadForm) form;
 		response.setContentType("text/text;charset=utf-8");
 		response.setHeader("cache-control", "no-cache");
-		PrintWriter out = response.getWriter();
-		
-		
-		Thread thread = new Thread();
-		ThreadBO threadBO = new ThreadBO();
-		
-		thread.setWifi(searchThreadForm.isWifi());
-		thread.setWaterHeater(searchThreadForm.isWaterHeater());
-		thread.setConditioner(searchThreadForm.isConditioner());
-		
-		ArrayList<Thread> threads = null;
-		threads = threadBO.searchBy(thread);
 
-		Gson gson = new Gson();
-		String json = gson.toJson(threads);
+		String action = searchThreadForm.getAction();
+		int page = searchThreadForm.getPage();
+		if (action == null) { 
+			return null;
+		} else if(action.equals("search")) {
 
-		out.println(json);
-		out.flush();
+			PrintWriter out = response.getWriter();
+
+			Thread thread = new Thread();
+			ThreadBO threadBO = new ThreadBO();
+
+			thread.setWifi(searchThreadForm.isWifi());
+			thread.setWaterHeater(searchThreadForm.isWaterHeater());
+			thread.setConditioner(searchThreadForm.isConditioner());
+
+			ArrayList<Thread> threads = new ArrayList<Thread>();
+			threads = threadBO.searchBy(thread, page);
+
+			Gson gson = new Gson();
+			String json = gson.toJson(threads);
+
+			out.println(json);
+			out.flush();
+			System.out.println(json);
+
+		} else if(action.equals("getDistrict")) {
+
+			PrintWriter out = response.getWriter();
+
+			Province province = new Province(searchThreadForm.getProvinceId(), "");
+			
+			ArrayList<District> districts = new ArrayList<District>();
+			DistrictBO districtBO = new DistrictBO();
+			districts = districtBO.getList(province);
+
+			Gson gson = new Gson();
+			String json = gson.toJson(districts);
+
+			out.println(json);
+			out.flush();
+			System.out.println(json);
+
+		} else if(action.equals("getVillage")) {
+
+			PrintWriter out = response.getWriter();
+
+			District district = new District(searchThreadForm.getDistrictId(), 0, "");
+			
+			ArrayList<Village> villages = new ArrayList<Village>();
+			VillageBO	villageBO = new VillageBO();
+			villages = villageBO.getList(district);
+
+			Gson gson = new Gson();
+			String json = gson.toJson(villages);
+
+			out.println(json);
+			out.flush();
+			System.out.println(json);
+
+		}
 		return null;
 	}
 }

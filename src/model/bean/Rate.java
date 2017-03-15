@@ -91,4 +91,11 @@ public class Rate {
 		this.score = score;
 	}
 
+	@Override
+	public String toString() {
+		return "Rate [rateId=" + rateId + ", threadId=" + threadId + ", accountId=" + accountId + ", created=" + created
+				+ ", accountName=" + accountName + ", accountImage=" + accountImage + ", content=" + content
+				+ ", score=" + score + "]";
+	}
+
 }

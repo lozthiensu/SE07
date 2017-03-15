@@ -3,10 +3,11 @@ package model.bean;
 import java.util.ArrayList;
 
 public class CategoryWithThread {
-	
+
 	int categoryId;
 	String name;
 	ArrayList<Thread> threads;
+
 	public CategoryWithThread() {
 		super();
 	}
@@ -40,6 +41,11 @@ public class CategoryWithThread {
 
 	public void setThreads(ArrayList<Thread> threads) {
 		this.threads = threads;
+	}
+
+	@Override
+	public String toString() {
+		return "CategoryWithThread [categoryId=" + categoryId + ", name=" + name + ", threads=" + threads + "]";
 	}
 
 }

@@ -91,4 +91,10 @@ public class Account {
 		this.status = status;
 	}
 
+	@Override
+	public String toString() {
+		return "Account [accountId=" + accountId + ", level=" + level + ", categoryId=" + categoryId + ", name=" + name
+				+ ", email=" + email + ", password=" + password + ", phone=" + phone + ", status=" + status + "]";
+	}
+
 }

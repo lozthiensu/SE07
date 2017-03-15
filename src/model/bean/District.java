@@ -40,4 +40,9 @@ public class District {
 		this.name = name;
 	}
 
+	@Override
+	public String toString() {
+		return "District [districtId=" + districtId + ", provinceId=" + provinceId + ", name=" + name + "]";
+	}
+
 }

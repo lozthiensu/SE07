@@ -28,10 +28,15 @@ public class SearchThreadForm extends ActionForm {
 	int numOfPeople;
 	int object;
 	int villageId;
+	int districtId;
+	int provinceId;
 	String created;
 	int viewed;
 	int status;
 	String imageThumb;
+	String action;
+	int page;
+	int totalPage;
 
 	public SearchThreadForm() {
 		super();
@@ -79,6 +84,22 @@ public class SearchThreadForm extends ActionForm {
 		return threadId;
 	}
 
+	public int getPage() {
+		return page;
+	}
+
+	public void setPage(int page) {
+		this.page = page;
+	}
+
+	public int getTotalPage() {
+		return totalPage;
+	}
+
+	public void setTotalPage(int totalPage) {
+		this.totalPage = totalPage;
+	}
+
 	public void setThreadId(int threadId) {
 		this.threadId = threadId;
 	}
@@ -93,6 +114,30 @@ public class SearchThreadForm extends ActionForm {
 
 	public int getAccountId() {
 		return accountId;
+	}
+
+	public int getDistrictId() {
+		return districtId;
+	}
+
+	public void setDistrictId(int districtId) {
+		this.districtId = districtId;
+	}
+
+	public int getProvinceId() {
+		return provinceId;
+	}
+
+	public void setProvinceId(int provinceId) {
+		this.provinceId = provinceId;
+	}
+
+	public String getAction() {
+		return action;
+	}
+
+	public void setAction(String action) {
+		this.action = action;
 	}
 
 	public void setAccountId(int accountId) {

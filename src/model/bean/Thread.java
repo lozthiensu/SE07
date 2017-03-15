@@ -26,6 +26,10 @@ public class Thread {
 	int numOfPeople;
 	int object;
 	int villageId;
+	Province province;
+	District district;
+	Village village;
+	
 	String created;
 	int viewed;
 	int status;
@@ -33,6 +37,7 @@ public class Thread {
 	String priceString;
 	float avgScore;
 	int avgScoreInt;
+	int total;
 
 	public Thread() {
 		super();
@@ -330,6 +335,50 @@ public class Thread {
 	public void setAvgScoreInt(int avgScoreInt) {
 		this.avgScoreInt = avgScoreInt;
 	}
-	
+
+	public int getTotal() {
+		return total;
+	}
+
+	public void setTotal(int total) {
+		this.total = total;
+	}
+
+	public Province getProvince() {
+		return province;
+	}
+
+	public void setProvince(Province province) {
+		this.province = province;
+	}
+
+	public District getDistrict() {
+		return district;
+	}
+
+	public void setDistrict(District district) {
+		this.district = district;
+	}
+
+	public Village getVillage() {
+		return village;
+	}
+
+	public void setVillage(Village village) {
+		this.village = village;
+	}
+
+	@Override
+	public String toString() {
+		return "Thread [threadId=" + threadId + ", categoryId=" + categoryId + ", accountId=" + accountId + ", name="
+				+ name + ", address=" + address + ", latitude=" + latitude + ", longitude=" + longitude + ", content="
+				+ content + ", price=" + price + ", electricFee=" + electricFee + ", waterFee=" + waterFee
+				+ ", otherFee=" + otherFee + ", area=" + area + ", wifi=" + wifi + ", waterHeater=" + waterHeater
+				+ ", conditioner=" + conditioner + ", fridge=" + fridge + ", attic=" + attic + ", camera=" + camera
+				+ ", waterSource=" + waterSource + ", direction=" + direction + ", numOfToilets=" + numOfToilets
+				+ ", numOfPeople=" + numOfPeople + ", object=" + object + ", villageId=" + villageId + ", created="
+				+ created + ", viewed=" + viewed + ", status=" + status + ", imageThumb=" + imageThumb
+				+ ", priceString=" + priceString + ", avgScore=" + avgScore + ", avgScoreInt=" + avgScoreInt + "]";
+	}
 
 }

@@ -37,14 +37,17 @@
 			<i class="fa fa-bars" aria-hidden="true"
 				style="color: #fff; font-size: 30px;"></i>
 		</button>
-		<a class="navbar-brand" href="#"> <strong><img
+		<a class="navbar-brand"> <strong><img
 				src="image/logo.png" height="30px;" /></strong>
 		</a>
 		<div class="collapse navbar-collapse" id="navbarNav1">
 			<ul class="navbar-nav mr-auto hidden-lg-up">
 				<logic:iterate name="homeViewForm" property="categories" id="item">
-					<li class="nav-item"><a class="nav-link btn-right-menu-main">
-							<i class="fa fa-folder-open-o" aria-hidden="true"></i> <bean:write
+					<li class="nav-item"><a
+						class="nav-link btn-right-menu-main" 
+						href='./view-category-action.do?categoryId=<bean:write
+								name="item" property="categoryId" />'> <i
+							class="fa fa-folder-open-o" aria-hidden="true"></i> <bean:write
 								name="item" property="name" />
 					</a></li>
 				</logic:iterate>
@@ -119,16 +122,19 @@
 		</button>
 		<div class="collapse navbar-collapse" id="navbarNav1">
 			<ul class="navbar-nav mr-auto">
-
 				<logic:iterate name="homeViewForm" property="categories" id="item">
-					<li class="nav-item"><a class="nav-link"> <i
-							class="fa fa-folder-open-o" aria-hidden="true"></i> <bean:write
-								name="item" property="name" /></a></li>
+					<li class="nav-item"><a class="nav-link"
+						href='./view-category-action.do?categoryId=<bean:write
+								name="item" property="categoryId" />'>
+							<i class="fa fa-folder-open-o" aria-hidden="true"></i> <bean:write
+								name="item" property="name" />
+					</a></li>
 				</logic:iterate>
 
 			</ul>
 			<ul class="navbar-nav ml-auto">
-				<li class="nav-item"><a class="nav-link" href="tim-kiem.do"><i
+				<li class="nav-item"><a class="nav-link" 
+						href="./search.do"><i
 						class="fa fa-search" aria-hidden="true"></i> Tìm kiếm</a></li>
 			</ul>
 		</div>
@@ -175,10 +181,14 @@
 									<div class="card-block">
 										<!--Social shares button-->
 										<a class="activator" style="margin-top: 10px;"><i
-											class="fa fa-eye" aria-hidden="true"></i> 1232</a>
+											class="fa fa-eye" aria-hidden="true"></i> <bean:write
+												name="thread" property="viewed" /></a>
 										<!--Title-->
-											<span class="score s<bean:write name="thread" property="avgScoreInt" />" style="margin-top: -15px;"></span>
-											(<strong itemprop="reviewCount"><bean:write name="thread" property="avgScore" /></strong>)
+										<span
+											class="score s<bean:write name="thread" property="avgScoreInt" />"
+											style="margin-top: -15px;"></span> (<strong
+											itemprop="reviewCount"><bean:write name="thread"
+												property="avgScore" /></strong>)
 									</div>
 									<div class="card-block text-center" style="margin-top: -35px;">
 										<!--Title-->

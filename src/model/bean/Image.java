@@ -60,4 +60,10 @@ public class Image {
 		this.image360 = image360;
 	}
 
+	@Override
+	public String toString() {
+		return "Image [imageId=" + imageId + ", threadId=" + threadId + ", src=" + src + ", content=" + content
+				+ ", image360=" + image360 + "]";
+	}
+
 }

@@ -34,13 +34,15 @@
 			<i class="fa fa-bars" aria-hidden="true"
 				style="color: #fff; font-size: 30px;"></i>
 		</button>
-		<a class="navbar-brand" href="#"> <strong><img
+		<a class="navbar-brand" href="./"> <strong><img
 				src="image/logo.png" height="30px;" /></strong>
 		</a>
 		<div class="collapse navbar-collapse" id="navbarNav1">
 			<ul class="navbar-nav mr-auto hidden-lg-up">
 				<logic:iterate name="viewThreadForm" property="categories" id="item">
-					<li class="nav-item"><a class="nav-link btn-right-menu-main">
+					<li class="nav-item"><a class="nav-link btn-right-menu-main"
+						href='./view-category-action.do?categoryId=<bean:write
+								name="item" property="categoryId" />'>
 							<i class="fa fa-folder-open-o" aria-hidden="true"></i> <bean:write
 								name="item" property="name" />
 					</a></li>
@@ -84,14 +86,17 @@
 			<ul class="navbar-nav mr-auto">
 
 				<logic:iterate name="viewThreadForm" property="categories" id="item">
-					<li class="nav-item"><a class="nav-link"> <i
-							class="fa fa-folder-open-o" aria-hidden="true"></i> <bean:write
-								name="item" property="name" /></a></li>
+					<li class="nav-item"><a class="nav-link"
+						href='./view-category-action.do?categoryId=<bean:write
+								name="item" property="categoryId" />'>
+							<i class="fa fa-folder-open-o" aria-hidden="true"></i> <bean:write
+								name="item" property="name" />
+					</a></li>
 				</logic:iterate>
 
 			</ul>
 			<ul class="navbar-nav ml-auto">
-				<li class="nav-item"><a class="nav-link"><i
+				<li class="nav-item"><a class="nav-link" href="./search.do"><i
 						class="fa fa-search" aria-hidden="true"></i> Tìm kiếm</a></li>
 			</ul>
 		</div>
@@ -268,11 +273,12 @@
 									<div class="card-data" style="padding: 0px;">
 										<ul>
 											<li class="comment-date"><i class="fa fa-commenting"
-												aria-hidden="true"></i>
-												<span class="score s<bean:write name="item" property="score" />"></span>
+												aria-hidden="true"></i> <span
+												class="score s<bean:write name="item" property="score" />"></span>
 											</li>
-											<li class="comment-date" style="    float: right;"><i class="fa fa-clock-o"></i> <bean:write
-													name="item" property="created" /></li>
+											<li class="comment-date" style="float: right;"><i
+												class="fa fa-clock-o"></i> <bean:write name="item"
+													property="created" /></li>
 										</ul>
 									</div>
 									<p class="comment-text"
@@ -310,7 +316,10 @@
 						<h5 class="card-title">
 							<strong>Gọi: <bean:write name="thread" property="price" /></strong>
 						</h5>
-						<span class="text-left">
+						<span class="text-left"> <span
+							class="score s<bean:write name="thread" property="avgScoreInt" />"></span>(<strong
+							itemprop="reviewCount"><bean:write name="thread"
+									property="avgScore" /></strong>)
 							<h5>
 								<font color="#607d8b">Ngày đăng:</font>
 								<bean:write name="thread" property="created" />
@@ -349,35 +358,67 @@
 							</h5>
 							<h5>
 								<font color="#607d8b">Wifi:</font>
-								<bean:write name="thread" property="wifi" />
+								<logic:equal name="thread" property="wifi" value="true">
+								Có
+								</logic:equal>
+								<logic:notEqual name="thread" property="wifi" value="true">
+								Không
+								</logic:notEqual>
 							</h5>
 							<h5>
 								<font color="#607d8b">Máy nước nóng:</font>
-								<bean:write name="thread" property="waterHeater" />
+								<logic:equal name="thread" property="waterHeater" value="true">
+								Có
+								</logic:equal>
+								<logic:notEqual name="thread" property="waterHeater"
+									value="true">
+								Không
+								</logic:notEqual>
 							</h5>
 							<h5>
 								<font color="#607d8b">Điều hòa:</font>
-								<bean:write name="thread" property="conditioner" />
+								<logic:equal name="thread" property="conditioner" value="true">
+								Có
+								</logic:equal>
+								<logic:notEqual name="thread" property="conditioner"
+									value="true">
+								Không
+								</logic:notEqual>
 							</h5>
 							<h5>
 								<font color="#607d8b">Tủ lạnh:</font>
-								<bean:write name="thread" property="fridge" />
+								<logic:equal name="thread" property="fridge" value="true">
+								Có
+								</logic:equal>
+								<logic:notEqual name="thread" property="fridge" value="true">
+								Không
+								</logic:notEqual>
 							</h5>
 							<h5>
 								<font color="#607d8b">Gác xếp:</font>
-								<bean:write name="thread" property="attic" />
-							</h5>
-							<h5>
-								<font color="#607d8b">Số toilet:</font>
-								<bean:write name="thread" property="numOfToilets" />
+								<logic:equal name="thread" property="attic" value="true">
+								Có
+								</logic:equal>
+								<logic:notEqual name="thread" property="attic" value="true">
+								Không
+								</logic:notEqual>
 							</h5>
 							<h5>
 								<font color="#607d8b">Camera an ninh:</font>
-								<bean:write name="thread" property="camera" />
+								<logic:equal name="thread" property="camera" value="true">
+								Có
+								</logic:equal>
+								<logic:notEqual name="thread" property="camera" value="true">
+								Không
+								</logic:notEqual>
 							</h5>
 							<h5>
 								<font color="#607d8b">Nguồn nước:</font>
 								<bean:write name="thread" property="waterSource" />
+							</h5>
+							<h5>
+								<font color="#607d8b">Số toilet:</font>
+								<bean:write name="thread" property="numOfToilets" />
 							</h5>
 							<h5>
 								<font color="#607d8b">Hướng phòng:</font>
@@ -385,15 +426,18 @@
 							</h5>
 							<h5>
 								<font color="#607d8b">Tỉnh:</font>
-								<bean:write name="thread" property="villageId" />
+								<bean:define id="province" name="thread" property="province"></bean:define>
+								<bean:write name="province" property="name" />
 							</h5>
 							<h5>
 								<font color="#607d8b">Quân/Huyện:</font>
-								<bean:write name="thread" property="villageId" />
+								<bean:define id="district" name="thread" property="district"></bean:define>
+								<bean:write name="district" property="name" />
 							</h5>
 							<h5>
 								<font color="#607d8b">Xã:</font>
-								<bean:write name="thread" property="villageId" />
+								<bean:define id="village" name="thread" property="village"></bean:define>
+								<bean:write name="village" property="name" />
 							</h5>
 						</span>
 						<!--/.Card content-->
@@ -420,7 +464,7 @@
 							<div class="view overlay hm-white-slight"
 								style="margin-top: -15px; width: 90%; margin-left: 5%; min-height: 200px; max-height: 200px;">
 								<img class="img-fluid"
-									src="<bean:write name="threadRelated" property="imageThumb" />"
+									src="<bean:write name="thread" property="imageThumb" />"
 									style="border-radius: 3px; width: auto; min-height: 200px;"
 									style=" ">
 								<div class="mask waves-effect waves-light"></div>
@@ -432,15 +476,14 @@
 							<div class="card-block">
 								<!--Social shares button-->
 								<a class="activator" style="margin-top: 10px;"><i
-									class="fa fa-eye" aria-hidden="true"></i> 1232</a>
+									class="fa fa-eye" aria-hidden="true"></i> <bean:write
+										name="threadRelated" property="viewed" /></a>
 								<!--Title-->
-								<div class="star-rating" itemprop="aggregateRating" itemscope=""
-									itemtype="http://schema.org/AggregateRating">
-									<span class="fill"></span><span class="fill"></span><span
-										class="fill"></span><span class="fill"></span><span
-										class="half"></span>( <strong itemprop="reviewCount">5</strong>
-									)
-								</div>
+								<span
+									class="score s<bean:write name="threadRelated" property="avgScoreInt" />"
+									style="margin-top: -15px;"></span> (<strong
+									itemprop="reviewCount"><bean:write name="threadRelated"
+										property="avgScore" /></strong>)
 							</div>
 							<div class="card-block text-center" style="margin-top: -35px;">
 								<!--Title-->
@@ -455,10 +498,9 @@
 									m&#178;
 								</h5>
 								<p class="card-text truncase-detail">
-									<bean:write name="threadRelated" property="name" />
+									<bean:write name="thread" property="name" />
 								</p>
-								<bean:define id="threadId" name="threadRelated"
-									property="threadId"></bean:define>
+								<bean:define id="threadId" name="threadRelated" property="threadId"></bean:define>
 								<html:link styleClass="btn btn-success btn-fb"
 									action="/view-thread-action?threadId=${threadId}">Xem</html:link>
 
