@@ -45,7 +45,7 @@ public class VillageDAO {
 		try {
 
 			// Câu lệnh truy vấn
-			String sql = "select * from Province";
+			String sql = "select * from Village";
 			PreparedStatement pr = connection.prepareStatement(sql);
 
 			// Thực hiện
@@ -53,7 +53,7 @@ public class VillageDAO {
 
 			// Lấy kết quả đưa vào accountData
 			while (rs.next()) {
-				villages.add(new Village(rs.getInt("villageId"), rs.getInt("districtId"), ""));
+				villages.add(new Village(rs.getInt("villageId"), rs.getInt("districtId"), rs.getString("name")));
 			}
 
 			// Đóng kết nối

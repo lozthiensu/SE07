@@ -465,7 +465,7 @@ public class ThreadDAO {
 
 		/* Lưu kết quả truy vấn */
 		ResultSet rs = null;
-		
+
 		/* Tao ra cau dieu kien where */
 		String filter = "";
 		int count = 0;
@@ -484,6 +484,123 @@ public class ThreadDAO {
 			filter += " waterHeater = 1";
 		}
 		if (thread.isConditioner() == true) {
+			if (count == 0)
+				filter += " WHERE ";
+			else
+				filter += " AND  ";
+			count++;
+			filter += " conditioner = 1 ";
+		}
+		if (thread.isFridge() == true) {
+			if (count == 0)
+				filter += " WHERE ";
+			else
+				filter += " AND  ";
+			count++;
+			filter += " fridge = 1 ";
+		}
+		if (thread.isAttic() == true) {
+			if (count == 0)
+				filter += " WHERE ";
+			else
+				filter += " AND  ";
+			count++;
+			filter += " attic = 1 ";
+		}
+		if (thread.isCamera() == true) {
+			if (count == 0)
+				filter += " WHERE ";
+			else
+				filter += " AND  ";
+			count++;
+			filter += " camera = 1 ";
+		}
+		if (thread.getWaterSource() > 0) {
+			if (count == 0)
+				filter += " WHERE ";
+			else
+				filter += " AND  ";
+			count++;
+			filter += " waterSource =  " + thread.getWaterSource();
+		}
+		if (thread.getObject() > 0) {
+			if (count == 0)
+				filter += " WHERE ";
+			else
+				filter += " AND  ";
+			count++;
+			filter += " object = " + thread.getObject();
+		}
+		if (thread.getArea() > 0) {
+			if (count == 0)
+				filter += " WHERE ";
+			else
+				filter += " AND  ";
+			count++;
+			if (thread.getArea() == 1) {
+				filter += " area < 15";
+			} else if (thread.getArea() == 2) {
+				filter += " area between 15 and 25 ";
+			} else if (thread.getArea() == 3) {
+				filter += " area between 25 and 35 ";
+			} else if (thread.getArea() == 4) {
+				filter += " area between 35 and 50 ";
+			} else if (thread.getArea() == 5) {
+				filter += " area > 50 ";
+			}
+		}
+		if (thread.getPrice() > 0) {
+			if (count == 0)
+				filter += " WHERE ";
+			else
+				filter += " AND  ";
+			count++;
+			if (thread.getPrice() == 1) {
+				filter += " price < 500000";
+			} else if (thread.getPrice() == 2) {
+				filter += " price between 500000 and 1000000 ";
+			} else if (thread.getPrice() == 3) {
+				filter += " price between 1000000 and 1500000 ";
+			} else if (thread.getPrice() == 4) {
+				filter += " price between 1500000 and 2500000 ";
+			} else if (thread.getPrice() == 4) {
+				filter += " price between 2500000 and 5000000 ";
+			} else if (thread.getPrice() == 5) {
+				filter += " price > 5000000 ";
+			}
+		}
+		if (thread.getFar() > 0) {
+			if (count == 0)
+				filter += " WHERE ";
+			else
+				filter += " AND  ";
+			count++;
+		}
+		if (thread.getProvince().getProvinceId() > 0) {
+			if (count == 0)
+				filter += " WHERE ";
+			else
+				filter += " AND  ";
+			count++;
+			filter += " Province.provinceId = " + thread.getProvince().getProvinceId();
+		}
+		if (thread.getDistrict().getDistrictId() > 0) {
+			if (count == 0)
+				filter += " WHERE ";
+			else
+				filter += " AND  ";
+			count++;
+			filter += " District.districtId = " + thread.getDistrict().getDistrictId();
+		}
+		if (thread.getVillage().getVillageId() > 0) {
+			if (count == 0)
+				filter += " WHERE ";
+			else
+				filter += " AND  ";
+			count++;
+			filter += " Village.villageId = " + thread.getVillage().getVillageId();
+		}
+		if (thread.getName().length() > 0) {
 			if (count == 0)
 				filter += " WHERE ";
 			else
@@ -521,13 +638,15 @@ public class ThreadDAO {
 
 		/* Phan trang ket qua tim kiem duoc */
 
-		filter += " order by threadId offset " + offset + " rows fetch next " + Pagination.itemPerPageView + " row only";
+		filter += " order by threadId offset " + offset + " rows fetch next " + Pagination.itemPerPageView
+				+ " row only";
 		// Lưu thông tin account
 		ArrayList<Thread> temp = new ArrayList<Thread>();
 		try {
 
 			// Câu lệnh truy vấn
-			String sql = "select Thread.*, temp.avgScore from Thread inner join (select Thread.threadId, avg(Cast(Rate.score as Float)) as avgScore, avg(Rate.score) as avgScoreInt from Thread left join Rate on Thread.threadId = Rate.threadId group by Thread.threadId) temp on Thread.threadId = temp.threadId  " + filter;
+			String sql = "select Thread.*, temp.avgScore from Thread inner join (select Thread.threadId, avg(Cast(Rate.score as Float)) as avgScore, avg(Rate.score) as avgScoreInt from Thread left join Rate on Thread.threadId = Rate.threadId group by Thread.threadId) temp on Thread.threadId = temp.threadId  "
+					+ filter;
 			Log.in(sql);
 			PreparedStatement pr = connection.prepareStatement(sql);
 
@@ -558,7 +677,7 @@ public class ThreadDAO {
 				Log.in(df.format(rs.getFloat("avgScore")) + " " + valueStr);
 				threadTemp.setAvgScore(Float.parseFloat(valueStr));
 				threadTemp.setAvgScoreInt((int) threadTemp.getAvgScore());
-				
+
 				temp.add(threadTemp);
 			}
 

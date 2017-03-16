@@ -22,7 +22,7 @@ public class SearchThreadForm extends ActionForm {
 	boolean fridge;
 	boolean attic;
 	boolean camera;
-	String waterSource;
+	int waterSource;
 	String direction;
 	int numOfToilets;
 	int numOfPeople;
@@ -33,8 +33,11 @@ public class SearchThreadForm extends ActionForm {
 	String created;
 	int viewed;
 	int status;
+	int far;
 	String imageThumb;
 	String action;
+	String post;
+
 	int page;
 	int totalPage;
 
@@ -46,7 +49,7 @@ public class SearchThreadForm extends ActionForm {
 	public SearchThreadForm(int threadId, int categoryId, int accountId, String name, String address, double latitude,
 			double longitude, String content, long price, int electricFee, int waterFee, int otherFee, int area,
 			boolean wifi, boolean waterHeater, boolean conditioner, boolean fridge, boolean attic, boolean camera,
-			String waterSource, String direction, int numOfToilets, int numOfPeople, int object, int villageId,
+			int waterSource, String direction, int numOfToilets, int numOfPeople, int object, int villageId,
 			String created, int viewed, int status, String imageThumb) {
 		super();
 		this.threadId = threadId;
@@ -78,6 +81,14 @@ public class SearchThreadForm extends ActionForm {
 		this.viewed = viewed;
 		this.status = status;
 		this.imageThumb = imageThumb;
+	}
+
+	public String getPost() {
+		return post;
+	}
+
+	public void setPost(String post) {
+		this.post = post;
 	}
 
 	public int getThreadId() {
@@ -134,6 +145,14 @@ public class SearchThreadForm extends ActionForm {
 
 	public String getAction() {
 		return action;
+	}
+
+	public int getFar() {
+		return far;
+	}
+
+	public void setFar(int far) {
+		this.far = far;
 	}
 
 	public void setAction(String action) {
@@ -272,11 +291,11 @@ public class SearchThreadForm extends ActionForm {
 		this.camera = camera;
 	}
 
-	public String getWaterSource() {
+	public int getWaterSource() {
 		return waterSource;
 	}
 
-	public void setWaterSource(String waterSource) {
+	public void setWaterSource(int waterSource) {
 		this.waterSource = waterSource;
 	}
 

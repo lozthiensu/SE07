@@ -47,7 +47,20 @@ public class SearchThreadAction extends Action {
 			thread.setWifi(searchThreadForm.isWifi());
 			thread.setWaterHeater(searchThreadForm.isWaterHeater());
 			thread.setConditioner(searchThreadForm.isConditioner());
-
+			thread.setFridge(searchThreadForm.isFridge());
+			thread.setAttic(searchThreadForm.isAttic());
+			thread.setCamera(searchThreadForm.isCamera());
+			thread.setObject(searchThreadForm.getObject());
+			thread.setWaterSource(searchThreadForm.getWaterSource());
+			thread.setFar(searchThreadForm.getFar());
+			thread.setArea(searchThreadForm.getArea());
+			thread.setPrice(searchThreadForm.getPrice());
+			thread.setProvince(new Province(searchThreadForm.getProvinceId(), ""));
+			thread.setDistrict(new District(searchThreadForm.getDistrictId(), 0, ""));
+			thread.setVillage(new Village(searchThreadForm.getVillageId(), 0, ""));
+			thread.setName(searchThreadForm.getName());
+			
+			Log.in(thread.toString());
 			ArrayList<Thread> threads = new ArrayList<Thread>();
 			threads = threadBO.searchBy(thread, page);
 
@@ -80,6 +93,7 @@ public class SearchThreadAction extends Action {
 			PrintWriter out = response.getWriter();
 
 			District district = new District(searchThreadForm.getDistrictId(), 0, "");
+			
 			
 			ArrayList<Village> villages = new ArrayList<Village>();
 			VillageBO	villageBO = new VillageBO();

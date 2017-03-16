@@ -20,7 +20,7 @@ public class Thread {
 	boolean fridge;
 	boolean attic;
 	boolean camera;
-	String waterSource;
+	int waterSource;
 	String direction;
 	int numOfToilets;
 	int numOfPeople;
@@ -38,7 +38,7 @@ public class Thread {
 	float avgScore;
 	int avgScoreInt;
 	int total;
-
+	int far;
 	public Thread() {
 		super();
 	}
@@ -46,7 +46,6 @@ public class Thread {
 	public Thread(int threadId, int categoryId, int accountId, String name, String address, double latitude,
 			double longitude, String content, long price, int electricFee, int waterFee, int otherFee, int area,
 			boolean wifi, boolean waterHeater, boolean conditioner, boolean fridge, boolean attic, boolean camera,
-			String waterSource, String direction, int numOfToilets, int numOfPeople, int object, int villageId,
 			String created, int viewed, int status, String imageThumb) {
 		super();
 		this.threadId = threadId;
@@ -94,6 +93,14 @@ public class Thread {
 
 	public void setCategoryId(int categoryId) {
 		this.categoryId = categoryId;
+	}
+
+	public int getFar() {
+		return far;
+	}
+
+	public void setFar(int far) {
+		this.far = far;
 	}
 
 	public int getAccountId() {
@@ -232,11 +239,11 @@ public class Thread {
 		this.camera = camera;
 	}
 
-	public String getWaterSource() {
+	public int getWaterSource() {
 		return waterSource;
 	}
 
-	public void setWaterSource(String waterSource) {
+	public void setWaterSource(int waterSource) {
 		this.waterSource = waterSource;
 	}
 

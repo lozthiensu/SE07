@@ -157,8 +157,8 @@
 
 				<div class="row">
 					<div class="col-lg-3">
-						<select class="mdb-select">
-							<option value="" selected>Không</option>
+						<select class="mdb-select" id="waterSource">
+							<option value="0" selected>Không</option>
 							<option value="1">Giếng đào</option>
 							<option value="2">Giếng đóng-khoan</option>
 							<option value="3">Nước máy</option>
@@ -166,43 +166,43 @@
 						</select> <label>Nguồn nước</label>
 					</div>
 					<div class="col-lg-3">
-						<select class="mdb-select">
-							<option value="" selected>Không</option>
+						<select class="mdb-select" id="object">
+							<option value="0" selected>Không</option>
 							<option value="1">Nam</option>
 							<option value="1">Nữ</option>
 							<option value="2">Không xác định</option>
 						</select> <label>Đối tượng</label>
 					</div>
 					<div class="col-lg-3">
-						<select class="mdb-select">
-							<option value="" selected>Không</option>
+						<select class="mdb-select" id="area">
+							<option value="0" selected>Không</option>
 							<option value="1">&lt; 15 m&#178;</option>
-							<option value="1">15 - 25 m&#178;</option>
-							<option value="2">25 - 35 m&#178;</option>
-							<option value="3">35 - 50 m&#178;</option>
-							<option value="3">&gt; 50 m&#178;</option>
+							<option value="2">15 - 25 m&#178;</option>
+							<option value="3">25 - 35 m&#178;</option>
+							<option value="4">35 - 50 m&#178;</option>
+							<option value="5">&gt; 50 m&#178;</option>
 						</select> <label>Diện tích</label>
 					</div>
 					<div class="col-lg-3">
-						<select class="mdb-select">
-							<option value="" selected>Không</option>
+						<select class="mdb-select" id="price">
+							<option value="0" selected>Không</option>
 							<option value="1">&lt; 500 k</option>
-							<option value="1">500 - 1000 k</option>
-							<option value="2">1000 - 1500 k</option>
-							<option value="3">1500 - 2500 k</option>
-							<option value="3">2500 - 5000 k</option>
-							<option value="3">&gt; 5000 k</option>
+							<option value="2">500 - 1000 k</option>
+							<option value="3">1000 - 1500 k</option>
+							<option value="4">1500 - 2500 k</option>
+							<option value="5">2500 - 5000 k</option>
+							<option value="6">&gt; 5000 k</option>
 						</select> <label>Giá phòng</label>
 					</div>
 					<div class="col-lg-3">
-						<select class="mdb-select">
-							<option value="" selected>Không</option>
+						<select class="mdb-select" id="far">
+							<option value="0" selected>Không</option>
 							<option value="1">&lt; 500 m</option>
-							<option value="1">500 - 1500 m</option>
-							<option value="2">1500 - 3000 m</option>
-							<option value="3">3000 - 6000 m</option>
-							<option value="3">6000 - 10000 m</option>
-							<option value="3">&gt; 10000 m</option>
+							<option value="2">500 - 1500 m</option>
+							<option value="3">1500 - 3000 m</option>
+							<option value="4">3000 - 6000 m</option>
+							<option value="5">6000 - 10000 m</option>
+							<option value="6">&gt; 10000 m</option>
 						</select> <label>Phạm vi</label>
 					</div>
 					<div class="col-lg-3">
@@ -219,25 +219,13 @@
 						<label>Tỉnh/Thành phố</label>
 					</div>
 					<div class="col-lg-3">
-						<select name="districtId"  class="mdb-select" id="slbDistrict">
+						<select name="districtId" class="mdb-select" id="slbDistrict">
 							<option value="" selected>Không</option>
-							<option value="1">&lt; 500 m</option>
-							<option value="1">500 - 1500 m</option>
-							<option value="2">1500 - 3000 m</option>
-							<option value="3">3000 - 6000 m</option>
-							<option value="3">6000 - 10000 m</option>
-							<option value="3">&gt; 10000 m</option>
 						</select> <label>Quận/Huyện</label>
 					</div>
 					<div class="col-lg-3">
-						<select class="mdb-select">
+						<select name="villageId" class="mdb-select" id="slbVillage">
 							<option value="" selected>Không</option>
-							<option value="1">&lt; 500 m</option>
-							<option value="1">500 - 1500 m</option>
-							<option value="2">1500 - 3000 m</option>
-							<option value="3">3000 - 6000 m</option>
-							<option value="3">6000 - 10000 m</option>
-							<option value="3">&gt; 10000 m</option>
 						</select> <label>Làng/Xã</label>
 					</div>
 					<div class="col-lg-12">
@@ -346,9 +334,38 @@
 							for (var i = 0; i < n; i++) {
 								stringResults += '<option value="'+districts[i].districtId+'">'+districts[i].name+'</option>';
 							}
-							log("Noi dung cu: " + $('#slbDistrict').html());
-							log("Noi dung moi: " + stringResults);
 							$('#slbDistrict').html(stringResults);
+							$('#slbDistrict').material_select();
+
+							$('#slbVillage').html('<option value="" selected>Không</option>');
+							$('#slbVillage').material_select();
+						}
+					},
+					error : function(e) {
+						alert('Error: ' + e);
+					}
+				});
+			});
+			$('#slbDistrict').on("change", function() {
+				var districtId = $(this).val();
+				log(districtId);
+				var str = "action=getVillage" + "&districtId=" + districtId;
+				log("POST: " + str);
+				$.ajax({
+					type : "POST",
+					url : "/Mock_SE7/search-thread.do",
+					data : str,
+					success : function(response) {
+						log("RES: " + response);
+						var villages = JSON.parse(response);
+						if (villages != undefined) {
+							var n = villages.length;
+							var stringResults = '<option value="" selected>Không</option>';
+							for (var i = 0; i < n; i++) {
+								stringResults += '<option value="'+villages[i].villageId+'">'+villages[i].name+'</option>';
+							}
+							$('#slbVillage').html(stringResults);
+							$('#slbVillage').material_select();
 						}
 					},
 					error : function(e) {
@@ -359,14 +376,39 @@
 		});
 		function doAjaxPost() {
 			// get the form values
-			var page = parseInt(readCookie('page'));
-			var name = $('#name').val();
-			var wifi = $('#wifi').is(':checked');
-			var waterHeater = $('#waterHeater').is(':checked');
-			var conditioner = $('#conditioner').is(':checked');
-			var str = "action=search" + "&page=" + page + "&name=" + name
-					+ "&wifi=" + wifi + "&waterHeater=" + waterHeater
-					+ "&conditioner=" + conditioner;
+			wifi = $('#wifi').is(':checked');
+			waterHeater = $('#waterHeater').is(':checked');
+			conditioner = $('#conditioner').is(':checked');
+			fridge = $('#fridge').is(':checked');
+			attic = $('#attic').is(':checked');
+			camera = $('#camera').is(':checked');
+			object = $('#object').val();
+			waterSource = $('#waterSource').val();
+			area = $('#area').val();
+			price = $('#price').val();
+			far = $('#far').val();
+			provinceId = $('#slbProvince').val();
+			districtId = $('#slbDistrict').val();
+			villageId = $('#slbVillage').val();
+			name = $('#name').val();
+			page = parseInt(readCookie('page'));
+			var str = "action=search" + 
+			"&wifi=" + wifi + 
+			"&waterHeater=" + waterHeater +
+			"&conditioner=" + conditioner +
+			"&fridge=" + fridge +
+			"&attic=" + attic +
+			"&camera=" + camera +
+			"&object=" + object +
+			"&waterSource=" + waterSource +
+			"&area=" + area +
+			"&price=" + price +
+			"&far=" + far +
+			"&provinceId=" + provinceId +
+			"&districtId=" + districtId +
+			"&villageId=" + villageId +
+			"&name=" + name;
+			"&page=" + page;
 			log("Post " + str);
 			$.ajax({
 				type : "POST",
@@ -375,7 +417,7 @@
 				success : function(response) {
 					++page;
 					createCookie('page', page, 1);
-					log("Res " + response);
+					//log("Res " + response);
 					var threads = JSON.parse(response);
 					if (threads != undefined) {
 						var n = threads.length;
