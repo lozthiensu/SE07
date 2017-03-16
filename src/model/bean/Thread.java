@@ -29,7 +29,7 @@ public class Thread {
 	Province province;
 	District district;
 	Village village;
-	
+
 	String created;
 	int viewed;
 	int status;
@@ -39,6 +39,9 @@ public class Thread {
 	int avgScoreInt;
 	int total;
 	int far;
+	int page;
+	int totalPage;
+
 	public Thread() {
 		super();
 	}
@@ -46,6 +49,7 @@ public class Thread {
 	public Thread(int threadId, int categoryId, int accountId, String name, String address, double latitude,
 			double longitude, String content, long price, int electricFee, int waterFee, int otherFee, int area,
 			boolean wifi, boolean waterHeater, boolean conditioner, boolean fridge, boolean attic, boolean camera,
+			int waterSource, String direction, int numOfToilets, int numOfPeople, int object, int villageId,
 			String created, int viewed, int status, String imageThumb) {
 		super();
 		this.threadId = threadId;
@@ -89,6 +93,22 @@ public class Thread {
 
 	public int getCategoryId() {
 		return categoryId;
+	}
+
+	public int getPage() {
+		return page;
+	}
+
+	public void setPage(int page) {
+		this.page = page;
+	}
+
+	public int getTotalPage() {
+		return totalPage;
+	}
+
+	public void setTotalPage(int totalPage) {
+		this.totalPage = totalPage;
 	}
 
 	public void setCategoryId(int categoryId) {

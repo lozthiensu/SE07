@@ -1,4 +1,3 @@
-<%@page import="common.StringProcess"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://struts.apache.org/tags-bean" prefix="bean"%>
@@ -19,6 +18,79 @@
 <link href="css/owl.theme.css" rel="stylesheet">
 <link href="css/style-view.css" rel="stylesheet">
 <link href="css/lightbox.min.css" rel="stylesheet">
+<style>
+#map {
+	height: 400px;
+}
+
+#description {
+	font-family: Roboto;
+	font-size: 15px;
+	font-weight: 300;
+}
+
+#infowindow-content .title {
+	font-weight: bold;
+}
+
+#infowindow-content {
+	display: none;
+}
+
+#map #infowindow-content {
+	display: inline;
+}
+
+.pac-card {
+	margin: 10px 10px 0 0;
+	border-radius: 2px 0 0 2px;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	outline: none;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+	background-color: #fff;
+	font-family: Roboto;
+}
+
+#pac-container {
+	padding-bottom: 12px;
+	margin-right: 12px;
+}
+
+.pac-controls {
+	display: inline-block;
+	padding: 5px 11px;
+}
+
+.pac-controls label {
+	font-family: Roboto;
+	font-size: 13px;
+	font-weight: 300;
+}
+
+#pac-input {
+	background-color: #fff;
+	font-family: Roboto;
+	font-size: 15px;
+	font-weight: 300;
+	margin-left: 12px;
+	padding: 0 11px 0 13px;
+	text-overflow: ellipsis;
+	width: 400px;
+}
+
+#pac-input:focus {
+	border-color: #4d90fe;
+}
+
+#title {
+	color: #fff;
+	background-color: #4d90fe;
+	font-size: 25px;
+	font-weight: 500;
+	padding: 6px 12px;
+}
+</style>
 </head>
 <body>
 
@@ -59,7 +131,8 @@
 					aria-expanded="false"><span id="welcomeText"></span></a>
 					<div class="dropdown-menu dropdown dropdown-menu-right"
 						aria-labelledby="dropdownMenu1">
-						<a class="dropdown-item" onclick="logout();">Đăng xuất</a>
+						<a class="dropdown-item" href="./user/">Quản lý</a> <a
+							class="dropdown-item" onclick="logout();">Đăng xuất</a>
 					</div></li>
 				<li class="nav-item" id="btnReg"><a
 					class="nav-link btn-right-menu-main" data-toggle="modal"
@@ -117,47 +190,55 @@
 		<div class="row">
 			<div class="col-lg-12">
 				<div class="row">
+					<div class="col-lg-12">
+						<div class="md-form">
+							<input type="text" id="name" class="form-control validate"
+								length="250" onkeydown="doAjaxPost()"> <label for="name"
+								data-error="wrong" data-success="right">Nhập từ khóa</label>
+						</div>
+					</div>
 					<div class="col-lg-3">
 						<fieldset class="form-group">
-							<input type="checkbox" id="wifi" checked> <label
-								for="wifi">Wifi/Mạng</label>
+							<input type="checkbox" id="wifi" onchange="doAjaxPost()">
+							<label for="wifi">Wifi/Mạng</label>
 						</fieldset>
 					</div>
 					<div class="col-lg-3">
 						<fieldset class="form-group">
-							<input type="checkbox" id="waterHeater"> <label
-								for="waterHeater">Máy nước nóng</label>
+							<input type="checkbox" id="waterHeater" onchange="doAjaxPost()">
+							<label for="waterHeater">Máy nước nóng</label>
 						</fieldset>
 					</div>
 					<div class="col-lg-3">
 						<fieldset class="form-group">
-							<input type="checkbox" id="conditioner"> <label
-								for="conditioner">Điều hòa</label>
+							<input type="checkbox" id="conditioner" onchange="doAjaxPost()">
+							<label for="conditioner">Điều hòa</label>
 						</fieldset>
 					</div>
 					<div class="col-lg-3">
 						<fieldset class="form-group">
-							<input type="checkbox" id="fridge"> <label for="fridge">Tủ
-								lạnh</label>
+							<input type="checkbox" id="fridge" onchange="doAjaxPost()">
+							<label for="fridge">Tủ lạnh</label>
 						</fieldset>
 					</div>
 					<div class="col-lg-3">
 						<fieldset class="form-group">
-							<input type="checkbox" id="attic"> <label for="attic">Gác
-								xếp</label>
+							<input type="checkbox" id="attic" onchange="doAjaxPost()">
+							<label for="attic">Gác xếp</label>
 						</fieldset>
 					</div>
 					<div class="col-lg-3">
 						<fieldset class="form-group">
-							<input type="checkbox" id="camera"> <label for="camera">Camera
-								an ninh</label>
+							<input type="checkbox" id="camera" onchange="doAjaxPost()">
+							<label for="camera">Camera an ninh</label>
 						</fieldset>
 					</div>
 				</div>
 
 				<div class="row">
 					<div class="col-lg-3">
-						<select class="mdb-select" id="waterSource">
+						<select class="mdb-select" id="waterSource"
+							onchange="doAjaxPost()">
 							<option value="0" selected>Không</option>
 							<option value="1">Giếng đào</option>
 							<option value="2">Giếng đóng-khoan</option>
@@ -166,7 +247,7 @@
 						</select> <label>Nguồn nước</label>
 					</div>
 					<div class="col-lg-3">
-						<select class="mdb-select" id="object">
+						<select class="mdb-select" id="object" onchange="doAjaxPost()">
 							<option value="0" selected>Không</option>
 							<option value="1">Nam</option>
 							<option value="1">Nữ</option>
@@ -174,7 +255,7 @@
 						</select> <label>Đối tượng</label>
 					</div>
 					<div class="col-lg-3">
-						<select class="mdb-select" id="area">
+						<select class="mdb-select" id="area" onchange="doAjaxPost()">
 							<option value="0" selected>Không</option>
 							<option value="1">&lt; 15 m&#178;</option>
 							<option value="2">15 - 25 m&#178;</option>
@@ -184,7 +265,7 @@
 						</select> <label>Diện tích</label>
 					</div>
 					<div class="col-lg-3">
-						<select class="mdb-select" id="price">
+						<select class="mdb-select" id="price" onchange="doAjaxPost()">
 							<option value="0" selected>Không</option>
 							<option value="1">&lt; 500 k</option>
 							<option value="2">500 - 1000 k</option>
@@ -195,19 +276,9 @@
 						</select> <label>Giá phòng</label>
 					</div>
 					<div class="col-lg-3">
-						<select class="mdb-select" id="far">
-							<option value="0" selected>Không</option>
-							<option value="1">&lt; 500 m</option>
-							<option value="2">500 - 1500 m</option>
-							<option value="3">1500 - 3000 m</option>
-							<option value="4">3000 - 6000 m</option>
-							<option value="5">6000 - 10000 m</option>
-							<option value="6">&gt; 10000 m</option>
-						</select> <label>Phạm vi</label>
-					</div>
-					<div class="col-lg-3">
 						<html:select name="searchForm" property="provinceId"
-							styleClass="mdb-select" styleId="slbProvince">
+							styleClass="mdb-select" styleId="slbProvince"
+							onchange="doAjaxPost()">
 							<option value="" selected>Không</option>
 							<logic:iterate name="searchForm" property="provinces" id="item">
 								<bean:define id="id" name="item" property="provinceId" />
@@ -219,24 +290,175 @@
 						<label>Tỉnh/Thành phố</label>
 					</div>
 					<div class="col-lg-3">
-						<select name="districtId" class="mdb-select" id="slbDistrict">
+						<select name="districtId" class="mdb-select" id="slbDistrict"
+							onchange="doAjaxPost()">
 							<option value="" selected>Không</option>
 						</select> <label>Quận/Huyện</label>
 					</div>
 					<div class="col-lg-3">
-						<select name="villageId" class="mdb-select" id="slbVillage">
+						<select name="villageId" class="mdb-select" id="slbVillage"
+							onchange="doAjaxPost()">
 							<option value="" selected>Không</option>
 						</select> <label>Làng/Xã</label>
 					</div>
-					<div class="col-lg-12">
-						<div class="md-form">
-							<input type="text" id="name" class="form-control validate"
-								length="250" onkeypress="doAjaxPost()"> <label
-								for="name" data-error="wrong" data-success="right">Nhập
-								từ khóa</label>
-						</div>
-						<input type="button" value="Say Hello" onclick="doAjaxPost()"><br />
+					<div class="col-lg-3">
+						<select class="mdb-select" id="far" onchange="doAjaxPost()">
+							<option value="0" selected>Không</option>
+							<option value="1">&lt; 500 m</option>
+							<option value="2">&lt; 1500 m</option>
+							<option value="3">&lt; 3000 m</option>
+							<option value="4">&lt; 6000 m</option>
+							<option value="5">&lt; 10000 m</option>
+							<option value="6">&lt; 20000 m</option>
+						</select> <label>Phạm vi</label>
 					</div>
+					<div class="col-lg-12">
+						<div class="pac-card" id="pac-card">
+							<div>
+								<div id="title">Autocomplete search</div>
+								<div id="type-selector" class="pac-controls">
+									<input type="radio" name="type" id="changetype-all"
+										checked="checked"> <label for="changetype-all">All</label>
+									<input type="radio" name="type" id="changetype-establishment">
+									<label for="changetype-establishment">Establishments</label> <input
+										type="radio" name="type" id="changetype-address"> <label
+										for="changetype-address">Addresses</label> <input type="radio"
+										name="type" id="changetype-geocode"> <label
+										for="changetype-geocode">Geocodes</label>
+								</div>
+								<div id="strict-bounds-selector" class="pac-controls">
+									<input type="checkbox" id="use-strict-bounds" value="">
+									<label for="use-strict-bounds">Strict Bounds</label>
+								</div>
+							</div>
+							<div id="pac-container">
+								<input id="pac-input" type="text" placeholder="Enter a location">
+							</div>
+						</div>
+					</div>
+					<div id="map"></div>
+					<div id="infowindow-content">
+						<img src="" width="16" height="16" id="place-icon"> <span
+							id="place-name" class="title"></span> <br> <span
+							id="place-address"></span>
+					</div>
+					<script>
+						// This example requires the Places library. Include the libraries=places
+						// parameter when you first load the API. For example:
+						// <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
+						function initMap() {
+							var map = new google.maps.Map(document
+									.getElementById('map'), {
+								center : {
+									lat : 15.9782827,
+									lng : 108.2631494
+								},
+								zoom : 16
+							});
+							var card = document.getElementById('pac-card');
+							var input = document.getElementById('pac-input');
+							var types = document
+									.getElementById('type-selector');
+							var strictBounds = document
+									.getElementById('strict-bounds-selector');
+							map.controls[google.maps.ControlPosition.TOP_RIGHT]
+									.push(card);
+							var autocomplete = new google.maps.places.Autocomplete(
+									input);
+							// Bind the map's bounds (viewport) property to the autocomplete object,
+							// so that the autocomplete requests use the current map bounds for the
+							// bounds option in the request.
+							autocomplete.bindTo('bounds', map);
+							var infowindow = new google.maps.InfoWindow();
+							var infowindowContent = document
+									.getElementById('infowindow-content');
+							infowindow.setContent(infowindowContent);
+							var marker = new google.maps.Marker({
+								map : map,
+								anchorPoint : new google.maps.Point(0, -29)
+							});
+							autocomplete
+									.addListener(
+											'place_changed',
+											function() {
+												infowindow.close();
+												marker.setVisible(false);
+												var place = autocomplete
+														.getPlace();
+												if (!place.geometry) {
+													// User entered the name of a Place that was not suggested and
+													// pressed the Enter key, or the Place Details request failed.
+													window
+															.alert("No details available for input: '"
+																	+ place.name
+																	+ "'");
+													return;
+												}
+												// If the place has a geometry, then present it on a map.
+												if (place.geometry.viewport) {
+													map
+															.fitBounds(place.geometry.viewport);
+												} else {
+													map
+															.setCenter(place.geometry.location);
+													map.setZoom(17); // Why 17? Because it looks good.
+												}
+												marker
+														.setPosition(place.geometry.location);
+												log(place.geometry.location.lat() + " " + place.geometry.location.lng() );
+												createCookie("lat", place.geometry.location.lat(), 1);
+												createCookie("lng", place.geometry.location.lng(), 1);
+												marker.setVisible(true);
+												var address = '';
+												if (place.address_components) {
+													address = [
+															(place.address_components[0]
+																	&& place.address_components[0].short_name || ''),
+															(place.address_components[1]
+																	&& place.address_components[1].short_name || ''),
+															(place.address_components[2]
+																	&& place.address_components[2].short_name || '') ]
+															.join(' ');
+												}
+												infowindowContent.children['place-icon'].src = place.icon;
+												infowindowContent.children['place-name'].textContent = place.name;
+												infowindowContent.children['place-address'].textContent = address;
+												infowindow.open(map, marker);
+											});
+							// Sets a listener on a radio button to change the filter type on Places
+							// Autocomplete.
+							function setupClickListener(id, types) {
+								var radioButton = document.getElementById(id);
+								radioButton.addEventListener('click',
+										function() {
+											autocomplete.setTypes(types);
+										});
+							}
+							setupClickListener('changetype-all', []);
+							setupClickListener('changetype-address',
+									[ 'address' ]);
+							setupClickListener('changetype-establishment',
+									[ 'establishment' ]);
+							setupClickListener('changetype-geocode',
+									[ 'geocode' ]);
+							document
+									.getElementById('use-strict-bounds')
+									.addEventListener(
+											'click',
+											function() {
+												console
+														.log('Checkbox clicked! New state='
+																+ this.checked);
+												autocomplete.setOptions({
+													strictBounds : this.checked
+												});
+											});
+						}
+					</script>
+					<script
+						src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-H_xa-vjvVRk59cgxAFSBHwj2huBV-B4&libraries=places&callback=initMap"
+						async defer></script>
+
 				</div>
 
 
@@ -250,29 +472,7 @@
 			<h1 class="h1-title">Kết quả tìm kiếm</h1>
 			<div class="row" id="resultThreads"></div>
 			<br> <br> <br>
-			<div style="display: table; margin: 0 auto;">
-				<nav>
-				<ul class="pagination pg-amber">
-					<!--Arrow left-->
-					<li class="page-item"><a class="page-link"
-						aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
-							<span class="sr-only">Previous</span>
-					</a></li>
-
-					<!--Numbers-->
-					<li class="page-item active"><a class="page-link">1</a></li>
-					<li class="page-item"><a class="page-link">2</a></li>
-					<li class="page-item"><a class="page-link">3</a></li>
-					<li class="page-item"><a class="page-link">4</a></li>
-					<li class="page-item"><a class="page-link">5</a></li>
-
-					<!--Arrow right-->
-					<li class="page-item"><a class="page-link" aria-label="Next">
-							<span aria-hidden="true">&raquo;</span> <span class="sr-only">Next</span>
-					</a></li>
-				</ul>
-				</nav>
-			</div>
+			<div style="display: table; margin: 0 auto;" id="pagination"></div>
 		</div>
 	</div>
 
@@ -313,67 +513,112 @@
 		function log(text) {
 			console.log(text);
 		}
-		$(document).ready(function() {
-			createCookie('page', 1, 1);
-			$('.mdb-select').material_select();
-			$('#slbProvince').on("change", function() {
-				var provinceId = $(this).val();
-				log(provinceId);
-				var str = "action=getDistrict" + "&provinceId=" + provinceId;
-				log("POST: " + str);
-				$.ajax({
-					type : "POST",
-					url : "/Mock_SE7/search-thread.do",
-					data : str,
-					success : function(response) {
-						log("RES: " + response);
-						var districts = JSON.parse(response);
-						if (districts != undefined) {
-							var n = districts.length;
-							var stringResults = '<option value="" selected>Không</option>';
-							for (var i = 0; i < n; i++) {
-								stringResults += '<option value="'+districts[i].districtId+'">'+districts[i].name+'</option>';
-							}
-							$('#slbDistrict').html(stringResults);
-							$('#slbDistrict').material_select();
+		$(document)
+				.ready(
+						function() {
+							createCookie('page', 1, 1);
+							$('.mdb-select').material_select();
+							$('#slbProvince')
+									.on(
+											"change",
+											function() {
+												var provinceId = $(this).val();
+												log(provinceId);
+												var str = "action=getDistrict"
+														+ "&provinceId="
+														+ provinceId;
+												log("POST: " + str);
+												$
+														.ajax({
+															type : "POST",
+															url : "/Mock_SE7/search-thread.do",
+															data : str,
+															success : function(
+																	response) {
+																log("RES: "
+																		+ response);
+																var districts = JSON
+																		.parse(response);
+																if (districts != undefined) {
+																	var n = districts.length;
+																	var stringResults = '<option value="" selected>Không</option>';
+																	for (var i = 0; i < n; i++) {
+																		stringResults += '<option value="'+districts[i].districtId+'">'
+																				+ districts[i].name
+																				+ '</option>';
+																	}
+																	$(
+																			'#slbDistrict')
+																			.html(
+																					stringResults);
+																	$(
+																			'#slbDistrict')
+																			.material_select();
 
-							$('#slbVillage').html('<option value="" selected>Không</option>');
-							$('#slbVillage').material_select();
-						}
-					},
-					error : function(e) {
-						alert('Error: ' + e);
-					}
-				});
-			});
-			$('#slbDistrict').on("change", function() {
-				var districtId = $(this).val();
-				log(districtId);
-				var str = "action=getVillage" + "&districtId=" + districtId;
-				log("POST: " + str);
-				$.ajax({
-					type : "POST",
-					url : "/Mock_SE7/search-thread.do",
-					data : str,
-					success : function(response) {
-						log("RES: " + response);
-						var villages = JSON.parse(response);
-						if (villages != undefined) {
-							var n = villages.length;
-							var stringResults = '<option value="" selected>Không</option>';
-							for (var i = 0; i < n; i++) {
-								stringResults += '<option value="'+villages[i].villageId+'">'+villages[i].name+'</option>';
-							}
-							$('#slbVillage').html(stringResults);
-							$('#slbVillage').material_select();
-						}
-					},
-					error : function(e) {
-						alert('Error: ' + e);
-					}
-				});
-			});
-		});
+																	$(
+																			'#slbVillage')
+																			.html(
+																					'<option value="" selected>Không</option>');
+																	$(
+																			'#slbVillage')
+																			.material_select();
+																}
+															},
+															error : function(e) {
+																alert('Error: '
+																		+ e);
+															}
+														});
+											});
+							$('#slbDistrict')
+									.on(
+											"change",
+											function() {
+												var districtId = $(this).val();
+												log(districtId);
+												var str = "action=getVillage"
+														+ "&districtId="
+														+ districtId;
+												log("POST: " + str);
+												$
+														.ajax({
+															type : "POST",
+															url : "/Mock_SE7/search-thread.do",
+															data : str,
+															success : function(
+																	response) {
+																log("RES: "
+																		+ response);
+																var villages = JSON
+																		.parse(response);
+																if (villages != undefined) {
+																	var n = villages.length;
+																	var stringResults = '<option value="" selected>Không</option>';
+																	for (var i = 0; i < n; i++) {
+																		stringResults += '<option value="'+villages[i].villageId+'">'
+																				+ villages[i].name
+																				+ '</option>';
+																	}
+																	$(
+																			'#slbVillage')
+																			.html(
+																					stringResults);
+																	$(
+																			'#slbVillage')
+																			.material_select();
+																}
+															},
+															error : function(e) {
+																alert('Error: '
+																		+ e);
+															}
+														});
+											});
+						});
+		function viewPage(page) {
+			createCookie('page', page, 1);
+			doAjaxPost();
+		}
 		function doAjaxPost() {
 			// get the form values
 			wifi = $('#wifi').is(':checked');
@@ -392,69 +637,105 @@
 			villageId = $('#slbVillage').val();
 			name = $('#name').val();
 			page = parseInt(readCookie('page'));
-			var str = "action=search" + 
-			"&wifi=" + wifi + 
-			"&waterHeater=" + waterHeater +
-			"&conditioner=" + conditioner +
-			"&fridge=" + fridge +
-			"&attic=" + attic +
-			"&camera=" + camera +
-			"&object=" + object +
-			"&waterSource=" + waterSource +
-			"&area=" + area +
-			"&price=" + price +
-			"&far=" + far +
-			"&provinceId=" + provinceId +
-			"&districtId=" + districtId +
-			"&villageId=" + villageId +
-			"&name=" + name;
-			"&page=" + page;
+			lat = readCookie('lat');
+			lng = readCookie('lng');
+			var str = "action=search" + "&wifi=" + wifi + "&waterHeater="
+					+ waterHeater + "&conditioner=" + conditioner + "&fridge="
+					+ fridge + "&attic=" + attic + "&camera=" + camera
+					+ "&object=" + object + "&waterSource=" + waterSource
+					+ "&area=" + area + "&price=" + price + "&far=" + far + "&lat=" + lat + "&lng=" + lng
+					+ "&provinceId=" + provinceId + "&districtId=" + districtId
+					+ "&villageId=" + villageId + "&name=" + name + "&page="
+					+ page;
 			log("Post " + str);
-			$.ajax({
-				type : "POST",
-				url : "/Mock_SE7/search-thread.do",
-				data : str,
-				success : function(response) {
-					++page;
-					createCookie('page', page, 1);
-					//log("Res " + response);
-					var threads = JSON.parse(response);
-					if (threads != undefined) {
-						var n = threads.length;
-						var stringResults = '';
-						for (var i = 0; i < n; i++) {
-							stringResults += "<div class=\"col-lg-4\">"
-									+ "<div class=\"card card-cascade hoverable\" style=\"margin-top: 40px;\">"
-									+ "<div class=\"view overlay hm-white-slight\" style=\"border-radius: 10px; margin-top: -20px; width: 90%; margin-left: 5%; box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12);\">"
-									+ "	<img src=\""
-									+ threads[i].imageThumb
-									+ "\" class=\"img-fluid\" style=\" border-radius: 10px; width: 100%; \">"
-									+ "<a href=\"#!\">"
-									+ "	<div class=\"mask waves-effect waves-light\"></div>"
-									+ "</a>"
-									+ "</div>"
-									+ "<div class=\"card-block text-center\">"
-									+ "<h4 class=\"card-title\"><strong>Giá: "
-									+ threads[i].price
-									+ " đ</strong></h4>"
-									+ "<h5>Diện tích: "
-									+ threads[i].area
-									+ " m&#178;</h5>"
-									+ "<p class=\"card-text truncase-detail\">"
-									+ threads[i].content
-									+ "</p>"
-									+ "<a href=\"view-thread-action.do?threadId="
-									+ threads[i].threadId
-									+ "\" ><button type=\"button\" class=\"btn btn-success\">Chi tiết</button></a>"
-									+ "</div>" + "</div>" + "</div>";
+			$
+					.ajax({
+						type : "POST",
+						url : "/Mock_SE7/search-thread.do",
+						data : str,
+						success : function(response) {
+							//++page;
+							createCookie('page', page, 1);
+							//log("Res " + response);
+							var threads = JSON.parse(response);
+							if (threads != undefined) {
+								var n = threads.length;
+								var stringResults = '';
+								for (var i = 0; i < n; i++) {
+									stringResults += '<div class=" col-lg-4 col-md-6"><div class="card card-cascade hoverable"style="margin-top: 40px;"><div class="view overlay hm-white-slight"style="margin-top: -15px; width: 90%; margin-left: 5%; min-height: 200px; max-height: 200px;"><img class="img-fluid"src="'+threads[i].imageThumb+'"style="border-radius: 3px; width: auto; min-height: 200px;"style=" "><div class="mask waves-effect waves-light"></div></div><div class="card-block"><a class="activator" style="margin-top: 10px;"><i class="fa fa-eye" aria-hidden="true"></i> '
+											+ threads[i].viewed
+											+ '</a><span class="score s'+threads[i].avgScoreInt+'" style="margin-top: -15px;"></span> (<strong itemprop="reviewCount">'
+											+ threads[i].avgScore
+											+ '</strong>)</div><div class="card-block text-center" style="margin-top: -35px;"><h4 class="card-title"><strong>Giá: '
+											+ threads[i].price
+											+ '</strong></h4><h5>Diện tích:'
+											+ threads[i].area
+											+ 'm&#178;</h5><p class="card-text truncase-detail">'
+											+ threads[i].name
+											+ '</p><a class="btn btn-success btn-fb" href="./view-thread-action.do?threadId='
+											+ threads[i].threadId
+											+ '">Xem</a><a type="button" class="btn-floating btn-small btn-fb"><i class="fa fa-compress"></i></a></div></div></div>';
+								}
+							}
+							$('#resultThreads').html(stringResults);
+							var strPagi = '<nav class="pagination-center">';
+							strPagi += '<ul class="pagination pagination-md pg-amber">';
+							strPagi += '<li onclick="viewPage(1);" class="page-item">';
+							strPagi += '<a class="page-link" saria-label="Previous">';
+							strPagi += '<span aria-hidden="true">&laquo;</span><span aria-hidden="true">&laquo;</span>';
+							strPagi += '</a>';
+							strPagi += '</li>';
+							strPagi += '<li onclick="viewPage('
+									+ ((threads[0].page - 1) > 1 ? (threads[0].page - 1)
+											: 1) + ')" class="page-item">';
+							strPagi += '<a class="page-link" saria-label="Previous">';
+							strPagi += '<span aria-hidden="true">&laquo;</span>';
+							strPagi += '</a>';
+							strPagi += '</li>';
+
+							var pc = threads[0].page;
+							var i = 0;
+							var n = threads[0].totalPage;
+
+							for (i = 1; i <= n; i++) {
+								if (i != pc)
+									strPagi += "<li onclick='viewPage("
+											+ i
+											+ ");' class=\"page-item\"><a class=\"page-link\">"
+											+ i + "</a></li>";
+								else
+									strPagi += "<li onclick='viewPage("
+											+ i
+											+ ");' class=\"page-item active\"><a class=\"page-link\">"
+											+ i + "</a></li>";
+							}
+
+							strPagi += '<li onclick="viewPage('
+									+ ((threads[0].page + 1) < threads[0].totalPage ? (threads[0].totalPage + 1)
+											: threads[0].totalPage)
+									+ ');" class="page-item">';
+							strPagi += '<a class="page-link" aria-label="Next">';
+							strPagi += '<span aria-hidden="true">&raquo;</span>';
+							strPagi += '</a>';
+							strPagi += '</li>';
+							strPagi += '<li onclick="viewPage('
+									+ (threads[0].totalPage)
+									+ ');" class="page-item">';
+							strPagi += '<a class="page-link" aria-label="Next">';
+							strPagi += '	<span aria-hidden="true">&raquo;</span><span aria-hidden="true">&raquo;</span>';
+							strPagi += '</a>';
+							strPagi += '</li>';
+							strPagi += '</ul>';
+							strPagi += '</nav>';
+							//log(strPagi);
+							$('#pagination').html(strPagi);
+							
+							//pagination
+						},
+						error : function(e) {
+							alert('Error: ' + e);
 						}
-					}
-					$('#resultThreads').html(stringResults);
-				},
-				error : function(e) {
-					alert('Error: ' + e);
-				}
-			});
+					});
 		}
 	</script>
 </body>

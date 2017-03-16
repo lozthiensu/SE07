@@ -40,6 +40,8 @@ public class SearchThreadForm extends ActionForm {
 
 	int page;
 	int totalPage;
+	double lat;
+	double lng;
 
 	public SearchThreadForm() {
 		super();
@@ -245,6 +247,22 @@ public class SearchThreadForm extends ActionForm {
 
 	public boolean isWifi() {
 		return wifi;
+	}
+
+	public double getLat() {
+		return lat;
+	}
+
+	public void setLat(double lat) {
+		this.lat = lat;
+	}
+
+	public double getLng() {
+		return lng;
+	}
+
+	public void setLng(double lng) {
+		this.lng = lng;
 	}
 
 	public void setWifi(boolean wifi) {

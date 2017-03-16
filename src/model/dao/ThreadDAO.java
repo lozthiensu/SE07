@@ -66,7 +66,7 @@ public class ThreadDAO {
 							rs.getLong("price"), rs.getInt("electricFee"), rs.getInt("waterFee"), rs.getInt("otherFee"),
 							rs.getInt("area"), rs.getBoolean("wifi"), rs.getBoolean("waterHeater"),
 							rs.getBoolean("conditioner"), rs.getBoolean("fridge"), rs.getBoolean("attic"),
-							rs.getBoolean("camera"), rs.getString("waterSource"), rs.getString("direction"),
+							rs.getBoolean("camera"), rs.getInt("waterSource"), rs.getString("direction"),
 							rs.getInt("numOfToilets"), rs.getInt("numOfPeople"), rs.getInt("object"),
 							rs.getInt("villageId"), rs.getString("created"), rs.getInt("viewed"), rs.getInt("status"),
 							rs.getString("imageThumb"));
@@ -119,7 +119,7 @@ public class ThreadDAO {
 							rs.getLong("price"), rs.getInt("electricFee"), rs.getInt("waterFee"), rs.getInt("otherFee"),
 							rs.getInt("area"), rs.getBoolean("wifi"), rs.getBoolean("waterHeater"),
 							rs.getBoolean("conditioner"), rs.getBoolean("fridge"), rs.getBoolean("attic"),
-							rs.getBoolean("camera"), rs.getString("waterSource"), rs.getString("direction"),
+							rs.getBoolean("camera"), rs.getInt("waterSource"), rs.getString("direction"),
 							rs.getInt("numOfToilets"), rs.getInt("numOfPeople"), rs.getInt("object"),
 							rs.getInt("villageId"), rs.getString("created"), rs.getInt("viewed"), rs.getInt("status"),
 							rs.getString("imageThumb"));
@@ -201,7 +201,7 @@ public class ThreadDAO {
 			pr.setBoolean(16, thread.isFridge());
 			pr.setBoolean(17, thread.isAttic());
 			pr.setBoolean(18, thread.isCamera());
-			pr.setString(19, thread.getWaterSource());
+			pr.setInt(19, thread.getWaterSource());
 			pr.setString(20, thread.getDirection());
 			pr.setInt(21, thread.getNumOfToilets());
 			pr.setInt(22, thread.getNumOfPeople());
@@ -252,7 +252,7 @@ public class ThreadDAO {
 						rs.getInt("electricFee"), rs.getInt("waterFee"), rs.getInt("otherFee"), rs.getInt("area"),
 						rs.getBoolean("wifi"), rs.getBoolean("waterHeater"), rs.getBoolean("conditioner"),
 						rs.getBoolean("fridge"), rs.getBoolean("attic"), rs.getBoolean("camera"),
-						rs.getString("waterSource"), rs.getString("direction"), rs.getInt("numOfToilets"),
+						rs.getInt("waterSource"), rs.getString("direction"), rs.getInt("numOfToilets"),
 						rs.getInt("numOfPeople"), rs.getInt("object"), rs.getInt("villageId"), rs.getString("created"),
 						rs.getInt("viewed"), rs.getInt("status"), rs.getString("imageThumb"));
 
@@ -355,7 +355,7 @@ public class ThreadDAO {
 						rs.getInt("electricFee"), rs.getInt("waterFee"), rs.getInt("otherFee"), rs.getInt("area"),
 						rs.getBoolean("wifi"), rs.getBoolean("waterHeater"), rs.getBoolean("conditioner"),
 						rs.getBoolean("fridge"), rs.getBoolean("attic"), rs.getBoolean("camera"),
-						rs.getString("waterSource"), rs.getString("direction"), rs.getInt("numOfToilets"),
+						rs.getInt("waterSource"), rs.getString("direction"), rs.getInt("numOfToilets"),
 						rs.getInt("numOfPeople"), rs.getInt("object"), rs.getInt("villageId"), rs.getString("created"),
 						rs.getInt("viewed"), rs.getInt("status"), rs.getString("imageThumb"));
 				if (threadTemp.getPrice() >= 1000000) {
@@ -426,7 +426,7 @@ public class ThreadDAO {
 						rs.getInt("electricFee"), rs.getInt("waterFee"), rs.getInt("otherFee"), rs.getInt("area"),
 						rs.getBoolean("wifi"), rs.getBoolean("waterHeater"), rs.getBoolean("conditioner"),
 						rs.getBoolean("fridge"), rs.getBoolean("attic"), rs.getBoolean("camera"),
-						rs.getString("waterSource"), rs.getString("direction"), rs.getInt("numOfToilets"),
+						rs.getInt("waterSource"), rs.getString("direction"), rs.getInt("numOfToilets"),
 						rs.getInt("numOfPeople"), rs.getInt("object"), rs.getInt("villageId"), rs.getString("created"),
 						rs.getInt("viewed"), rs.getInt("status"), rs.getString("imageThumb"));
 
@@ -570,10 +570,36 @@ public class ThreadDAO {
 			}
 		}
 		if (thread.getFar() > 0) {
+			int meter = 0;
 			if (count == 0)
 				filter += " WHERE ";
 			else
 				filter += " AND  ";
+			if (thread.getFar() == 1) {
+				meter = 500;
+			} else if (thread.getFar() == 2) {
+				meter = 1500;
+			} else if (thread.getFar() == 3) {
+				meter = 3000;
+			} else if (thread.getFar() == 4) {
+				meter = 6000;
+			} else if (thread.getFar() == 5) {
+				meter = 10000;
+			} else if (thread.getFar() == 6) {
+				meter = 20000;
+			}
+
+			double epxilong = 0.000008998719243599958 * meter;
+			double lat = thread.getLatitude();
+			double lng = thread.getLongitude();
+			double latUp, latDown, lngUp, lngDown;
+			latUp = lat + epxilong;
+			lngUp = lng + epxilong;
+			latDown = lat - epxilong;
+			lngDown = lng - epxilong;
+			Log.in("Met: " + meter + ", Ex: " + epxilong + "Lat: " + lat + ", Lng: " + lng);
+			filter += " Thread.latitude between " + latDown + " and " + latUp + " and Thread.longitude between "
+					+ lngDown + " and " + lngUp + "";
 			count++;
 		}
 		if (thread.getProvince().getProvinceId() > 0) {
@@ -606,13 +632,16 @@ public class ThreadDAO {
 			else
 				filter += " AND  ";
 			count++;
-			filter += " conditioner = 1 ";
+			filter += " Thread.name like '%" + thread.getName() + "%'";
 		}
 
 		/* START COUNT */
 		try {
 			// Dem co bao nhieu dong ket qua dung voi dieu kien tim kiem
-			String sqlCount = "select count(threadId) as total from  Thread " + filter;
+			String sqlCount = "select count(Thread.threadId) as total from  Thread inner join Village on Village.villageId = Thread.villageId inner join District on District.districtId = Village.districtId inner join Province on Province.provinceId = District.provinceId"
+					+ filter;
+			Log.in(sqlCount);
+			// return null;
 			PreparedStatement pr = connection.prepareStatement(sqlCount);
 			rs = pr.executeQuery();
 			if (rs.next()) {
@@ -645,7 +674,7 @@ public class ThreadDAO {
 		try {
 
 			// Câu lệnh truy vấn
-			String sql = "select Thread.*, temp.avgScore from Thread inner join (select Thread.threadId, avg(Cast(Rate.score as Float)) as avgScore, avg(Rate.score) as avgScoreInt from Thread left join Rate on Thread.threadId = Rate.threadId group by Thread.threadId) temp on Thread.threadId = temp.threadId  "
+			String sql = "select Thread.*, temp.avgScore from Thread inner join Village on Village.villageId = Thread.villageId inner join District on District.districtId = Village.districtId inner join Province on Province.provinceId = District.provinceId inner join (select Thread.threadId, avg(Cast(Rate.score as Float)) as avgScore, avg(Rate.score) as avgScoreInt from Thread left join Rate on Thread.threadId = Rate.threadId group by Thread.threadId) temp on Thread.threadId = temp.threadId  "
 					+ filter;
 			Log.in(sql);
 			PreparedStatement pr = connection.prepareStatement(sql);
@@ -661,7 +690,7 @@ public class ThreadDAO {
 						rs.getInt("electricFee"), rs.getInt("waterFee"), rs.getInt("otherFee"), rs.getInt("area"),
 						rs.getBoolean("wifi"), rs.getBoolean("waterHeater"), rs.getBoolean("conditioner"),
 						rs.getBoolean("fridge"), rs.getBoolean("attic"), rs.getBoolean("camera"),
-						rs.getString("waterSource"), rs.getString("direction"), rs.getInt("numOfToilets"),
+						rs.getInt("waterSource"), rs.getString("direction"), rs.getInt("numOfToilets"),
 						rs.getInt("numOfPeople"), rs.getInt("object"), rs.getInt("villageId"), rs.getString("created"),
 						rs.getInt("viewed"), rs.getInt("status"), rs.getString("imageThumb"));
 				if (threadTemp.getPrice() >= 1000000) {
@@ -677,7 +706,8 @@ public class ThreadDAO {
 				Log.in(df.format(rs.getFloat("avgScore")) + " " + valueStr);
 				threadTemp.setAvgScore(Float.parseFloat(valueStr));
 				threadTemp.setAvgScoreInt((int) threadTemp.getAvgScore());
-
+				threadTemp.setTotalPage(totalPage);
+				threadTemp.setPage(page);
 				temp.add(threadTemp);
 			}
 

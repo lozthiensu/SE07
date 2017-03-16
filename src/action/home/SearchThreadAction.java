@@ -53,20 +53,23 @@ public class SearchThreadAction extends Action {
 			thread.setObject(searchThreadForm.getObject());
 			thread.setWaterSource(searchThreadForm.getWaterSource());
 			thread.setFar(searchThreadForm.getFar());
+			thread.setLatitude(searchThreadForm.getLat());
+			thread.setLongitude(searchThreadForm.getLng());
 			thread.setArea(searchThreadForm.getArea());
 			thread.setPrice(searchThreadForm.getPrice());
 			thread.setProvince(new Province(searchThreadForm.getProvinceId(), ""));
 			thread.setDistrict(new District(searchThreadForm.getDistrictId(), 0, ""));
 			thread.setVillage(new Village(searchThreadForm.getVillageId(), 0, ""));
 			thread.setName(searchThreadForm.getName());
-			
+
+			Log.in(thread);
 			Log.in(thread.toString());
 			ArrayList<Thread> threads = new ArrayList<Thread>();
 			threads = threadBO.searchBy(thread, page);
 
 			Gson gson = new Gson();
 			String json = gson.toJson(threads);
-
+			Log.in(json);
 			out.println(json);
 			out.flush();
 			System.out.println(json);
