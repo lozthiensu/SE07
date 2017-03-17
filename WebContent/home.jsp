@@ -42,11 +42,10 @@
 		<div class="collapse navbar-collapse" id="navbarNav1">
 			<ul class="navbar-nav mr-auto hidden-lg-up">
 				<logic:iterate name="homeViewForm" property="categories" id="item">
-					<li class="nav-item"><a
-						class="nav-link btn-right-menu-main" 
+					<li class="nav-item"><a class="nav-link btn-right-menu-main"
 						href='./view-category-action.do?categoryId=<bean:write
-								name="item" property="categoryId" />'> <i
-							class="fa fa-folder-open-o" aria-hidden="true"></i> <bean:write
+								name="item" property="categoryId" />'>
+							<i class="fa fa-folder-open-o" aria-hidden="true"></i> <bean:write
 								name="item" property="name" />
 					</a></li>
 				</logic:iterate>
@@ -61,8 +60,8 @@
 					aria-expanded="false"><span id="welcomeText"></span></a>
 					<div class="dropdown-menu dropdown dropdown-menu-right"
 						aria-labelledby="dropdownMenu1">
-						<a class="dropdown-item" href="./user/">Quản lý</a>
-						<a class="dropdown-item" onclick="logout();">Đăng xuất</a>
+						<a class="dropdown-item" href="./user/">Quản lý</a> <a
+							class="dropdown-item" onclick="logout();">Đăng xuất</a>
 					</div></li>
 				<li class="nav-item" id="btnReg"><a
 					class="nav-link btn-right-menu-main" data-toggle="modal"
@@ -70,6 +69,9 @@
 				<li class="nav-item" id="btnLog"><a
 					class="nav-link  btn-right-menu-main" data-toggle="modal"
 					data-target="#modal-login">Đăng nhập</a></li>
+				<li class="nav-item" id="btnLog"><a
+					class="nav-link  btn-right-menu-main" data-toggle="modal"
+					data-target="#modal-compare">So sánh</a></li>
 			</ul>
 		</div>
 	</div>
@@ -96,7 +98,6 @@
 							src="<bean:write name="item" property="imageThumb" />"
 							alt="<bean:write name="item" property="name" />" />1</span></a>
 				</logic:iterate>
-
 			</div>
 		</div>
 		<div class="ws_script" style="position: absolute; left: -99%">
@@ -133,8 +134,7 @@
 
 			</ul>
 			<ul class="navbar-nav ml-auto">
-				<li class="nav-item"><a class="nav-link" 
-						href="./search.do"><i
+				<li class="nav-item"><a class="nav-link" href="./search.do"><i
 						class="fa fa-search" aria-hidden="true"></i> Tìm kiếm</a></li>
 			</ul>
 		</div>
@@ -154,8 +154,11 @@
 					<div class="breadcrumb flat">
 						<a style="border: 1px solid #ddd;"><i class="fa fa-home"
 							aria-hidden="true" style="font-size: 35px;"></i></a> <a
-							class="active" href="#"> <bean:write name="item"
-								property="name" /></a>
+							class="active"
+							href="./view-category-action.do?categoryId=<bean:write name="item"
+								property="categoryId" />">
+							<bean:write name="item" property="name" />
+						</a>
 					</div>
 					<div class="row">
 						<!--Carousel Wrapper-->
@@ -206,11 +209,13 @@
 											<bean:write name="thread" property="name" />
 										</p>
 										<bean:define id="threadId" name="thread" property="threadId"></bean:define>
+										<bean:define id="name" name="thread" property="name"></bean:define>
 										<html:link styleClass="btn btn-success btn-fb"
 											action="/view-thread-action?threadId=${threadId}">Xem</html:link>
 
 										<!--Facebook-->
-										<a type="button" class="btn-floating btn-small btn-fb"><i
+										<a type="button" onclick="addToCompare(${threadId},'${name}')"
+											class="btn-floating btn-small btn-fb"><i
 											class="fa fa-compress"></i></a>
 										<!--Twitter-->
 									</div>
@@ -226,12 +231,12 @@
 		</div>
 	</div>
 
-	<jsp:include page="footer.jsp" />
 	<script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
 	<script type="text/javascript" src="js/tether.min.js"></script>
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="js/mdb.min.js"></script>
 	<script type="text/javascript" src="js/owl.carousel.min.js"></script>
+	<jsp:include page="footer.jsp" />
 	<script>
 		var stick = function() {
 			var size = $(window).width();

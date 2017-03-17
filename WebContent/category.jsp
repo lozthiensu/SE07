@@ -74,6 +74,9 @@
 				<li class="nav-item" id="btnLog"><a
 					class="nav-link  btn-right-menu-main" data-toggle="modal"
 					data-target="#modal-login">Đăng nhập</a></li>
+				<li class="nav-item" id="btnLog"><a
+					class="nav-link  btn-right-menu-main" data-toggle="modal"
+					data-target="#modal-compare">So sánh</a></li>
 			</ul>
 		</div>
 	</div>
@@ -122,8 +125,7 @@
 			<bean:define id="category" name="viewCategoryForm"
 				property="category"></bean:define>
 			<a style="border: 1px solid #ddd;"><i class="fa fa-home"
-				aria-hidden="true" style="font-size: 35px;"></i></a> <a class="active"
-				href="#"> <bean:write name="category" property="name" /></a>
+				aria-hidden="true" style="font-size: 35px;"></i></a> <a class="active" > <bean:write name="category" property="name" /></a>
 		</div>
 		<div class="row">
 			<div class="col-lg-12">
@@ -177,13 +179,15 @@
 									<p class="card-text truncase-detail">
 										<bean:write name="thread" property="name" />
 									</p>
-									<bean:define id="threadId" name="thread" property="threadId"></bean:define>
-									<html:link styleClass="btn btn-success btn-fb"
-										action="/view-thread-action?threadId=${threadId}">Xem</html:link>
+										<bean:define id="threadId" name="thread" property="threadId"></bean:define>
+										<bean:define id="name" name="thread" property="name"></bean:define>
+										<html:link styleClass="btn btn-success btn-fb"
+											action="/view-thread-action?threadId=${threadId}">Xem</html:link>
 
-									<!--Facebook-->
-									<a type="button" class="btn-floating btn-small btn-fb"><i
-										class="fa fa-compress"></i></a>
+										<!--Facebook-->
+										<a type="button" onclick="addToCompare(${threadId},'${name}')"
+											class="btn-floating btn-small btn-fb"><i
+											class="fa fa-compress"></i></a>
 									<!--Twitter-->
 								</div>
 								<!--/.Card content-->
@@ -246,12 +250,12 @@
 		</div>
 	</div>
 
-	<jsp:include page="footer.jsp" />
 	<script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
 	<script type="text/javascript" src="js/tether.min.js"></script>
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="js/mdb.min.js"></script>
 	<script type="text/javascript" src="js/owl.carousel.min.js"></script>
+	<jsp:include page="footer.jsp" />
 	<script>
 		//Trỏ đến styleId( tương đương với id) của property page
 		var pageId = $("#pageId");

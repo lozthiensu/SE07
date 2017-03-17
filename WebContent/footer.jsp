@@ -67,20 +67,20 @@
 			</div>
 			<!--Body-->
 			<div class="modal-body">
-					<div class="md-form">
-						<i class="fa fa-envelope prefix"></i> <input type="text"
-							id="emailLog" class="form-control"> <label for="form2">Email</label>
-					</div>
+				<div class="md-form">
+					<i class="fa fa-envelope prefix"></i> <input type="text"
+						id="emailLog" class="form-control"> <label for="form2">Email</label>
+				</div>
 
-					<div class="md-form">
-						<i class="fa fa-lock prefix"></i> <input type="password"
-							id="passwordLog" class="form-control"> <label for="form3">Mật
-							khẩu</label>
-					</div>
-					<div class="text-center">
-						<button class="btn btn-primary btn-lg green"
-							onclick="loginAjax();">Đăng nhập</button>
-					</div>
+				<div class="md-form">
+					<i class="fa fa-lock prefix"></i> <input type="password"
+						id="passwordLog" class="form-control"> <label for="form3">Mật
+						khẩu</label>
+				</div>
+				<div class="text-center">
+					<button class="btn btn-primary btn-lg green" onclick="loginAjax();">Đăng
+						nhập</button>
+				</div>
 
 			</div>
 			<!--Footer-->
@@ -92,6 +92,40 @@
 				</div>
 				<button type="button" class="btn btn-warning ml-auto"
 					data-dismiss="modal">Đóng</button>
+			</div>
+		</div>
+		<!--/.Content-->
+	</div>
+</div>
+
+
+<!-- Modal Login -->
+<div class="modal fade modal-ext" id="modal-compare" tabindex="-1"
+	role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<!--Content-->
+		<div class="modal-content">
+
+			<!--Header-->
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h3 class="w-100">
+					<i class="fa fa-user"></i> So sánh
+				</h3>
+			</div>
+			<!--Body-->
+			<div class="modal-body">
+				<div id="list-compare"> 
+				</div> 
+				<div class="text-center">
+					<button class="btn btn-primary  ml-auto green" onclick="compare();">Bắt
+						đầu</button>
+					<button type="button" class="btn btn-warning ml-auto" onclick="clearCompare();" data-dismiss="modal">Xóa</button>
+				</div>
+
 			</div>
 		</div>
 		<!--/.Content-->
@@ -120,30 +154,31 @@
 				</h3>
 			</div>
 			<!--Body-->
-			<div class="modal-body"> 
-					<div class="md-form">
-						<i class="fa fa-envelope prefix"></i> <input type="text"
-							id="emailReg"
-							pattern="/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/"
-							class="form-control"> <label for="form2">Email</label><span
-							id="labelEmail"></span>
-					</div>
+			<div class="modal-body">
+				<div class="md-form">
+					<i class="fa fa-envelope prefix"></i> <input type="text"
+						id="emailReg"
+						pattern="/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/"
+						class="form-control"> <label for="form2">Email</label><span
+						id="labelEmail"></span>
+				</div>
 
-					<div class="md-form">
-						<i class="fa fa-lock prefix"></i> <input type="password"
-							id="passwordReg" class="form-control"> <label for="form3">Mật
-							khẩu</label>
-					</div>
+				<div class="md-form">
+					<i class="fa fa-lock prefix"></i> <input type="password"
+						id="passwordReg" class="form-control"> <label for="form3">Mật
+						khẩu</label>
+				</div>
 
-					<div class="md-form">
-						<i class="fa fa-lock prefix"></i> <input type="password"
-							id="re-passwordReg" class="form-control"> <label
-							for="form4">Nhập lại mật khẩu</label>
-					</div>
+				<div class="md-form">
+					<i class="fa fa-lock prefix"></i> <input type="password"
+						id="re-passwordReg" class="form-control"> <label
+						for="form4">Nhập lại mật khẩu</label>
+				</div>
 
-					<div class="text-center">
-						<button onclick="return registerAjax();" class="btn btn-primary btn-lg green">Đăng ký</button>
-					</div> 
+				<div class="text-center">
+					<button onclick="return registerAjax();"
+						class="btn btn-primary btn-lg green">Đăng ký</button>
+				</div>
 			</div>
 			<!--Footer-->
 			<div class="modal-footer">
@@ -324,5 +359,121 @@
 	}
 	function showSuccess(text) {
 		sweetAlert("Thành công", text, "success");
+	}
+	function addToCompare(threadId, name){
+		var cmpJSON = readCookie("cmpJSON"); 
+		var cmpOBJ = null;
+		if( cmpJSON == "null" || cmpJSON === "null" || cmpJSON == null){
+			cmpOBJ = [];
+			log("Rỗng");
+		}else{
+			log("Có");
+			cmpOBJ = JSON.parse(cmpJSON);
+		} 
+		var myObj = { "id" : threadId,  "name" : name };
+	  	var count = Object.keys(cmpOBJ).length;
+		if(count <= 1){
+			cmpOBJ.push( myObj );
+		}else{
+				cmpOBJ.splice(0, 1);
+			cmpOBJ.push( myObj );
+		}
+		createCookie("cmpJSON", JSON.stringify(cmpOBJ), 1);
+	}
+	$('#modal-compare').on('shown.bs.modal', function () {
+		log("á");
+		var cmpJSON = readCookie("cmpJSON"); 
+		if( cmpJSON == 'null'){
+			var cmpOBJ = [];
+		}else{
+			var cmpOBJ = [];
+			var cmpOBJ = JSON.parse(cmpJSON);
+		}
+		var str = '<ul class="list-group">'; 
+		for(var k in cmpOBJ) {
+			str += '<li class="list-group-item justify-content-between">'
+			+ cmpOBJ[k].name + '<button onclick="removeCompare('+cmpOBJ[k].id+')" type="button" class="btn btn-action" > <i class="fa fa-times red-text icon-btn-action"></i></button>'
+			+ '</li>';
+			   console.log(k, cmpOBJ[k]);
+		}
+		str += '</ul>';
+		log(str);
+		$("#list-compare").html(str); 
+	})
+	function removeCompare(a){
+		var cmpJSON = readCookie("cmpJSON");
+		log("Read: =" + cmpJSON + "-");
+		var cmpOBJ = null;
+		if( cmpJSON == "null" || cmpJSON === "null" || cmpJSON == null){
+			cmpOBJ = [];
+			log("Rỗng");
+		}else{
+			log("Có");
+			cmpOBJ = JSON.parse(cmpJSON);
+		}
+	  	var count = Object.keys(cmpOBJ).length;
+	  	log("Dem: " + count);
+	  	for(i = 0; i < count; i++){
+	  		if(cmpOBJ[i].id == a){
+ 				cmpOBJ.splice(i, 1);
+ 				break;
+	  		}
+	  	}
+	  	var count1 = Object.keys(cmpOBJ).length;
+	  	log("Con lai: " + count1);
+	  	if(count1 == 0){
+			eraseCookie("cmpJSON");
+	  	}else{
+			createCookie("cmpJSON", JSON.stringify(cmpOBJ), 1);
+	  	}
+		
+		//Cap nhap
+
+		var cmpJSON = readCookie("cmpJSON"); 
+		if( cmpJSON == 'null'){
+			var cmpOBJ = [];
+		}else{
+			var cmpOBJ = [];
+			var cmpOBJ = JSON.parse(cmpJSON);
+		}
+		var str = '<ul class="list-group">'; 
+		for(var k in cmpOBJ) {
+			str += '<li class="list-group-item justify-content-between">'
+				+ cmpOBJ[k].name + '<button onclick="removeCompare('+cmpOBJ[k].id+')" type="button" class="btn btn-action" > <i class="fa fa-times red-text icon-btn-action"></i></button>'
+			+ '</li>';
+			   console.log(k, cmpOBJ[k]);
+		}
+		str += '</ul>';
+		$("#list-compare").html(str); 
+	}
+	function clearCompare(){
+		$('#modal-compare').toggle ();
+		$("#list-compare").html("");
+		eraseCookie("cmpJSON");
+	}
+	function compare(){
+		var cmpJSON = readCookie("cmpJSON");
+		log("Read: =" + cmpJSON + "-");
+		var cmpOBJ = null;
+		if( cmpJSON == "null" || cmpJSON === "null" || cmpJSON == null){
+			cmpOBJ = [];
+			alert("Không có sản phẩm để so sánh");
+			log("Rỗng");
+		}else{
+			log("Có");
+			cmpOBJ = JSON.parse(cmpJSON);
+		}
+	  	var count = Object.keys(cmpOBJ).length;
+	  	if(count == 1){
+	  		alert("Cần có đủ 2 sản phẩm để so sánh");
+	  	}else{
+	  		thread1Id = cmpOBJ[0].id;
+	  		thread2Id = cmpOBJ[1].id;
+			var curentUrl = window.location.href;
+			var index = curentUrl.lastIndexOf("/");
+			var url = curentUrl.substring(0, index);
+			window.location.href = url + "/compare-thread-action.do?thread1Id="+thread1Id + "&thread2Id="+thread2Id; 
+	  	}
+	  	log("Dem: " + count);
 	}
 </script>

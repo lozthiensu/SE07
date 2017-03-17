@@ -140,6 +140,9 @@
 				<li class="nav-item" id="btnLog"><a
 					class="nav-link  btn-right-menu-main" data-toggle="modal"
 					data-target="#modal-login">Đăng nhập</a></li>
+				<li class="nav-item" id="btnLog"><a
+					class="nav-link  btn-right-menu-main" data-toggle="modal"
+					data-target="#modal-compare">So sánh</a></li>
 			</ul>
 		</div>
 	</div>
@@ -674,7 +677,7 @@
 											+ threads[i].name
 											+ '</p><a class="btn btn-success btn-fb" href="./view-thread-action.do?threadId='
 											+ threads[i].threadId
-											+ '">Xem</a><a type="button" class="btn-floating btn-small btn-fb"><i class="fa fa-compress"></i></a></div></div></div>';
+											+ '">Xem</a><a type="button" onclick="addToCompare('+threads[i].threadId+','+ "'" +threads[i].name+ "'" +')" class="btn-floating btn-small btn-fb"><i class="fa fa-compress"></i></a></div></div></div>';
 								}
 							}
 							$('#resultThreads').html(stringResults);

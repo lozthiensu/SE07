@@ -41,6 +41,7 @@ public class Thread {
 	int far;
 	int page;
 	int totalPage;
+	boolean old;
 
 	public Thread() {
 		super();
@@ -365,6 +366,14 @@ public class Thread {
 
 	public int getTotal() {
 		return total;
+	}
+
+	public boolean isOld() {
+		return old;
+	}
+
+	public void setOld(boolean old) {
+		this.old = old;
 	}
 
 	public void setTotal(int total) {

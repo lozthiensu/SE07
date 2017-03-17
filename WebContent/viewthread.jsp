@@ -57,8 +57,8 @@
 					aria-expanded="false"><span id="welcomeText"></span></a>
 					<div class="dropdown-menu dropdown dropdown-menu-right"
 						aria-labelledby="dropdownMenu1">
-						<a class="dropdown-item" href="./user/">Quản lý</a>
-						<a class="dropdown-item" onclick="logout();">Đăng xuất</a>
+						<a class="dropdown-item" href="./user/">Quản lý</a> <a
+							class="dropdown-item" onclick="logout();">Đăng xuất</a>
 					</div></li>
 				<li class="nav-item" id="btnReg"><a
 					class="nav-link btn-right-menu-main" data-toggle="modal"
@@ -66,6 +66,9 @@
 				<li class="nav-item" id="btnLog"><a
 					class="nav-link  btn-right-menu-main" data-toggle="modal"
 					data-target="#modal-login">Đăng nhập</a></li>
+				<li class="nav-item" id="btnLog"><a
+					class="nav-link  btn-right-menu-main" data-toggle="modal"
+					data-target="#modal-compare">So sánh</a></li>
 			</ul>
 		</div>
 	</div>
@@ -120,7 +123,7 @@
 						aria-hidden="true" style="font-size: 35px;"></i></a> <a class="active"
 						href="#"> Thông tin chi tiết</a>
 				</div>
-				<div class="">
+				<div class="infoThread">
 					<div id="card-1" class="card-rotating effect__click">
 						<!--Back Side-->
 						<br> <br> <br>
@@ -168,7 +171,7 @@
 						<br> <br>
 
 
-						<div class="row">
+						<div class="row infoThread">
 							<div id="map" class="z-depth-1"></div>
 							<div id="map2" class="z-depth-1"></div>
 						</div>
@@ -178,7 +181,7 @@
 								aria-hidden="true" style="font-size: 35px;"></i></a> <a
 								class="active" href="#"> Bình luận</a>
 						</div>
-						<div class="modal-body">
+						<div class="modal-body infoThread">
 
 							<section> <!--Leave a reply form-->
 							<div class="reply-form">
@@ -248,7 +251,7 @@
 
 				<!-- START COMMENTS -->
 				<!--Main wrapper-->
-				<div class="comments-list text-left">
+				<div class="comments-list text-left infoThread">
 					<div class="section-heading">
 						<h3>
 							Số bình luận<span class="badge blue" id="ratesCountAjax"><bean:write
@@ -299,14 +302,23 @@
 			</div>
 			<div class="col-lg-3">
 				<div class="card card-cascade hoverable" style="margin-top: 0px;">
+					<input style="display: none;" id="threadOld"
+						value="<bean:write name="thread" property="old" />"></input>
 					<div class="text-center">
-						<button type="button"
-							class="btn btn-success waves-effect waves-light">Còn
-							phòng</button>
+						<logic:equal name="thread" property="old" value="true">
+							<button type="button"
+								class="btn btn-danger waves-effect waves-light">Tin đã
+								quá lâu</button>
+						</logic:equal>
+						<logic:equal name="thread" property="old" value="false">
+							<button type="button"
+								class="btn btn-success waves-effect waves-light">Tin
+								còn hạn</button>
+						</logic:equal>
 					</div>
 					<!--/Card image-->
 					<!--Card content-->
-					<div class="card-block text-center">
+					<div class="card-block text-center infoThread">
 						<!--Title-->
 						<h4 class="card-title">
 							<strong>Giá: <bean:write name="thread" property="price" />
@@ -482,8 +494,8 @@
 								<span
 									class="score s<bean:write name="threadRelated" property="avgScoreInt" />"
 									style="margin-top: -15px;"></span> (<strong
-									itemprop="reviewCount"><bean:write name="threadRelated"
-										property="avgScore" /></strong>)
+									itemprop="reviewCount"><bean:write
+										name="threadRelated" property="avgScore" /></strong>)
 							</div>
 							<div class="card-block text-center" style="margin-top: -35px;">
 								<!--Title-->
@@ -500,13 +512,15 @@
 								<p class="card-text truncase-detail">
 									<bean:write name="thread" property="name" />
 								</p>
-								<bean:define id="threadId" name="threadRelated" property="threadId"></bean:define>
-								<html:link styleClass="btn btn-success btn-fb"
-									action="/view-thread-action?threadId=${threadId}">Xem</html:link>
+										<bean:define id="threadId" name="thread" property="threadId"></bean:define>
+										<bean:define id="name" name="thread" property="name"></bean:define>
+										<html:link styleClass="btn btn-success btn-fb"
+											action="/view-thread-action?threadId=${threadId}">Xem</html:link>
 
-								<!--Facebook-->
-								<a type="button" class="btn-floating btn-small btn-fb"><i
-									class="fa fa-compress"></i></a>
+										<!--Facebook-->
+										<a type="button" onclick="addToCompare(${threadId},'${name}')"
+											class="btn-floating btn-small btn-fb"><i
+											class="fa fa-compress"></i></a>
 								<!--Twitter-->
 							</div>
 							<!--/.Card content-->
@@ -569,6 +583,32 @@
 				$('#btnAddRate').prop('disabled', true); //TO DISABLED
 				$("#welcomeToRate").html("Chức năng yêu cầu đăng nhập");
 			}	
+			log($("#threadOld").val());
+			if($("#threadOld").val() == 'true'){
+				log(true + "ne");
+				$('.infoThread')
+				.css({
+				   'filter'         : 'blur(2px)',
+				   '-webkit-filter' : 'blur(2px)',
+				   '-moz-filter'    : 'blur(2px)',
+				   '-o-filter'      : 'blur(2px)',
+				   '-ms-filter'     : 'blur(2px)'
+				});
+				$('#btnAddRate').prop('disabled', true); //TO DISABLEDnewContentRate
+				$('#newContentRate').prop('disabled', true); //TO DISABLED
+			}else{
+				log(false + "ne");
+				$('.infoThread')
+				.css({
+				   'filter'         : 'blur(0px)',
+				   '-webkit-filter' : 'blur(0px)',
+				   '-moz-filter'    : 'blur(0px)',
+				   '-o-filter'      : 'blur(0px)',
+				   '-ms-filter'     : 'blur(0px)'
+				});
+				$('#btnAddRate').prop('disabled', false); //TO DISABLEDnewContentRate
+				$('#newContentRate').prop('disabled', false); //TO DISABLED
+			}
 		});
 	</script>
 	<script>

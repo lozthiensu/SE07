@@ -63,7 +63,7 @@ public class CategoryDAO {
 				e.printStackTrace();
 			}
 
-			Log.in("Co " + dem + " danh muc");
+			//Log.in("Co " + dem + " danh muc");
 			// Đóng kết nối
 			pr.close();
 			connection.close();

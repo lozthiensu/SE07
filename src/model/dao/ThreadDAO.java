@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 
 import model.bean.Category;
@@ -13,6 +14,7 @@ import model.bean.District;
 import model.bean.Province;
 import model.bean.Thread;
 import model.bean.Village;
+import statics.Check;
 import statics.InfoSQLServer;
 import statics.Log;
 import statics.Pagination;
@@ -267,13 +269,25 @@ public class ThreadDAO {
 				String valueStr = df.format(rs.getFloat("avgScore"));
 				valueStr = valueStr.replace(',', '.');
 
-				Log.in(df.format(rs.getFloat("avgScore")) + " " + valueStr);
+				//Log.in(df.format(rs.getFloat("avgScore")) + " " + valueStr);
 				threadData.setAvgScore(Float.parseFloat(valueStr));
 				threadData.setAvgScoreInt((int) threadData.getAvgScore());
 				threadData.setVillage(new Village(0, 0, rs.getString("villageName")));
 				threadData.setDistrict(new District(0, 0, rs.getString("districtName")));
 				threadData.setProvince(new Province(0, rs.getString("provinceName")));
-
+				try {
+					if(Check.old(rs.getString("created"))){
+						Log.in("Set true dao");
+						threadData.setOld(true); 
+					}else{
+						Log.in("Set false dao");
+						threadData.setOld(false); 
+					}
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} 
+				Log.in( "Thread " + threadData.isOld());
 				// Câu lệnh truy vấn
 				sql = "update Thread set viewed = (viewed + 1) where threadId = ?";
 				pr = connection.prepareStatement(sql);

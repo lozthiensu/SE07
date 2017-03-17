@@ -39,6 +39,8 @@ public class ViewThreadAction extends Action {
 		Thread thread = new Thread();
 		thread.setThreadId(viewThreadForm.getThreadId());
 		viewThreadForm.setThread(threadBO.getById(thread));
+
+		Log.in("Wifi: " + viewThreadForm.getThread().isWifi() + " , Old: " + viewThreadForm.getThread().isOld());
 		
 		ArrayList<Category> categories = new ArrayList<Category>();
 		categories = categoryBO.getList();
@@ -50,10 +52,11 @@ public class ViewThreadAction extends Action {
 		ArrayList<Rate> rates = rateBO.getListByThread(thread);
 		viewThreadForm.setRates(rates);
 		viewThreadForm.setRatesCount(rates.size());
+		//Log.in("Wifi: " + viewThreadForm.getThread().isWifi() + " , Old: " + viewThreadForm.getThread().isOld());
 		
-		Log.in(imageBO.getListByThread(thread));
-		Log.in("Rate " + viewThreadForm.getRates());
-		Log.in("Related " + viewThreadForm.getRelateThreads());
+		//Log.in(imageBO.getListByThread(thread));
+		//Log.in("Rate " + viewThreadForm.getRates());
+		//Log.in("Related " + viewThreadForm.getRelateThreads());
 		
 		return mapping.findForward("viewThread");
 	}
