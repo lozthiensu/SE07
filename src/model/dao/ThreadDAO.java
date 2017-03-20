@@ -233,7 +233,7 @@ public class ThreadDAO {
 		ResultSet rs = null;
 
 		// Lưu thông tin account
-		Thread threadData = null;
+		Thread threadData = new Thread();
 		try {
 
 			// Câu lệnh truy vấn

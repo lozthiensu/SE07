@@ -50,7 +50,7 @@ public class RateDAO {
 		try {
 
 			// Câu lệnh truy vấn
-			String sql = "select Rate.*, Account.name as accountName from Rate inner join Account on Rate.accountId = Account.accountId  where Rate.threadId = ? order by rateId desc";
+			String sql = "select Rate.*, Account.name as accountName, Account.avatar as avatar from Rate inner join Account on Rate.accountId = Account.accountId  where Rate.threadId = ? order by rateId desc";
 			PreparedStatement pr = connection.prepareStatement(sql);
 
 			// Truyền tham số
@@ -62,7 +62,7 @@ public class RateDAO {
 			// Lấy kết quả đưa vào accountData
 			while (rs.next()) {
 				rates.add(new Rate(rs.getInt("rateId"), rs.getInt("threadId"), rs.getInt("accountId"),
-						rs.getString("created"), rs.getString("accountName"), "img/avatar.jpg", rs.getString("content"),
+						rs.getString("created"), rs.getString("accountName"), rs.getString("avatar"), rs.getString("content"),
 						rs.getInt("score")));
 			}
 

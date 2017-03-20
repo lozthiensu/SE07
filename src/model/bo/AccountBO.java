@@ -40,5 +40,9 @@ public class AccountBO {
 	public int checkLogin(Account account) {
 		return accountDAO.checkLogin(account);
 	}
+	
+	public Account checkLoginAccount(Account account) {
+		return accountDAO.checkLoginAccount(account);
+	}
 
 }

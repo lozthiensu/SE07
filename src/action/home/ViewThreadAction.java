@@ -39,7 +39,15 @@ public class ViewThreadAction extends Action {
 		Thread thread = new Thread();
 		thread.setThreadId(viewThreadForm.getThreadId());
 		viewThreadForm.setThread(threadBO.getById(thread));
+		
+		Log.in("Id bai viet " + viewThreadForm.getThreadId());
+		
+		
 
+		if(viewThreadForm.getThread().getThreadId() == 0){
+			Log.in("Thoat");
+			return mapping.findForward("failed");
+		}
 		Log.in("Wifi: " + viewThreadForm.getThread().isWifi() + " , Old: " + viewThreadForm.getThread().isOld());
 		
 		ArrayList<Category> categories = new ArrayList<Category>();
@@ -49,9 +57,13 @@ public class ViewThreadAction extends Action {
 		viewThreadForm.setImages360(imageBO.getList360ByThread(thread));
 		viewThreadForm.setRelateThreads(threadBO.getRelateThreadsByThread(thread));
 		
+		Log.in("Lien quan: " + viewThreadForm.getRelateThreads().toString());
+		
+		
 		ArrayList<Rate> rates = rateBO.getListByThread(thread);
 		viewThreadForm.setRates(rates);
 		viewThreadForm.setRatesCount(rates.size());
+		
 		//Log.in("Wifi: " + viewThreadForm.getThread().isWifi() + " , Old: " + viewThreadForm.getThread().isOld());
 		
 		//Log.in(imageBO.getListByThread(thread));

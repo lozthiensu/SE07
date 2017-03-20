@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -38,7 +39,6 @@ public class AccountAction extends Action {
 		account.setEmail(accountHomeForm.getEmail());
 		account.setPassword(accountHomeForm.getPassword());
 		String action = accountHomeForm.getAction();
-		Gson gson = null;
 		if (action.equals("register")) {
 			if(accountBO.addAccount(account) == true){
 				out.print("success");
@@ -48,12 +48,23 @@ public class AccountAction extends Action {
 				Log.in("thanh bai");
 			}
 		} else if (action.equals("login")) {
-			int accountId = accountBO.checkLogin(account);
-			if( accountId > 0){
-				Log.in(accountId);
-				out.print(accountId);
+			Account accountData = accountBO.checkLoginAccount(account);
+			if( accountData.getAccountId() > 0){
+				Log.in(accountData.toString()); 
+				Gson gson = new Gson();
+				String json = gson.toJson(accountData);
+				HttpSession httpSession = request.getSession();
+				httpSession.setAttribute("email", accountData.getEmail());
+				httpSession.setAttribute("password", accountData.getPassword());
+				accountData.setPassword("");
+				
+				Log.in(httpSession.getAttribute("email"));
+				//Log.in(json);
+				out.print(json);
 			}else {
-				out.print("-1");
+				Gson gson = null;
+				String json = gson.toJson(accountData);
+				out.print(json);
 			}
 		} else if (action.equals("checkEmail")) {
 			if(accountBO.checkEmail(account) == true){

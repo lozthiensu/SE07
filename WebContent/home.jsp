@@ -90,21 +90,12 @@
 				</logic:iterate>
 
 			</ul>
-		</div>
-		<div class="ws_bullets">
-			<div>
-				<logic:iterate name="homeViewForm" property="viewHighest" id="item">
-					<a href="#" title="<bean:write name="item" property="name" />"><span><img
-							src="<bean:write name="item" property="imageThumb" />"
-							alt="<bean:write name="item" property="name" />" />1</span></a>
-				</logic:iterate>
-			</div>
-		</div>
+		</div> 
 		<div class="ws_script" style="position: absolute; left: -99%">
 			<a href="http://wowslider.com">bootstrap slider</a> by WOWSlider.com
 			v8.7
 		</div>
-		<div class="ws_shadow"></div>
+ 
 	</div>
 	<script type="text/javascript" src="engine1/wowslider.js"></script>
 	<script type="text/javascript" src="engine1/script.js"></script>

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -48,11 +49,14 @@ public class RateAction extends Action {
 		thread.setThreadId(rateHomeForm.getThreadId());
 		Log.in("action: " + action);
 		if (action.equals("addNew")) {
-			if (loginBO.checkLogin(new Login(rateHomeForm.getEmail(), rateHomeForm.getPassword())) == true) {
+			HttpSession httpSession = request.getSession();
+			String email = (String) httpSession.getAttribute("email");
+			String password = (String) httpSession.getAttribute("password");
+			Log.in(email + " " + password + " session"); 
+			if (loginBO.checkLogin(new Login(email, password)) == true) {
 				Log.in("Bat dau add rate");
 				if (rateBO.addRate(rate) == true) {
 					rates = rateBO.getListByThread(thread);
-					Log.in(rates);
 					String json = gson.toJson(rates);
 					out.print(json);
 					Log.in("Add rate thanh cong");

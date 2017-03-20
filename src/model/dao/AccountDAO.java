@@ -302,40 +302,76 @@ public class AccountDAO {
 		Log.in("EMail k0 ton tai");
 		return true;
 	}
+
 	// Kiểm tra đăng nhập với đối tượng loginAccount
-		public int checkLogin(Account account) {
+	public int checkLogin(Account account) {
 
-			// Mở kết nối
-			connect();
-			int accountId = -1;
-			// Khai báo biến rs để chứa kết quả
-			ResultSet rs = null;
-			try {
+		// Mở kết nối
+		connect();
+		int accountId = -1;
+		// Khai báo biến rs để chứa kết quả
+		ResultSet rs = null;
+		try {
 
-				// Câu lẹnh kiểm tra đăng nhập
-				String sql = "select accountId from Account where email = ? AND password = ?";
-				PreparedStatement pr = connection.prepareStatement(sql);
+			// Câu lẹnh kiểm tra đăng nhập
+			String sql = "select accountId from Account where email = ? AND password = ?";
+			PreparedStatement pr = connection.prepareStatement(sql);
 
-				// Truyền các biến vào câu lệnh để thực thi
-				pr.setString(1, account.getEmail());
-				pr.setString(2, account.getPassword());
-				rs = pr.executeQuery();
+			// Truyền các biến vào câu lệnh để thực thi
+			pr.setString(1, account.getEmail());
+			pr.setString(2, account.getPassword());
+			rs = pr.executeQuery();
 
-				if (rs.next()) {
-					// Nếu kết quả trả về khác null, đăng nhập thành công, return
-					// true
-					accountId = rs.getInt("accountId");
-					return accountId;
-				}
-
-				// Đóng kết nối
-				pr.close();
-				connection.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
+			if (rs.next()) {
+				// Nếu kết quả trả về khác null, đăng nhập thành công, return
+				// true
+				accountId = rs.getInt("accountId");
+				return accountId;
 			}
-			// Đăng nhập thất bại, return false
-			return accountId;
 
+			// Đóng kết nối
+			pr.close();
+			connection.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
+		// Đăng nhập thất bại, return false
+		return accountId;
+
+	}
+
+	public Account checkLoginAccount(Account account) {
+		// Mở kết nối
+		connect();
+		Account accountData = null;
+		// Khai báo biến rs để chứa kết quả
+		ResultSet rs = null;
+		try {
+
+			// Câu lẹnh kiểm tra đăng nhập
+			String sql = "select * from Account where email = ? AND password = ?";
+			PreparedStatement pr = connection.prepareStatement(sql);
+
+			// Truyền các biến vào câu lệnh để thực thi
+			pr.setString(1, account.getEmail());
+			pr.setString(2, account.getPassword());
+			rs = pr.executeQuery();
+
+			if (rs.next()) {
+				// Nếu kết quả trả về khác null, đăng nhập thành công, return
+				// true
+				accountData = new Account(rs.getInt("accountId"), rs.getInt("level"), rs.getInt("categoryId"),
+						rs.getString("name"), rs.getString("email"), rs.getString("password"), rs.getString("phone"), rs.getInt("status"));
+				accountData.setAvatar(rs.getString("avatar"));
+			}
+
+			// Đóng kết nối
+			pr.close();
+			connection.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		// Đăng nhập thất bại, return false
+		return accountData;
+	}
 }

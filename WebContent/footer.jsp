@@ -262,14 +262,16 @@
 					data : "email=" + email + "&password=" + password
 							+ "&action=login",
 					success : function(res) {
-						var accountId = 0;
-						accountId = parseInt(res);
-						log(accountId);
-						if (accountId >= 0) {
+						var objAccount = JSON.parse(res);
+						log(objAccount);
+						if (objAccount.accountId >= 0) {
 							showSuccess("Đăng nhập thành công");
-							createCookie("email", email, 1);
-							createCookie("password", password, 1);
-							createCookie("accountId", accountId, 1);
+							createCookie("email", objAccount.email, 1);
+							createCookie("password", objAccount.password, 1);
+							createCookie("accountId", objAccount.accountId, 1);
+							createCookie("avatar", objAccount.avatar, 1); 
+				            $("#imgAva").attr("src", objAccount.avatar);
+				            $("#imgAvaCMT").attr("src", objAccount.avatar);
 							$("#welcomeText").html("Chào " + email);
 							$("#modal-login").modal('hide');
 							$("#btnReg").hide();
@@ -277,6 +279,9 @@
 							$("#imgAva").show();
 							$("#menuAcc").show();
 							$('#btnAddRate').prop('disabled', false); //TO DISABLED
+							$('#newContentRate').prop('disabled', false); //TO DISABLED
+							$('input[name=newScoreRate]').prop('disabled', false); //TO DISABLED 
+							$('input[name=newScoreRate]:checked').prop('checked', false);
 							$("#welcomeToRate").html("");	
 							return true;
 						} else {
@@ -323,7 +328,11 @@
 		$("#imgAva").hide();
 		$("#menuAcc").hide();
 		$('#btnAddRate').prop('disabled', true); //TO DISABLED
+		$('#newContentRate').prop('disabled', true); //TO DISABLED
+		$('input[name=newScoreRate]').prop('disabled', true); //TO DISABLED 
+		$('input[name=newScoreRate]:checked').prop('checked', false);
 		$("#welcomeToRate").html("Chức năng yêu cầu đăng nhập");
+        $("#imgAvaCMT").attr("src", "image/avatar.jpg");
 	}
 	$(document).ready(function() {
 		$("#emailReg").keypress(function() {
@@ -343,6 +352,8 @@
 			$("#btnReg").hide();
 			$("#btnLog").hide();
 			$('#btnAddRate').prop('disabled', false); //TO DISABLED
+            $("#imgAva").attr("src", readCookie("avatar"));
+            $("#imgAvaCMT").attr("src", readCookie("avatar"));
 			$("#welcomeToRate").html("");	
 		} else {
 			$("#btnReg").show();
@@ -351,7 +362,9 @@
 			$("#menuAcc").hide(); 
 			$("#welcomeText").html("");
 			$('#btnAddRate').prop('disabled', true); //TO DISABLED
+			$('#newContentRate').prop('disabled', true); //TO DISABLED
 			$("#welcomeToRate").html("Chức năng yêu cầu đăng nhập");
+            $("#imgAvaCMT").attr("src", "image/avatar.jpg");
 		}
 	});
 	function showError(text) {

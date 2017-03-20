@@ -37,6 +37,11 @@ public class ViewCategoryAction extends Action {
 		// Tao ra doi tuong category tu form
 		Category categoryForm = new Category(viewCategoryForm.getCategoryId(), null);
 		Category category = categoryBO.getById(categoryForm);
+		
+		if(category.getCategoryId() == 0){
+			Log.in("Thoat");
+			return mapping.findForward("failed");
+		}
 
 		// Lay so trang can xem   
 		int page = viewCategoryForm.getPage();

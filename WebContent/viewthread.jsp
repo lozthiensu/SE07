@@ -192,7 +192,7 @@
 								<div class="row">
 									<!--Image column-->
 									<div class="col-sm-2 col-12">
-										<img src="img/avatar1.jpg" style="height: 100px;">
+										<img src="image/avatar.jpg" style="height: 100px;" id="imgAvaCMT">
 									</div>
 									<!--/.Image column-->
 
@@ -460,8 +460,7 @@
 		<!--Slide new start -->
 		<div class="breadcrumb flat" style="clear: both;">
 			<a style="border: 1px solid #ddd;"><i class="fa fa-home"
-				aria-hidden="true" style="font-size: 35px;"></i></a> <a class="active"
-				href="#"> Bài viết liên quan</a>
+				aria-hidden="true" style="font-size: 35px;"></i></a> <a class="active"> Bài viết liên quan</a>
 		</div>
 		<div class="row">
 			<div class="row">
@@ -476,7 +475,7 @@
 							<div class="view overlay hm-white-slight"
 								style="margin-top: -15px; width: 90%; margin-left: 5%; min-height: 200px; max-height: 200px;">
 								<img class="img-fluid"
-									src="<bean:write name="thread" property="imageThumb" />"
+									src="<bean:write name="threadRelated" property="imageThumb" />"
 									style="border-radius: 3px; width: auto; min-height: 200px;"
 									style=" ">
 								<div class="mask waves-effect waves-light"></div>
@@ -510,10 +509,10 @@
 									m&#178;
 								</h5>
 								<p class="card-text truncase-detail">
-									<bean:write name="thread" property="name" />
+									<bean:write name="threadRelated" property="name" />
 								</p>
-										<bean:define id="threadId" name="thread" property="threadId"></bean:define>
-										<bean:define id="name" name="thread" property="name"></bean:define>
+										<bean:define id="threadId" name="threadRelated" property="threadId"></bean:define>
+										<bean:define id="name" name="threadRelated" property="name"></bean:define>
 										<html:link styleClass="btn btn-success btn-fb"
 											action="/view-thread-action?threadId=${threadId}">Xem</html:link>
 
@@ -574,6 +573,8 @@
 		});
 		$(document).ready(function() {
 			$('#btnAddRate').prop('disabled', true); //TO DISABLED
+			$('input[name=newScoreRate]:checked').prop('checked', false);
+			$('input[name=newScoreRate]').prop('disabled', true); //TO DISABLED  
 			email = readCookie('email');
 			log(email);
 			if (email != undefined && email.length > 6) {
@@ -596,7 +597,7 @@
 				});
 				$('#btnAddRate').prop('disabled', true); //TO DISABLEDnewContentRate
 				$('#newContentRate').prop('disabled', true); //TO DISABLED
-			}else{
+			}else if( $("#threadOld").val() != 'true' && email != undefined && email.length > 6 ){
 				log(false + "ne");
 				$('.infoThread')
 				.css({
@@ -647,7 +648,7 @@
 			$.ajax({
 				type : "POST",
 				url : "/Mock_SE7/home-rate-action.do",
-				data : "threadId=" + threadId + "&content=" + content + "&score=" + score + "&accountId=" + accountId + "&email=" + email + "&password=" + password + "&action=addNew",
+				data : "threadId=" + threadId + "&content=" + content + "&score=" + score + "&accountId=" + accountId + "&email=" + email + "&action=addNew",
 				success : function(res) {
 					log(res);
 					var obj = JSON.parse(res);
@@ -687,15 +688,6 @@
 					}else{
 						showError("Lỗi không xác định");
 					}
-					/* if (res == "success") {
-						log("tc");
-						$("#labelEmail").html("");
-						return true;
-					} else {
-						log("tb");
-						$("#labelEmail").html("Email đã tồn tại");
-						return false;
-					} */
 				},
 				error : function(e) {
 					showError("Lỗi không xác định " + e);
