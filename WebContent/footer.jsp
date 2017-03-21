@@ -265,7 +265,7 @@
 						var objAccount = JSON.parse(res);
 						log(objAccount);
 						if (objAccount.accountId >= 0) {
-							showSuccess("Đăng nhập thành công");
+							//showSuccess("Đăng nhập thành công");
 							createCookie("email", objAccount.email, 1);
 							createCookie("password", objAccount.password, 1);
 							createCookie("accountId", objAccount.accountId, 1);
@@ -414,9 +414,11 @@
 		var count = Object.keys(cmpOBJ).length;
 		if (count <= 1) {
 			cmpOBJ.push(myObj);
+			showSuccess("Đã thêm vào giỏ so sánh");
 		} else {
 			cmpOBJ.splice(0, 1);
 			cmpOBJ.push(myObj);
+			showSuccess("Đã thêm vào giỏ so sánh");
 		}
 		createCookie("cmpJSON", JSON.stringify(cmpOBJ), 1);
 	}
@@ -506,7 +508,7 @@
 		var cmpOBJ = null;
 		if (cmpJSON == "null" || cmpJSON === "null" || cmpJSON == null) {
 			cmpOBJ = [];
-			alert("Không có sản phẩm để so sánh");
+			showError("Không có sản phẩm để so sánh");
 			log("Rỗng");
 		} else {
 			log("Có");
@@ -514,7 +516,7 @@
 		}
 		var count = Object.keys(cmpOBJ).length;
 		if (count == 1) {
-			alert("Cần có đủ 2 sản phẩm để so sánh");
+			showError("Cần có đủ 2 sản phẩm để so sánh");
 		} else {
 			thread1Id = cmpOBJ[0].id;
 			thread2Id = cmpOBJ[1].id;

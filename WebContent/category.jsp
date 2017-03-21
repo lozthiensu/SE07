@@ -152,9 +152,9 @@
 
 								<!--/Card image-->
 								<!--Card content-->
-								<div class="card-block">
+								<div class="card-block  card-block-tren">
 									<!--Social shares button-->
-									<a class="activator" style="margin-top: 10px;"><i
+									<a class="activator" style="margin-top: -5px;"><i
 										class="fa fa-eye" aria-hidden="true"></i> <bean:write
 											name="thread" property="viewed" /></a>
 									<!--Title-->
@@ -164,16 +164,15 @@
 										itemprop="reviewCount"><bean:write name="thread"
 											property="avgScore" /></strong>)
 								</div>
-								<div class="card-block text-center" style="margin-top: -35px;">
+								<div class="card-block text-center" style="margin-top: 0px;">
 									<!--Title-->
 									<h4 class="card-title">
-										<strong>Giá: <bean:write name="thread"
+										<strong><i class="fa fa-money" style="font-size:25px;color:#000"></i> <bean:write name="thread"
 												property="priceString" />
 										</strong>
 									</h4>
 									<h5>
-										Diện tích:
-										<bean:write name="thread" property="area" />
+										<i class="fa fa-area-chart" style="font-size:16px;color:#000"></i> <bean:write name="thread" property="area" />
 										m&#178;
 									</h5>
 									<p class="card-text truncase-detail">

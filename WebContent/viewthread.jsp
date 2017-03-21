@@ -13,11 +13,8 @@
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/compiled.min.css" rel="stylesheet">
 <link href="css/mdb.min.css" rel="stylesheet">
-<!-- Owl Carousel Assets -->
-<link href="css//owl.carousel.css" rel="stylesheet">
-<link href="css/owl.theme.css" rel="stylesheet">
 <link href="css/style-view.css" rel="stylesheet">
-<!-- <link href="css/lightbox.min.css" rel="stylesheet"> -->
+<link href="css/lightbox.min.css" rel="stylesheet">
 </head>
 <body>
 
@@ -318,7 +315,7 @@
 					</div>
 					<!--/Card image-->
 					<!--Card content-->
-					<div class="card-block text-center infoThread">
+					<div class="card-block text-center infoThread" style="margin-top: 0px;">
 						<!--Title-->
 						<h4 class="card-title">
 							<strong>Giá: <bean:write name="thread" property="price" />
@@ -484,9 +481,9 @@
 
 							<!--/Card image-->
 							<!--Card content-->
-							<div class="card-block">
+							<div class="card-block   card-block-tren">
 								<!--Social shares button-->
-								<a class="activator" style="margin-top: 10px;"><i
+								<a class="activator" style="margin-top: -5px;"><i
 									class="fa fa-eye" aria-hidden="true"></i> <bean:write
 										name="threadRelated" property="viewed" /></a>
 								<!--Title-->
@@ -496,7 +493,7 @@
 									itemprop="reviewCount"><bean:write
 										name="threadRelated" property="avgScore" /></strong>)
 							</div>
-							<div class="card-block text-center" style="margin-top: -35px;">
+							<div class="card-block text-center" style="margin-top: 0px;">
 								<!--Title-->
 								<h4 class="card-title">
 									<strong>Giá: <bean:write name="threadRelated"
@@ -537,10 +534,7 @@
 	<script type="text/javascript" src="js/tether.min.js"></script>
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="js/mdb.min.js"></script>
-	<script type="text/javascript" src="js/owl.carousel.min.js"></script>
-	<script type="text/javascript" src="js/jquery.raty-fa.js"></script>
-
-	<!-- <script type="text/javascript" src="js/lightbox-plus-jquery.min.js"></script> -->
+	<script type="text/javascript" src="js/lightbox-plus-jquery.min.js"></script>
 
 	<jsp:include page="footer.jsp" />
 	<script>

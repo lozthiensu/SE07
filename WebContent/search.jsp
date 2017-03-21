@@ -13,11 +13,7 @@
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/compiled.min.css" rel="stylesheet">
 <link href="css/mdb.min.css" rel="stylesheet">
-<!-- Owl Carousel Assets -->
-<link href="css//owl.carousel.css" rel="stylesheet">
-<link href="css/owl.theme.css" rel="stylesheet">
 <link href="css/style-view.css" rel="stylesheet">
-<link href="css/lightbox.min.css" rel="stylesheet">
 <style>
 #map {
 	height: calc(100vh - 100px);
@@ -481,8 +477,11 @@
 		<br> <br> <br>
 		<!--/.Carousel Wrapper-->
 		<!--/.Navbar-->
-		<div class="col-lg-12">
-			<h1 class="h1-title">Kết quả tìm kiếm</h1>
+		<div class="breadcrumb flat">
+			<a style="border: 1px solid #ddd;"><i class="fa fa-home"
+				aria-hidden="true" style="font-size: 35px;"></i></a> <a class="active" > Kết quả tìm kiếm</a>
+		</div>
+		<div class="col-lg-12"> 
 			<div class="row" id="resultThreads"></div>
 			<br> <br> <br>
 			<div style="display: table; margin: 0 auto;" id="pagination"></div>
@@ -726,17 +725,17 @@
 													'click',
 													(function(marker, i) {
 														return function() {
-															infowindow.setContent('<div class="view overlay hm-white-slight"style="margin-top: -15px; width: 90%; margin-left: 5%; min-height: 200px; max-height: 200px; max-width: 300px;"><img class="img-fluid"src="'+threads[i].imageThumb+'"style="border-radius: 3px; width: 100%; height: auto;"style=" "><div class="mask waves-effect waves-light"></div></div><div class="card-block"><a class="activator" style=" float: right;"><i class="fa fa-eye" aria-hidden="true"></i> '
+															infowindow.setContent('<div class="col-md-12"><div class="card card-cascade hoverable"style="margin-top: 40px;"><div class="view overlay hm-white-slight"style="margin-top: -15px; width: 90%; margin-left: 5%; min-height: 200px; max-height: 200px;"><img class="img-fluid"src="'+threads[i].imageThumb+'"style="border-radius: 3px; width: auto; min-height: 200px;"style=" "><div class="mask waves-effect waves-light"></div></div><div class="card-block  card-block-tren"><a class="activator" style="margin-top: -5px;"><i class="fa fa-eye" aria-hidden="true"></i> '
 																	+ threads[i].viewed
 																	+ '</a><span class="score s'+threads[i].avgScoreInt+'" style="margin-top: -15px;"></span> (<strong itemprop="reviewCount">'
 																	+ threads[i].avgScore
-																	+ '</strong>)</div><div class="card-block text-center" style="margin-top: -35px;"><h4 class="card-title"><strong>Giá: '
+																	+ '</strong>)</div><div class="card-block text-center" style="margin-top: 0px;"><h4 class="card-title"><strong><i class="fa fa-money" style="font-size:25px;color:#000"></i> '
 																	+ threads[i].price
-																	+ '</strong></h4><h5>Diện tích:'
+																	+ '</strong></h4><h5><i class="fa fa-area-chart" style="font-size:16px;color:#000"></i> '
 																	+ threads[i].area
 																	+ 'm&#178;</h5><p class="card-text truncase-detail">'
 																	+ threads[i].name
-																	+ '</p><a class="btn btn-success btn-fb" target="_blank" href="./view-thread-action.do?threadId='
+																	+ '</p><a class="btn btn-success btn-fb" href="./view-thread-action.do?threadId='
 																	+ threads[i].threadId
 																	+ '">Xem</a><a type="button" onclick="addToCompare('
 																	+ threads[i].threadId
@@ -744,7 +743,7 @@
 																	+ "'"
 																	+ threads[i].name
 																	+ "'"
-																	+ ')" class="btn-floating btn-small btn-fb"><i class="fa fa-compress"></i></a></div>');
+																	+ ')" class="btn-floating btn-small btn-fb"><i class="fa fa-compress"></i></a></div></div></div>');
 															infowindow
 																	.open(map,
 																			marker);
@@ -757,13 +756,13 @@
 								var n = threads.length;
 								var stringResults = '';
 								for (var i = 0; i < n; i++) {
-									stringResults += '<div class=" col-lg-4 col-md-6"><div class="card card-cascade hoverable"style="margin-top: 40px;"><div class="view overlay hm-white-slight"style="margin-top: -15px; width: 90%; margin-left: 5%; min-height: 200px; max-height: 200px;"><img class="img-fluid"src="'+threads[i].imageThumb+'"style="border-radius: 3px; width: auto; min-height: 200px;"style=" "><div class="mask waves-effect waves-light"></div></div><div class="card-block"><a class="activator" style="margin-top: 10px;"><i class="fa fa-eye" aria-hidden="true"></i> '
+									stringResults += '<div class=" col-lg-4 col-md-6"><div class="card card-cascade hoverable"style="margin-top: 40px;"><div class="view overlay hm-white-slight"style="margin-top: -15px; width: 90%; margin-left: 5%; min-height: 200px; max-height: 200px;"><img class="img-fluid"src="'+threads[i].imageThumb+'"style="border-radius: 3px; width: auto; min-height: 200px;"style=" "><div class="mask waves-effect waves-light"></div></div><div class="card-block  card-block-tren"><a class="activator" style="margin-top: -5px;"><i class="fa fa-eye" aria-hidden="true"></i> '
 											+ threads[i].viewed
 											+ '</a><span class="score s'+threads[i].avgScoreInt+'" style="margin-top: -15px;"></span> (<strong itemprop="reviewCount">'
 											+ threads[i].avgScore
-											+ '</strong>)</div><div class="card-block text-center" style="margin-top: -35px;"><h4 class="card-title"><strong>Giá: '
+											+ '</strong>)</div><div class="card-block text-center" style="margin-top: 0px;"><h4 class="card-title"><strong><i class="fa fa-money" style="font-size:25px;color:#000"></i> '
 											+ threads[i].price
-											+ '</strong></h4><h5>Diện tích:'
+											+ '</strong></h4><h5><i class="fa fa-area-chart" style="font-size:16px;color:#000"></i> '
 											+ threads[i].area
 											+ 'm&#178;</h5><p class="card-text truncase-detail">'
 											+ threads[i].name

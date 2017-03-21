@@ -13,9 +13,6 @@
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/compiled.min.css" rel="stylesheet">
 <link href="css/mdb.min.css" rel="stylesheet">
-<!-- Owl Carousel Assets -->
-<link href="css//owl.carousel.css" rel="stylesheet">
-<link href="css/owl.theme.css" rel="stylesheet">
 <link href="css/style-view.css" rel="stylesheet">
 <!-- Start WOWSlider.com HEAD section -->
 <link rel="stylesheet" type="text/css" href="engine1/style.css" />
@@ -172,9 +169,9 @@
 
 									<!--/Card image-->
 									<!--Card content-->
-									<div class="card-block">
+									<div class="card-block card-block-tren">
 										<!--Social shares button-->
-										<a class="activator" style="margin-top: 10px;"><i
+										<a class="activator" style="margin-top: -5px;"><i
 											class="fa fa-eye" aria-hidden="true"></i> <bean:write
 												name="thread" property="viewed" /></a>
 										<!--Title-->
@@ -184,25 +181,23 @@
 											itemprop="reviewCount"><bean:write name="thread"
 												property="avgScore" /></strong>)
 									</div>
-									<div class="card-block text-center" style="margin-top: -35px;">
+									<div class="card-block text-center" style="margin-top:0px;">
 										<!--Title-->
-										<h4 class="card-title">
-											<strong>Giá: <bean:write name="thread"
+										<h4 class="card-title" style="">
+											<strong><i class="fa fa-money" style="font-size:25px;color:#000"></i> <bean:write name="thread"
 													property="priceString" />
 											</strong>
 										</h4>
-										<h5>
-											Diện tích:
-											<bean:write name="thread" property="area" />
+										<h5 style="">
+											<i class="fa fa-area-chart" style="font-size:16px;color:#000"></i> <bean:write name="thread" property="area" />
 											m&#178;
 										</h5>
-										<p class="card-text truncase-detail">
+										<p class="card-text truncase-detail" style="clear: both;">
 											<bean:write name="thread" property="name" />
 										</p>
 										<bean:define id="threadId" name="thread" property="threadId"></bean:define>
 										<bean:define id="name" name="thread" property="name"></bean:define>
-										<html:link styleClass="btn btn-success btn-fb"
-											action="/view-thread-action?threadId=${threadId}">Xem</html:link>
+										<html:link styleClass="btn btn-success btn-fb" action="/view-thread-action?threadId=${threadId}">Xem</html:link>
 
 										<!--Facebook-->
 										<a type="button" onclick="addToCompare(${threadId},'${name}')"
@@ -226,7 +221,6 @@
 	<script type="text/javascript" src="js/tether.min.js"></script>
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="js/mdb.min.js"></script>
-	<script type="text/javascript" src="js/owl.carousel.min.js"></script>
 	<jsp:include page="footer.jsp" />
 	<script>
 		var stick = function() {
