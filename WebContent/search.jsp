@@ -20,7 +20,7 @@
 <link href="css/lightbox.min.css" rel="stylesheet">
 <style>
 #map {
-	height: 400px;
+	height: calc(100vh - 100px);
 }
 
 #description {
@@ -30,7 +30,7 @@
 }
 
 #infowindow-content .title {
-	font-weight: bold;
+	font-weight: bold; 
 }
 
 #infowindow-content {
@@ -196,8 +196,8 @@
 					<div class="col-lg-12">
 						<div class="md-form">
 							<input type="text" id="name" class="form-control validate"
-								length="250" onkeydown="doAjaxPost()"> <label for="name"
-								data-error="wrong" data-success="right">Nhập từ khóa</label>
+								length="250"> <label for="name" data-error="wrong"
+								data-success="right">Nhập từ khóa</label>
 						</div>
 					</div>
 					<div class="col-lg-3">
@@ -346,11 +346,13 @@
 							id="place-address"></span>
 					</div>
 					<script>
+						var map = null;
+						var markers = [];
 						// This example requires the Places library. Include the libraries=places
 						// parameter when you first load the API. For example:
 						// <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
 						function initMap() {
-							var map = new google.maps.Map(document
+							map = new google.maps.Map(document
 									.getElementById('map'), {
 								center : {
 									lat : 15.9782827,
@@ -408,9 +410,17 @@
 												}
 												marker
 														.setPosition(place.geometry.location);
-												log(place.geometry.location.lat() + " " + place.geometry.location.lng() );
-												createCookie("lat", place.geometry.location.lat(), 1);
-												createCookie("lng", place.geometry.location.lng(), 1);
+												log(place.geometry.location
+														.lat()
+														+ " "
+														+ place.geometry.location
+																.lng());
+												createCookie("lat",
+														place.geometry.location
+																.lat(), 1);
+												createCookie("lng",
+														place.geometry.location
+																.lng(), 1);
 												marker.setVisible(true);
 												var address = '';
 												if (place.address_components) {
@@ -483,6 +493,7 @@
 	<script type="text/javascript" src="js/tether.min.js"></script>
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="js/mdb.min.js"></script>
+	<script type="text/javascript" src="js/jquery.autocomplete.min.js"></script>
 
 	<jsp:include page="footer.jsp" />
 	<script type="text/javascript">
@@ -622,7 +633,34 @@
 			createCookie('page', page, 1);
 			doAjaxPost();
 		}
+		$('#name').autocomplete(
+				{
+					lookup : function(query, done) {
+						name = $("#name").val();
+						$.ajax({
+							type : "POST",
+							url : "/Mock_SE7/search-thread.do",
+							data : "action=autocomplete&name=" + name,
+							success : function(res) {
+								result = JSON.parse(res);
+								done(result);
+							},
+							error : function(e) {
+								alert('Error: ' + e);
+							}
+						});
+					},
+					onSelect : function(suggestion) {
+						doAjaxPost();
+						log('You selected: ' + suggestion.value + ', '
+								+ suggestion.data);
+					}
+				});
+		$("#name").focusout(function() {
+			doAjaxPost();
+		});
 		function doAjaxPost() {
+
 			// get the form values
 			wifi = $('#wifi').is(':checked');
 			waterHeater = $('#waterHeater').is(':checked');
@@ -638,7 +676,7 @@
 			provinceId = $('#slbProvince').val();
 			districtId = $('#slbDistrict').val();
 			villageId = $('#slbVillage').val();
-			name = $('#name').val();
+			name = $("#name").val();
 			page = parseInt(readCookie('page'));
 			lat = readCookie('lat');
 			lng = readCookie('lng');
@@ -646,10 +684,10 @@
 					+ waterHeater + "&conditioner=" + conditioner + "&fridge="
 					+ fridge + "&attic=" + attic + "&camera=" + camera
 					+ "&object=" + object + "&waterSource=" + waterSource
-					+ "&area=" + area + "&price=" + price + "&far=" + far + "&lat=" + lat + "&lng=" + lng
-					+ "&provinceId=" + provinceId + "&districtId=" + districtId
-					+ "&villageId=" + villageId + "&name=" + name + "&page="
-					+ page;
+					+ "&area=" + area + "&price=" + price + "&far=" + far
+					+ "&lat=" + lat + "&lng=" + lng + "&provinceId="
+					+ provinceId + "&districtId=" + districtId + "&villageId="
+					+ villageId + "&name=" + name + "&page=" + page;
 			log("Post " + str);
 			$
 					.ajax({
@@ -662,6 +700,60 @@
 							//log("Res " + response);
 							var threads = JSON.parse(response);
 							if (threads != undefined) {
+
+								while (markers.length) {
+									markers.pop().setMap(null);
+								}
+								/* START MAKER */
+
+								var infowindow = new google.maps.InfoWindow();
+
+								var marker, i;
+
+								for (i = 0; i < threads.length; i++) {
+									marker = new google.maps.Marker({
+										position : new google.maps.LatLng(
+												threads[i].latitude,
+												threads[i].longitude),
+										map : map,
+										icon : './img/green-dot.png'
+									});
+									markers.push(marker);
+
+									google.maps.event
+											.addListener(
+													marker,
+													'click',
+													(function(marker, i) {
+														return function() {
+															infowindow.setContent('<div class="view overlay hm-white-slight"style="margin-top: -15px; width: 90%; margin-left: 5%; min-height: 200px; max-height: 200px; max-width: 300px;"><img class="img-fluid"src="'+threads[i].imageThumb+'"style="border-radius: 3px; width: 100%; height: auto;"style=" "><div class="mask waves-effect waves-light"></div></div><div class="card-block"><a class="activator" style=" float: right;"><i class="fa fa-eye" aria-hidden="true"></i> '
+																	+ threads[i].viewed
+																	+ '</a><span class="score s'+threads[i].avgScoreInt+'" style="margin-top: -15px;"></span> (<strong itemprop="reviewCount">'
+																	+ threads[i].avgScore
+																	+ '</strong>)</div><div class="card-block text-center" style="margin-top: -35px;"><h4 class="card-title"><strong>Giá: '
+																	+ threads[i].price
+																	+ '</strong></h4><h5>Diện tích:'
+																	+ threads[i].area
+																	+ 'm&#178;</h5><p class="card-text truncase-detail">'
+																	+ threads[i].name
+																	+ '</p><a class="btn btn-success btn-fb" target="_blank" href="./view-thread-action.do?threadId='
+																	+ threads[i].threadId
+																	+ '">Xem</a><a type="button" onclick="addToCompare('
+																	+ threads[i].threadId
+																	+ ','
+																	+ "'"
+																	+ threads[i].name
+																	+ "'"
+																	+ ')" class="btn-floating btn-small btn-fb"><i class="fa fa-compress"></i></a></div>');
+															infowindow
+																	.open(map,
+																			marker);
+														}
+													})(marker, i));
+								}
+
+								/* END MAKER */
+
 								var n = threads.length;
 								var stringResults = '';
 								for (var i = 0; i < n; i++) {
@@ -677,7 +769,13 @@
 											+ threads[i].name
 											+ '</p><a class="btn btn-success btn-fb" href="./view-thread-action.do?threadId='
 											+ threads[i].threadId
-											+ '">Xem</a><a type="button" onclick="addToCompare('+threads[i].threadId+','+ "'" +threads[i].name+ "'" +')" class="btn-floating btn-small btn-fb"><i class="fa fa-compress"></i></a></div></div></div>';
+											+ '">Xem</a><a type="button" onclick="addToCompare('
+											+ threads[i].threadId
+											+ ','
+											+ "'"
+											+ threads[i].name
+											+ "'"
+											+ ')" class="btn-floating btn-small btn-fb"><i class="fa fa-compress"></i></a></div></div></div>';
 								}
 							}
 							$('#resultThreads').html(stringResults);
@@ -732,7 +830,7 @@
 							strPagi += '</nav>';
 							//log(strPagi);
 							$('#pagination').html(strPagi);
-							
+
 							//pagination
 						},
 						error : function(e) {

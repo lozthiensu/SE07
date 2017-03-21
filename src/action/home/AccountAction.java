@@ -40,36 +40,39 @@ public class AccountAction extends Action {
 		account.setPassword(accountHomeForm.getPassword());
 		String action = accountHomeForm.getAction();
 		if (action.equals("register")) {
-			if(accountBO.addAccount(account) == true){
+			if (accountBO.addAccount(account) == true) {
 				out.print("success");
 				Log.in("thanh cong");
-			}else {
+			} else {
 				out.print("failed");
 				Log.in("thanh bai");
 			}
 		} else if (action.equals("login")) {
 			Account accountData = accountBO.checkLoginAccount(account);
-			if( accountData.getAccountId() > 0){
-				Log.in(accountData.toString()); 
+			if (accountData.getAccountId() > 0) {
+				Log.in(accountData.toString());
 				Gson gson = new Gson();
 				String json = gson.toJson(accountData);
 				HttpSession httpSession = request.getSession();
 				httpSession.setAttribute("email", accountData.getEmail());
 				httpSession.setAttribute("password", accountData.getPassword());
 				accountData.setPassword("");
-				
+
 				Log.in(httpSession.getAttribute("email"));
-				//Log.in(json);
+				// Log.in(json);
 				out.print(json);
-			}else {
+			} else {
 				Gson gson = null;
 				String json = gson.toJson(accountData);
 				out.print(json);
 			}
+		} else if (action.equals("logout")) {
+			HttpSession httpSession = request.getSession();
+			httpSession.invalidate();
 		} else if (action.equals("checkEmail")) {
-			if(accountBO.checkEmail(account) == true){
+			if (accountBO.checkEmail(account) == true) {
 				out.print("success");
-			}else {
+			} else {
 				out.print("failed");
 			}
 		}

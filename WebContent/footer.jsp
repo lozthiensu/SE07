@@ -118,12 +118,12 @@
 			</div>
 			<!--Body-->
 			<div class="modal-body">
-				<div id="list-compare"> 
-				</div> 
+				<div id="list-compare"></div>
 				<div class="text-center">
 					<button class="btn btn-primary  ml-auto green" onclick="compare();">Bắt
 						đầu</button>
-					<button type="button" class="btn btn-warning ml-auto" onclick="clearCompare();" data-dismiss="modal">Xóa</button>
+					<button type="button" class="btn btn-warning ml-auto"
+						onclick="clearCompare();" data-dismiss="modal">Xóa</button>
 				</div>
 
 			</div>
@@ -269,9 +269,9 @@
 							createCookie("email", objAccount.email, 1);
 							createCookie("password", objAccount.password, 1);
 							createCookie("accountId", objAccount.accountId, 1);
-							createCookie("avatar", objAccount.avatar, 1); 
-				            $("#imgAva").attr("src", objAccount.avatar);
-				            $("#imgAvaCMT").attr("src", objAccount.avatar);
+							createCookie("avatar", objAccount.avatar, 1);
+							$("#imgAva").attr("src", objAccount.avatar);
+							$("#imgAvaCMT").attr("src", objAccount.avatar);
 							$("#welcomeText").html("Chào " + email);
 							$("#modal-login").modal('hide');
 							$("#btnReg").hide();
@@ -280,9 +280,11 @@
 							$("#menuAcc").show();
 							$('#btnAddRate').prop('disabled', false); //TO DISABLED
 							$('#newContentRate').prop('disabled', false); //TO DISABLED
-							$('input[name=newScoreRate]').prop('disabled', false); //TO DISABLED 
-							$('input[name=newScoreRate]:checked').prop('checked', false);
-							$("#welcomeToRate").html("");	
+							$('input[name=newScoreRate]').prop('disabled',
+									false); //TO DISABLED 
+							$('input[name=newScoreRate]:checked').prop(
+									'checked', false);
+							$("#welcomeToRate").html("");
 							return true;
 						} else {
 							showError("Đăng nhập thất bại");
@@ -319,7 +321,29 @@
 			}
 		});
 	}
+	function slug(str) {
+		str = str.toLowerCase();
+		str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
+		str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
+		str = str.replace(/ì|í|ị|ỉ|ĩ/g, "i");
+		str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o");
+		str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
+		str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
+		str = str.replace(/đ/g, "d");
+		return str;
+	}
 	function logout() {
+		$.ajax({
+			type : "POST",
+			url : "/Mock_SE7/home-account-action.do",
+			data : "action=logout",
+			success : function(res) {
+				log("Logout");
+			},
+			error : function(e) {
+				alert('Error: ' + e);
+			}
+		});
 		eraseCookie("email");
 		eraseCookie("password");
 		$("#welcomeText").html("");
@@ -332,7 +356,7 @@
 		$('input[name=newScoreRate]').prop('disabled', true); //TO DISABLED 
 		$('input[name=newScoreRate]:checked').prop('checked', false);
 		$("#welcomeToRate").html("Chức năng yêu cầu đăng nhập");
-        $("#imgAvaCMT").attr("src", "image/avatar.jpg");
+		$("#imgAvaCMT").attr("src", "image/avatar.jpg");
 	}
 	$(document).ready(function() {
 		$("#emailReg").keypress(function() {
@@ -352,19 +376,19 @@
 			$("#btnReg").hide();
 			$("#btnLog").hide();
 			$('#btnAddRate').prop('disabled', false); //TO DISABLED
-            $("#imgAva").attr("src", readCookie("avatar"));
-            $("#imgAvaCMT").attr("src", readCookie("avatar"));
-			$("#welcomeToRate").html("");	
+			$("#imgAva").attr("src", readCookie("avatar"));
+			$("#imgAvaCMT").attr("src", readCookie("avatar"));
+			$("#welcomeToRate").html("");
 		} else {
 			$("#btnReg").show();
 			$("#btnLog").show();
 			$("#imgAva").hide();
-			$("#menuAcc").hide(); 
+			$("#menuAcc").hide();
 			$("#welcomeText").html("");
 			$('#btnAddRate').prop('disabled', true); //TO DISABLED
 			$('#newContentRate').prop('disabled', true); //TO DISABLED
 			$("#welcomeToRate").html("Chức năng yêu cầu đăng nhập");
-            $("#imgAvaCMT").attr("src", "image/avatar.jpg");
+			$("#imgAvaCMT").attr("src", "image/avatar.jpg");
 		}
 	});
 	function showError(text) {
@@ -373,120 +397,133 @@
 	function showSuccess(text) {
 		sweetAlert("Thành công", text, "success");
 	}
-	function addToCompare(threadId, name){
-		var cmpJSON = readCookie("cmpJSON"); 
+	function addToCompare(threadId, name) {
+		var cmpJSON = readCookie("cmpJSON");
 		var cmpOBJ = null;
-		if( cmpJSON == "null" || cmpJSON === "null" || cmpJSON == null){
+		if (cmpJSON == "null" || cmpJSON === "null" || cmpJSON == null) {
 			cmpOBJ = [];
 			log("Rỗng");
-		}else{
+		} else {
 			log("Có");
 			cmpOBJ = JSON.parse(cmpJSON);
-		} 
-		var myObj = { "id" : threadId,  "name" : name };
-	  	var count = Object.keys(cmpOBJ).length;
-		if(count <= 1){
-			cmpOBJ.push( myObj );
-		}else{
-				cmpOBJ.splice(0, 1);
-			cmpOBJ.push( myObj );
+		}
+		var myObj = {
+			"id" : threadId,
+			"name" : name
+		};
+		var count = Object.keys(cmpOBJ).length;
+		if (count <= 1) {
+			cmpOBJ.push(myObj);
+		} else {
+			cmpOBJ.splice(0, 1);
+			cmpOBJ.push(myObj);
 		}
 		createCookie("cmpJSON", JSON.stringify(cmpOBJ), 1);
 	}
-	$('#modal-compare').on('shown.bs.modal', function () {
-		log("á");
-		var cmpJSON = readCookie("cmpJSON"); 
-		if( cmpJSON == 'null'){
-			var cmpOBJ = [];
-		}else{
-			var cmpOBJ = [];
-			var cmpOBJ = JSON.parse(cmpJSON);
-		}
-		var str = '<ul class="list-group">'; 
-		for(var k in cmpOBJ) {
-			str += '<li class="list-group-item justify-content-between">'
-			+ cmpOBJ[k].name + '<button onclick="removeCompare('+cmpOBJ[k].id+')" type="button" class="btn btn-action" > <i class="fa fa-times red-text icon-btn-action"></i></button>'
-			+ '</li>';
-			   console.log(k, cmpOBJ[k]);
-		}
-		str += '</ul>';
-		log(str);
-		$("#list-compare").html(str); 
-	})
-	function removeCompare(a){
+	$('#modal-compare')
+			.on(
+					'shown.bs.modal',
+					function() {
+						log("á");
+						var cmpJSON = readCookie("cmpJSON");
+						if (cmpJSON == 'null') {
+							var cmpOBJ = [];
+						} else {
+							var cmpOBJ = [];
+							var cmpOBJ = JSON.parse(cmpJSON);
+						}
+						var str = '<ul class="list-group">';
+						for ( var k in cmpOBJ) {
+							str += '<li class="list-group-item justify-content-between">'
+									+ cmpOBJ[k].name
+									+ '<button onclick="removeCompare('
+									+ cmpOBJ[k].id
+									+ ')" type="button" class="btn btn-action" > <i class="fa fa-times red-text icon-btn-action"></i></button>'
+									+ '</li>';
+							console.log(k, cmpOBJ[k]);
+						}
+						str += '</ul>';
+						log(str);
+						$("#list-compare").html(str);
+					})
+	function removeCompare(a) {
 		var cmpJSON = readCookie("cmpJSON");
 		log("Read: =" + cmpJSON + "-");
 		var cmpOBJ = null;
-		if( cmpJSON == "null" || cmpJSON === "null" || cmpJSON == null){
+		if (cmpJSON == "null" || cmpJSON === "null" || cmpJSON == null) {
 			cmpOBJ = [];
 			log("Rỗng");
-		}else{
+		} else {
 			log("Có");
 			cmpOBJ = JSON.parse(cmpJSON);
 		}
-	  	var count = Object.keys(cmpOBJ).length;
-	  	log("Dem: " + count);
-	  	for(i = 0; i < count; i++){
-	  		if(cmpOBJ[i].id == a){
- 				cmpOBJ.splice(i, 1);
- 				break;
-	  		}
-	  	}
-	  	var count1 = Object.keys(cmpOBJ).length;
-	  	log("Con lai: " + count1);
-	  	if(count1 == 0){
+		var count = Object.keys(cmpOBJ).length;
+		log("Dem: " + count);
+		for (i = 0; i < count; i++) {
+			if (cmpOBJ[i].id == a) {
+				cmpOBJ.splice(i, 1);
+				break;
+			}
+		}
+		var count1 = Object.keys(cmpOBJ).length;
+		log("Con lai: " + count1);
+		if (count1 == 0) {
 			eraseCookie("cmpJSON");
-	  	}else{
+		} else {
 			createCookie("cmpJSON", JSON.stringify(cmpOBJ), 1);
-	  	}
-		
+		}
+
 		//Cap nhap
 
-		var cmpJSON = readCookie("cmpJSON"); 
-		if( cmpJSON == 'null'){
+		var cmpJSON = readCookie("cmpJSON");
+		if (cmpJSON == 'null') {
 			var cmpOBJ = [];
-		}else{
+		} else {
 			var cmpOBJ = [];
 			var cmpOBJ = JSON.parse(cmpJSON);
 		}
-		var str = '<ul class="list-group">'; 
-		for(var k in cmpOBJ) {
+		var str = '<ul class="list-group">';
+		for ( var k in cmpOBJ) {
 			str += '<li class="list-group-item justify-content-between">'
-				+ cmpOBJ[k].name + '<button onclick="removeCompare('+cmpOBJ[k].id+')" type="button" class="btn btn-action" > <i class="fa fa-times red-text icon-btn-action"></i></button>'
-			+ '</li>';
-			   console.log(k, cmpOBJ[k]);
+					+ cmpOBJ[k].name
+					+ '<button onclick="removeCompare('
+					+ cmpOBJ[k].id
+					+ ')" type="button" class="btn btn-action" > <i class="fa fa-times red-text icon-btn-action"></i></button>'
+					+ '</li>';
+			console.log(k, cmpOBJ[k]);
 		}
 		str += '</ul>';
-		$("#list-compare").html(str); 
+		$("#list-compare").html(str);
 	}
-	function clearCompare(){
-		$('#modal-compare').toggle ();
+	function clearCompare() {
+		$('#modal-compare').toggle();
 		$("#list-compare").html("");
 		eraseCookie("cmpJSON");
 	}
-	function compare(){
+	function compare() {
 		var cmpJSON = readCookie("cmpJSON");
 		log("Read: =" + cmpJSON + "-");
 		var cmpOBJ = null;
-		if( cmpJSON == "null" || cmpJSON === "null" || cmpJSON == null){
+		if (cmpJSON == "null" || cmpJSON === "null" || cmpJSON == null) {
 			cmpOBJ = [];
 			alert("Không có sản phẩm để so sánh");
 			log("Rỗng");
-		}else{
+		} else {
 			log("Có");
 			cmpOBJ = JSON.parse(cmpJSON);
 		}
-	  	var count = Object.keys(cmpOBJ).length;
-	  	if(count == 1){
-	  		alert("Cần có đủ 2 sản phẩm để so sánh");
-	  	}else{
-	  		thread1Id = cmpOBJ[0].id;
-	  		thread2Id = cmpOBJ[1].id;
+		var count = Object.keys(cmpOBJ).length;
+		if (count == 1) {
+			alert("Cần có đủ 2 sản phẩm để so sánh");
+		} else {
+			thread1Id = cmpOBJ[0].id;
+			thread2Id = cmpOBJ[1].id;
 			var curentUrl = window.location.href;
 			var index = curentUrl.lastIndexOf("/");
 			var url = curentUrl.substring(0, index);
-			window.location.href = url + "/compare-thread-action.do?thread1Id="+thread1Id + "&thread2Id="+thread2Id; 
-	  	}
-	  	log("Dem: " + count);
+			window.location.href = url + "/compare-thread-action.do?thread1Id="
+					+ thread1Id + "&thread2Id=" + thread2Id;
+		}
+		log("Dem: " + count);
 	}
 </script>

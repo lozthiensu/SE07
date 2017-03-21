@@ -83,16 +83,32 @@ body {
 
 #map {
 	margin-top: 20px;
-	height: 400px;
+	height: 500px;
 	width: 100%;
 	background-color: #ccc;
 }
 
 #map2 {
 	margin-top: 20px;
-	height: 400px;
+	height: 500px;
 	width: 100%;
 	background-color: #ccc;
+}
+
+.gm-style-iw {
+	width: 350px !important;
+	height: 500px !important;
+}
+
+.gmap-popup {
+	width: 350px !important;
+	height: 500px !important;
+}
+ 
+
+#infoWindow {
+	width: 350px !important;
+	height: 500px !important;
 }
 
 .owl-carousel .owl-item {
@@ -433,4 +449,16 @@ footer.page-footer {
 
 .row-compare {
 	padding: 15px;
+}
+
+.autocomplete-suggestions {
+	background: #fff;
+	overflow-y: scroll;
+	-webkit-box-shadow: 0px 5px 22px -2px rgba(0, 0, 0, 0.75);
+	-moz-box-shadow: 0px 5px 22px -2px rgba(0, 0, 0, 0.75);
+	box-shadow: 0px 5px 22px -2px rgba(0, 0, 0, 0.75);
+}
+
+.autocomplete-suggestions>div {
+	padding: 10px;
 }

@@ -342,7 +342,7 @@
 							</h5>
 							<h5>
 								<font color="#607d8b">Lượt đánh giá:</font>
-								<bean:write name="thread" property="viewed" />
+								<bean:write name="thread" property="rateNum" />
 							</h5>
 							<h5>
 								<font color="#607d8b">Địa chỉ:</font>
@@ -573,15 +573,15 @@
 		});
 		$(document).ready(function() {
 			$('#btnAddRate').prop('disabled', true); //TO DISABLED
-			$('input[name=newScoreRate]:checked').prop('checked', false);
+			$('input[name=newScoreRate]:checked').prop('checked', false); //TO UNCHECK  
 			$('input[name=newScoreRate]').prop('disabled', true); //TO DISABLED  
 			email = readCookie('email');
 			log(email);
 			if (email != undefined && email.length > 6) {
-				$('#btnAddRate').prop('disabled', false); //TO DISABLED
+				$('#btnAddRate').prop('disabled', false); //TO ENABLE
+				$('input[name=newScoreRate]').prop('disabled', false); //TO ENABLE 
 				$("#welcomeToRate").html("");	
 			}else{
-				$('#btnAddRate').prop('disabled', true); //TO DISABLED
 				$("#welcomeToRate").html("Chức năng yêu cầu đăng nhập");
 			}	
 			log($("#threadOld").val());

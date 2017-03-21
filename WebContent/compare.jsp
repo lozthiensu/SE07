@@ -146,10 +146,10 @@
 				<strong>Lượt đánh giá</strong>
 			</div>
 			<div class="col-lg-4">
-				<bean:write name="thread" property="viewed" />
+				<bean:write name="thread" property="rateNum" />
 			</div>
 			<div class="col-lg-4">
-				<bean:write name="thread2" property="viewed" />
+				<bean:write name="thread2" property="rateNum" />
 			</div>
 		</div>
 		<div class="row row-compare">

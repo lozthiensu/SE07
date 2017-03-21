@@ -144,7 +144,7 @@ public class ThreadDAO {
 			e.printStackTrace();
 		}
 		// Trả về kết quả
-		Log.in(temp.toString());
+		//Log.in(temp.toString());
 		return temp;
 	}
 
@@ -237,11 +237,12 @@ public class ThreadDAO {
 		try {
 
 			// Câu lệnh truy vấn
-			String sql = "select Thread.*, Village.name as villageName, District.name as districtName, Province.name as provinceName, temp.avgScore from Thread inner join (select Thread.threadId, avg(Cast(Rate.score as Float)) as avgScore, avg(Rate.score) as avgScoreInt from Thread left join Rate on Thread.threadId = Rate.threadId group by Thread.threadId) temp on Thread.threadId = temp.threadId inner join Village on Thread.villageId = Village.villageId inner join District on Village.districtId = District.districtId inner join Province on Province.provinceId = District.provinceId where Thread.threadId = ?";
+			String sql = "select Thread.*, Village.name as villageName, District.name as districtName, Province.name as provinceName, temp.avgScore, temp2.rateNum from Thread inner join (select Thread.threadId, avg(Cast(Rate.score as Float)) as avgScore, avg(Rate.score) as avgScoreInt from Thread left join Rate on Thread.threadId = Rate.threadId group by Thread.threadId) temp on Thread.threadId = temp.threadId inner join Village on Thread.villageId = Village.villageId inner join District on Village.districtId = District.districtId inner join Province on Province.provinceId = District.provinceId left join (select Rate.threadId, COUNT(Rate.rateId) as rateNum from Rate where Rate.threadId = ? group by Rate.threadId) temp2 on Thread.threadId = temp2.threadId where Thread.threadId = ?";
 			PreparedStatement pr = connection.prepareStatement(sql);
 
 			// Truyền tham số
 			pr.setInt(1, thread.getThreadId());
+			pr.setInt(2, thread.getThreadId());
 
 			// Thực hiện
 			rs = pr.executeQuery();
@@ -269,25 +270,26 @@ public class ThreadDAO {
 				String valueStr = df.format(rs.getFloat("avgScore"));
 				valueStr = valueStr.replace(',', '.');
 
-				//Log.in(df.format(rs.getFloat("avgScore")) + " " + valueStr);
+				////Log.in(df.format(rs.getFloat("avgScore")) + " " + valueStr);
 				threadData.setAvgScore(Float.parseFloat(valueStr));
 				threadData.setAvgScoreInt((int) threadData.getAvgScore());
 				threadData.setVillage(new Village(0, 0, rs.getString("villageName")));
 				threadData.setDistrict(new District(0, 0, rs.getString("districtName")));
 				threadData.setProvince(new Province(0, rs.getString("provinceName")));
+				threadData.setRateNum(rs.getInt("rateNum"));
 				try {
 					if(Check.old(rs.getString("created"))){
-						Log.in("Set true dao");
+						//Log.in("Set true dao");
 						threadData.setOld(true); 
 					}else{
-						Log.in("Set false dao");
+						//Log.in("Set false dao");
 						threadData.setOld(false); 
 					}
 				} catch (ParseException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} 
-				Log.in( "Thread " + threadData.isOld());
+				//Log.in( "Thread " + threadData.isOld());
 				// Câu lệnh truy vấn
 				sql = "update Thread set viewed = (viewed + 1) where threadId = ?";
 				pr = connection.prepareStatement(sql);
@@ -354,7 +356,7 @@ public class ThreadDAO {
 			String sql = "select Thread.*, temp.avgScore from Thread inner join (select Thread.threadId, avg(Cast(Rate.score as Float)) as avgScore, avg(Rate.score) as avgScoreInt from Thread left join Rate on Thread.threadId = Rate.threadId group by Thread.threadId) temp on Thread.threadId = temp.threadId where categoryId = ?  order by Thread.threadId "
 					+ " offset " + offset + " rows fetch next " + Pagination.itemPerPageView + " row only";
 			pr = connection.prepareStatement(sql);
-			Log.in("query " + sql);
+			//Log.in("query " + sql);
 			// Truyền tham số
 			pr.setInt(1, category.getCategoryId());
 
@@ -382,9 +384,9 @@ public class ThreadDAO {
 				String valueStr = df.format(rs.getFloat("avgScore"));
 				valueStr = valueStr.replace(',', '.');
 
-				Log.in(df.format(rs.getFloat("avgScore")) + " " + valueStr);
+				//Log.in(df.format(rs.getFloat("avgScore")) + " " + valueStr);
 				threadTemp.setTotal(totalPage);
-				Log.in("Tong so trang: " + totalPage);
+				//Log.in("Tong so trang: " + totalPage);
 				threadTemp.setAvgScore(Float.parseFloat(valueStr));
 				threadTemp.setAvgScoreInt((int) threadTemp.getAvgScore());
 				temp.add(threadTemp);
@@ -454,7 +456,7 @@ public class ThreadDAO {
 				String valueStr = df.format(rs.getFloat("avgScore"));
 				valueStr = valueStr.replace(',', '.');
 
-				Log.in(df.format(rs.getFloat("avgScore")) + " " + valueStr);
+				//Log.in(df.format(rs.getFloat("avgScore")) + " " + valueStr);
 				threadTemp.setAvgScore(Float.parseFloat(valueStr));
 				threadTemp.setAvgScoreInt((int) threadTemp.getAvgScore());
 				temp.add(threadTemp);
@@ -611,7 +613,7 @@ public class ThreadDAO {
 			lngUp = lng + epxilong;
 			latDown = lat - epxilong;
 			lngDown = lng - epxilong;
-			Log.in("Met: " + meter + ", Ex: " + epxilong + "Lat: " + lat + ", Lng: " + lng);
+			//Log.in("Met: " + meter + ", Ex: " + epxilong + "Lat: " + lat + ", Lng: " + lng);
 			filter += " Thread.latitude between " + latDown + " and " + latUp + " and Thread.longitude between "
 					+ lngDown + " and " + lngUp + "";
 			count++;
@@ -646,7 +648,8 @@ public class ThreadDAO {
 			else
 				filter += " AND  ";
 			count++;
-			filter += " Thread.name like '%" + thread.getName() + "%'";
+			String nameAscii = Check.removeAccent(thread.getName());
+			filter += " cast(Thread.name as varchar(100)) COLLATE SQL_Latin1_General_CP1253_CI_AI like '%" + thread.getName() + "%' or Thread.name like '%" + nameAscii + "' ";
 		}
 
 		/* START COUNT */
@@ -654,7 +657,7 @@ public class ThreadDAO {
 			// Dem co bao nhieu dong ket qua dung voi dieu kien tim kiem
 			String sqlCount = "select count(Thread.threadId) as total from  Thread inner join Village on Village.villageId = Thread.villageId inner join District on District.districtId = Village.districtId inner join Province on Province.provinceId = District.provinceId"
 					+ filter;
-			Log.in(sqlCount);
+			//Log.in(sqlCount);
 			// return null;
 			PreparedStatement pr = connection.prepareStatement(sqlCount);
 			rs = pr.executeQuery();
@@ -690,7 +693,8 @@ public class ThreadDAO {
 			// Câu lệnh truy vấn
 			String sql = "select Thread.*, temp.avgScore from Thread inner join Village on Village.villageId = Thread.villageId inner join District on District.districtId = Village.districtId inner join Province on Province.provinceId = District.provinceId inner join (select Thread.threadId, avg(Cast(Rate.score as Float)) as avgScore, avg(Rate.score) as avgScoreInt from Thread left join Rate on Thread.threadId = Rate.threadId group by Thread.threadId) temp on Thread.threadId = temp.threadId  "
 					+ filter;
-			Log.in(sql);
+			//Log.in(sql);
+			Log.in("SQL: " + sql);
 			PreparedStatement pr = connection.prepareStatement(sql);
 
 			// Thực hiện
@@ -717,7 +721,7 @@ public class ThreadDAO {
 				String valueStr = df.format(rs.getFloat("avgScore"));
 				valueStr = valueStr.replace(',', '.');
 
-				Log.in(df.format(rs.getFloat("avgScore")) + " " + valueStr);
+				//Log.in(df.format(rs.getFloat("avgScore")) + " " + valueStr);
 				threadTemp.setAvgScore(Float.parseFloat(valueStr));
 				threadTemp.setAvgScoreInt((int) threadTemp.getAvgScore());
 				threadTemp.setTotalPage(totalPage);

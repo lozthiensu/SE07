@@ -2,6 +2,7 @@ package model.bean;
 
 public class Thread {
 	int threadId;
+	int rateNum;
 	int categoryId;
 	int accountId;
 	String name;
@@ -82,6 +83,14 @@ public class Thread {
 		this.viewed = viewed;
 		this.status = status;
 		this.imageThumb = imageThumb;
+	}
+
+	public int getRateNum() {
+		return rateNum;
+	}
+
+	public void setRateNum(int rateNum) {
+		this.rateNum = rateNum;
 	}
 
 	public int getThreadId() {
