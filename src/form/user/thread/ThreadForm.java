@@ -67,6 +67,7 @@ public class ThreadForm extends ActionForm {
 	ArrayList<Province> provinces;
 	ArrayList<District> districts;
 	ArrayList<Village> villages;
+	String imagesString;
 
 	public ThreadForm() {
 		super();
@@ -130,6 +131,14 @@ public class ThreadForm extends ActionForm {
 		this.provinces = provinces;
 		this.districts = districts;
 		this.villages = villages;
+	}
+
+	public String getImagesString() {
+		return imagesString;
+	}
+
+	public void setImagesString(String imagesString) {
+		this.imagesString = imagesString;
 	}
 
 	public int getThreadId() {
@@ -532,7 +541,6 @@ public class ThreadForm extends ActionForm {
 		this.villages = villages;
 	}
 
-
 	@Override
 	public String toString() {
 		return "ThreadForm [threadId=" + threadId + ", action=" + action + ", rateNum=" + rateNum + ", categoryId="
@@ -559,6 +567,5 @@ public class ThreadForm extends ActionForm {
 			e.printStackTrace();
 		}
 	}
-	
 
 }

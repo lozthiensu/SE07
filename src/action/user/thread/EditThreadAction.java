@@ -17,12 +17,14 @@ import form.admin.account.AccountForm;
 import form.user.thread.ThreadForm;
 import model.bean.Account;
 import model.bean.District;
+import model.bean.Image;
 import model.bean.Province;
 import model.bean.Thread;
 import model.bean.Village;
 import model.bo.AccountBO;
 import model.bo.CategoryBO;
 import model.bo.DistrictBO;
+import model.bo.ImageBO;
 import model.bo.ProvinceBO;
 import model.bo.ThreadBO;
 import model.bo.VillageBO;
@@ -72,10 +74,14 @@ public class EditThreadAction extends Action {
 		thread.setThreadId(threadId);
 
 		String action = action = threadForm.getAction();
-
+		//Log.in("Id bai viet de so sanh " + threadId);
+		
 		thread = threadBO.getById(thread);
+		//Log.in("Bai viet de so sanh: " + thread);
+		
+		
 		if(thread.getAccountId() != accountData.getAccountId()){
-			Log.in("Bai viet khong thuoc quyen cua ban");
+			//Log.in("Bai viet khong thuoc quyen cua ban");
 			Log.in(thread.toString());
 			Log.in(accountData.toString());
 			return mapping.findForward("edited");
@@ -87,11 +93,31 @@ public class EditThreadAction extends Action {
 		threadForm.setDistricts(new ArrayList<District>());
 		threadForm.setVillages(new ArrayList<Village>());
 		threadForm.setThreadId(threadId);
+		
+		Province province = new Province(thread.getProvinceId(), "");
+		Log.in(province.toString());
+		threadForm.setDistricts(districtBO.getList(province));
 
+		District district = new District(thread.getDistrictId(), 0, "");
+		Log.in(district.toString());
+		threadForm.setVillages(villageBO.getList(district));
+		
+		ImageBO imageBO = new ImageBO();
+		
+		
 		if ("submit".equals(action)) {
-			Log.in(threadForm.isWifi() + " Wifi");
+			ArrayList<Image> images = new ArrayList<Image>();
+			String imagesString = threadForm.getImagesString();
+			String[] imagesArr = imagesString.split(",");
+			for (String string : imagesArr) {
+				images.add(new Image(0, threadForm.getThreadId(), string, threadForm.getName(), false));
+			}
 			if (threadBO.edit(threadForm) == true) {
 				Log.in("Dem di sua: " + threadForm.toString());
+				
+				//Xoa het ảnh cu 
+				imageBO.delete(threadForm);
+				imageBO.insert(images);
 				return mapping.findForward("edited");
 			}
 
@@ -99,6 +125,16 @@ public class EditThreadAction extends Action {
 			return mapping.findForward("edit");
 		} else {
 
+			ArrayList<Image> imagesTemp = imageBO.getListByThread(thread);
+			String imagesStringTemp = "";
+			for (Image image : imagesTemp) {
+				if(imagesStringTemp != "")
+					imagesStringTemp += ",";
+				imagesStringTemp += image.getSrc().toString();
+			}
+			threadForm.setImagesString(imagesStringTemp);
+			Log.in("Image: " + imagesStringTemp);
+			
 			/* DUA LEN FORM */
 			threadForm.setThreadId(threadId);
 			threadForm.setCategoryId(thread.getCategoryId());
@@ -133,16 +169,8 @@ public class EditThreadAction extends Action {
 			threadForm.setProvinceId(thread.getProvinceId());
 			threadForm.setArea(thread.getArea());
 			threadForm.setOtherFee(thread.getOtherFee());
-
 			threadForm.setKindOf(thread.isKindOf());
-			Province province = new Province(thread.getProvinceId(), "");
-			Log.in(province.toString());
-			threadForm.setDistricts(districtBO.getList(province));
-
-			District district = new District(thread.getDistrictId(), 0, "");
-			Log.in(district.toString());
-			threadForm.setVillages(villageBO.getList(district));
-
+			
 			Log.in("Doc ra: " + threadForm.toString());
 			return mapping.findForward("edit");
 		}

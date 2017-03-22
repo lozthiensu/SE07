@@ -33,7 +33,7 @@ public class ThreadDAO {
 		try {
 			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 			connection = DriverManager.getConnection(url, userName, password);
-			System.out.println("Ket noi thanh cong");
+			//System.out.println("Ket noi thanh cong");
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println("Ket noi loi");
@@ -241,9 +241,10 @@ public class ThreadDAO {
 		try {
 
 			// Câu lệnh truy vấn
-			String sql = "select Thread.*,Province.provinceId, District.districtId, Village.name as villageName, District.name as districtName, Province.name as provinceName, temp.avgScore, temp2.rateNum from Thread inner join (select Thread.threadId, avg(Cast(Rate.score as Float)) as avgScore, avg(Rate.score) as avgScoreInt from Thread left join Rate on Thread.threadId = Rate.threadId group by Thread.threadId) temp on Thread.threadId = temp.threadId inner join Village on Thread.villageId = Village.villageId inner join District on Village.districtId = District.districtId inner join Province on Province.provinceId = District.provinceId left join (select Rate.threadId, COUNT(Rate.rateId) as rateNum from Rate where Rate.threadId = ? group by Rate.threadId) temp2 on Thread.threadId = temp2.threadId where Thread.threadId = ?";
+			String sql = "select Thread.*, Account.email, Account.phone, Account.avatar, Province.provinceId, District.districtId, Village.name as villageName, District.name as districtName, Province.name as provinceName, temp.avgScore, temp2.rateNum from Thread inner join (select Thread.threadId, avg(Cast(Rate.score as Float)) as avgScore, avg(Rate.score) as avgScoreInt from Thread left join Rate on Thread.threadId = Rate.threadId group by Thread.threadId) temp on Thread.threadId = temp.threadId inner join Village on Thread.villageId = Village.villageId inner join District on Village.districtId = District.districtId inner join Province on Province.provinceId = District.provinceId left join (select Rate.threadId, COUNT(Rate.rateId) as rateNum from Rate where Rate.threadId = ? group by Rate.threadId) temp2 on Thread.threadId = temp2.threadId inner join Account on Thread.accountId = Account.accountId where Thread.threadId = ?";
 			PreparedStatement pr = connection.prepareStatement(sql);
 
+			Log.in("SQL " + sql );
 			// Truyền tham số
 			pr.setInt(1, thread.getThreadId());
 			pr.setInt(2, thread.getThreadId());
@@ -285,6 +286,10 @@ public class ThreadDAO {
 				threadData.setProvinceId(rs.getInt("provinceId"));
 				threadData.setDistrictId(rs.getInt("districtId"));
 				threadData.setKindOf(rs.getBoolean("kindOf"));
+				threadData.setEmail(rs.getString("email"));
+				threadData.setPhone(rs.getString("phone"));
+				threadData.setAvatar(rs.getString("avatar"));
+				
 				try {
 					if (Check.old(rs.getString("created"))) {
 						// Log.in("Set true dao");
@@ -784,6 +789,7 @@ public class ThreadDAO {
 			pr.setInt(21, thread.getNumOfPeople());
 			pr.setInt(22, thread.getObject());
 			pr.setInt(23, thread.getVillageId());
+			Log.in("Lang " +  thread.getVillageId());
 			pr.setBoolean(24, thread.isKindOf());
 			pr.setString(25, thread.getImageThumb());
 			pr.setInt(26, thread.getThreadId());

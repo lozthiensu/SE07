@@ -189,7 +189,8 @@
 								<div class="row">
 									<!--Image column-->
 									<div class="col-sm-2 col-12">
-										<img src="image/avatar.jpg" style="height: 100px;" id="imgAvaCMT">
+										<img src="image/avatar.jpg" style="height: 100px;"
+											id="imgAvaCMT">
 									</div>
 									<!--/.Image column-->
 
@@ -298,7 +299,8 @@
 
 			</div>
 			<div class="col-lg-3">
-				<div class="card card-cascade hoverable" style="margin-top: 0px;">
+				<div class="card card-cascade hoverable " style="margin-top: 0px;">
+
 					<input style="display: none;" id="threadOld"
 						value="<bean:write name="thread" property="old" />"></input>
 					<div class="text-center">
@@ -313,18 +315,32 @@
 								còn hạn</button>
 						</logic:equal>
 					</div>
+					<br>
+					<div class="row infoThread">
+						<!--Image column-->
+						<div class="col-sm-6 col-6 thread-avatar">
+							<img src="<bean:write name="thread" property="avatar" />"
+								style="height: 100px; width: 100px; border-radius: 50%; border: 10px solid #fff; box-shadow: 5px 5px 5px 0 rgba(0, 0, 0, .16), 0px 2px 5px 0 rgba(0, 0, 0, .12);">
+						</div>
+						<!--/.Image column-->
+						<!--Content column-->
+						<div class="col-sm-6 col-6">
+							<a><h3 class="user-name" style="margin-left: -35px;">
+									<bean:write name="thread" property="phone" />
+								</h3></a> <span style="margin-left: -36px;"><bean:write
+									name="thread" property="email" /></span>
+						</div>
+						<!--/.Content column-->
+					</div>
 					<!--/Card image-->
 					<!--Card content-->
-					<div class="card-block text-center infoThread" style="margin-top: 0px;">
+					<div class="card-block text-center infoThread"
+						style="margin-top: 0px;">
 						<!--Title-->
 						<h4 class="card-title">
-							<strong>Giá: <bean:write name="thread" property="price" />
-								đ
+							<strong>Giá: <bean:write name="thread" property="priceString" />
 							</strong>
-						</h4>
-						<h5 class="card-title">
-							<strong>Gọi: <bean:write name="thread" property="price" /></strong>
-						</h5>
+						</h4> 
 						<span class="text-left"> <span
 							class="score s<bean:write name="thread" property="avgScoreInt" />"></span>(<strong
 							itemprop="reviewCount"><bean:write name="thread"
@@ -457,7 +473,8 @@
 		<!--Slide new start -->
 		<div class="breadcrumb flat" style="clear: both;">
 			<a style="border: 1px solid #ddd;"><i class="fa fa-home"
-				aria-hidden="true" style="font-size: 35px;"></i></a> <a class="active"> Bài viết liên quan</a>
+				aria-hidden="true" style="font-size: 35px;"></i></a> <a class="active">
+				Bài viết liên quan</a>
 		</div>
 		<div class="row">
 			<div class="row">
@@ -508,15 +525,16 @@
 								<p class="card-text truncase-detail">
 									<bean:write name="threadRelated" property="name" />
 								</p>
-										<bean:define id="threadId" name="threadRelated" property="threadId"></bean:define>
-										<bean:define id="name" name="threadRelated" property="name"></bean:define>
-										<html:link styleClass="btn btn-success btn-fb"
-											action="/view-thread-action?threadId=${threadId}">Xem</html:link>
+								<bean:define id="threadId" name="threadRelated"
+									property="threadId"></bean:define>
+								<bean:define id="name" name="threadRelated" property="name"></bean:define>
+								<html:link styleClass="btn btn-success btn-fb"
+									action="/view-thread-action?threadId=${threadId}">Xem</html:link>
 
-										<!--Facebook-->
-										<a type="button" onclick="addToCompare(${threadId},'${name}')"
-											class="btn-floating btn-small btn-fb"><i
-											class="fa fa-compress"></i></a>
+								<!--Facebook-->
+								<a type="button" onclick="addToCompare(${threadId},'${name}')"
+									class="btn-floating btn-small btn-fb"><i
+									class="fa fa-compress"></i></a>
 								<!--Twitter-->
 							</div>
 							<!--/.Card content-->

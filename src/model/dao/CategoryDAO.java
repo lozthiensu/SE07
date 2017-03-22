@@ -25,7 +25,7 @@ public class CategoryDAO {
 		try {
 			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 			connection = DriverManager.getConnection(url, userName, password);
-			System.out.println("Ket noi thanh cong");
+			//System.out.println("Ket noi thanh cong");
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println("Ket noi loi");

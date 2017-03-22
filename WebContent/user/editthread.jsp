@@ -92,7 +92,7 @@
 <script>
 	tinymce
 			.init({
-				selector : 'textarea',
+				selector : '#content',
 				height : 400,
 				plugins : "autolink,lists,spellchecker,pagebreak,table,save,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,template"
 			});
@@ -264,7 +264,7 @@
 
 						<label for="form3">Nội dung </label>
 						<div class="md-form">
-							<html:textarea property="content" styleClass="form-control"></html:textarea>
+							<html:textarea styleId="content" property="content" styleClass="form-control"></html:textarea>
 						</div>
 
 						<div class="md-form">
@@ -382,6 +382,11 @@
 						<div class="md-form">
 							<html:text property="imageThumb" styleClass="form-control"></html:text>
 							<label for="form3">Hình đại diện cho phòng</label>
+						</div>
+						
+						<div class="md-form">
+							<html:text property="imagesString" styleClass="form-control"></html:text>
+							<label for="form3">Hình ảnh về phòng</label>
 						</div>
 
 						<div class="col-lg-12">

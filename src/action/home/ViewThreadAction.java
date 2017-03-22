@@ -54,6 +54,7 @@ public class ViewThreadAction extends Action {
 		categories = categoryBO.getList();
 		viewThreadForm.setCategories(categories);
 		viewThreadForm.setImages(imageBO.getListByThread(thread));
+		Log.in("Image: " + imageBO.getListByThread(thread));
 		viewThreadForm.setImages360(imageBO.getList360ByThread(thread));
 		viewThreadForm.setRelateThreads(threadBO.getRelateThreadsByThread(thread));
 		

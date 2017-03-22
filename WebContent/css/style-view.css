@@ -484,3 +484,10 @@ footer.page-footer {
 .autocomplete-suggestions>div {
 	padding: 10px;
 }
+.thread-avatar{
+    margin-top: -15px;
+    margin-left: -15px;
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+}

@@ -48,6 +48,9 @@ public class Thread {
 	int totalPage;
 	boolean old;
 	String categoryName;
+	String avatar;
+	String phone;
+	String email;
 
 	public Thread() {
 		super();
@@ -88,6 +91,30 @@ public class Thread {
 		this.viewed = viewed;
 		this.status = status;
 		this.imageThumb = imageThumb;
+	}
+
+	public String getAvatar() {
+		return avatar;
+	}
+
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public int getProvinceId() {
