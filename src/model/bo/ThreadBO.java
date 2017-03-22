@@ -2,6 +2,8 @@ package model.bo;
 
 import java.util.ArrayList;
 
+import form.user.thread.ThreadForm;
+import model.bean.Account;
 import model.bean.Category;
 import model.bean.Thread;
 import model.dao.ThreadDAO;
@@ -21,6 +23,10 @@ public class ThreadBO {
 		return threadDAO.getListByCategory(category, page);
 	}
 
+	public ArrayList<Thread> getListByAccount(Account account, int page) {
+		return threadDAO.getListByAccount(account, page);
+	}
+
 	public ArrayList<Thread> searchBy(Thread thread, int page) {
 		return threadDAO.searchBy(thread, page);
 	}
@@ -32,5 +38,12 @@ public class ThreadBO {
 	public ArrayList<Thread> getRelateThreadsByThread(Thread thread) {
 		// TODO Auto-generated method stub
 		return threadDAO.getRelateThreadsByThread(thread);
+	}
+
+	public boolean delete(Thread thread) { 
+		return threadDAO.delete(thread);
+	}
+	public boolean edit(ThreadForm thread) { 
+		return threadDAO.edit(thread);
 	}
 }

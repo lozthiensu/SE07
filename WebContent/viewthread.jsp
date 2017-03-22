@@ -127,7 +127,7 @@
 						<div class="text-left">
 							<!--Content-->
 							<p>
-								<bean:write name="thread" property="content" />
+								<bean:write name="thread" property="content" filter="false" />
 							</p>
 						</div>
 						<!--/.Back Side-->

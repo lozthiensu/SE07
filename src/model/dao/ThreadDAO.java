@@ -9,6 +9,8 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 
+import form.user.thread.ThreadForm;
+import model.bean.Account;
 import model.bean.Category;
 import model.bean.District;
 import model.bean.Province;
@@ -144,13 +146,13 @@ public class ThreadDAO {
 			e.printStackTrace();
 		}
 		// Trả về kết quả
-		//Log.in(temp.toString());
+		// Log.in(temp.toString());
 		return temp;
 	}
 
 	// Xóa
-	public void delete(Thread thread) {
-
+	public boolean delete(Thread thread) {
+		Log.in("Da vao dao xoa " + thread.toString());
 		// Mở kết nối
 		connect();
 		try {
@@ -160,18 +162,20 @@ public class ThreadDAO {
 			PreparedStatement pr = connection.prepareStatement(sql);
 
 			// Truyền accounId vào
-			pr.setInt(1, thread.getCategoryId());
+			pr.setInt(1, thread.getThreadId());
 
 			// Thực hiện query update
-			pr.executeUpdate();
-
-			// Đóng kết nối
-			pr.close();
-			connection.close();
+			if (pr.executeUpdate() > 0) {
+				// Đóng kết nối
+				pr.close();
+				connection.close();
+				return true;
+			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		return false;
 	}
 
 	public void add(Thread thread) {
@@ -237,7 +241,7 @@ public class ThreadDAO {
 		try {
 
 			// Câu lệnh truy vấn
-			String sql = "select Thread.*, Village.name as villageName, District.name as districtName, Province.name as provinceName, temp.avgScore, temp2.rateNum from Thread inner join (select Thread.threadId, avg(Cast(Rate.score as Float)) as avgScore, avg(Rate.score) as avgScoreInt from Thread left join Rate on Thread.threadId = Rate.threadId group by Thread.threadId) temp on Thread.threadId = temp.threadId inner join Village on Thread.villageId = Village.villageId inner join District on Village.districtId = District.districtId inner join Province on Province.provinceId = District.provinceId left join (select Rate.threadId, COUNT(Rate.rateId) as rateNum from Rate where Rate.threadId = ? group by Rate.threadId) temp2 on Thread.threadId = temp2.threadId where Thread.threadId = ?";
+			String sql = "select Thread.*,Province.provinceId, District.districtId, Village.name as villageName, District.name as districtName, Province.name as provinceName, temp.avgScore, temp2.rateNum from Thread inner join (select Thread.threadId, avg(Cast(Rate.score as Float)) as avgScore, avg(Rate.score) as avgScoreInt from Thread left join Rate on Thread.threadId = Rate.threadId group by Thread.threadId) temp on Thread.threadId = temp.threadId inner join Village on Thread.villageId = Village.villageId inner join District on Village.districtId = District.districtId inner join Province on Province.provinceId = District.provinceId left join (select Rate.threadId, COUNT(Rate.rateId) as rateNum from Rate where Rate.threadId = ? group by Rate.threadId) temp2 on Thread.threadId = temp2.threadId where Thread.threadId = ?";
 			PreparedStatement pr = connection.prepareStatement(sql);
 
 			// Truyền tham số
@@ -270,26 +274,30 @@ public class ThreadDAO {
 				String valueStr = df.format(rs.getFloat("avgScore"));
 				valueStr = valueStr.replace(',', '.');
 
-				////Log.in(df.format(rs.getFloat("avgScore")) + " " + valueStr);
+				//// Log.in(df.format(rs.getFloat("avgScore")) + " " +
+				//// valueStr);
 				threadData.setAvgScore(Float.parseFloat(valueStr));
 				threadData.setAvgScoreInt((int) threadData.getAvgScore());
 				threadData.setVillage(new Village(0, 0, rs.getString("villageName")));
 				threadData.setDistrict(new District(0, 0, rs.getString("districtName")));
 				threadData.setProvince(new Province(0, rs.getString("provinceName")));
 				threadData.setRateNum(rs.getInt("rateNum"));
+				threadData.setProvinceId(rs.getInt("provinceId"));
+				threadData.setDistrictId(rs.getInt("districtId"));
+				threadData.setKindOf(rs.getBoolean("kindOf"));
 				try {
-					if(Check.old(rs.getString("created"))){
-						//Log.in("Set true dao");
-						threadData.setOld(true); 
-					}else{
-						//Log.in("Set false dao");
-						threadData.setOld(false); 
+					if (Check.old(rs.getString("created"))) {
+						// Log.in("Set true dao");
+						threadData.setOld(true);
+					} else {
+						// Log.in("Set false dao");
+						threadData.setOld(false);
 					}
 				} catch (ParseException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				} 
-				//Log.in( "Thread " + threadData.isOld());
+				}
+				// Log.in( "Thread " + threadData.isOld());
 				// Câu lệnh truy vấn
 				sql = "update Thread set viewed = (viewed + 1) where threadId = ?";
 				pr = connection.prepareStatement(sql);
@@ -356,7 +364,7 @@ public class ThreadDAO {
 			String sql = "select Thread.*, temp.avgScore from Thread inner join (select Thread.threadId, avg(Cast(Rate.score as Float)) as avgScore, avg(Rate.score) as avgScoreInt from Thread left join Rate on Thread.threadId = Rate.threadId group by Thread.threadId) temp on Thread.threadId = temp.threadId where categoryId = ?  order by Thread.threadId "
 					+ " offset " + offset + " rows fetch next " + Pagination.itemPerPageView + " row only";
 			pr = connection.prepareStatement(sql);
-			//Log.in("query " + sql);
+			// Log.in("query " + sql);
 			// Truyền tham số
 			pr.setInt(1, category.getCategoryId());
 
@@ -384,9 +392,9 @@ public class ThreadDAO {
 				String valueStr = df.format(rs.getFloat("avgScore"));
 				valueStr = valueStr.replace(',', '.');
 
-				//Log.in(df.format(rs.getFloat("avgScore")) + " " + valueStr);
+				// Log.in(df.format(rs.getFloat("avgScore")) + " " + valueStr);
 				threadTemp.setTotal(totalPage);
-				//Log.in("Tong so trang: " + totalPage);
+				// Log.in("Tong so trang: " + totalPage);
 				threadTemp.setAvgScore(Float.parseFloat(valueStr));
 				threadTemp.setAvgScoreInt((int) threadTemp.getAvgScore());
 				temp.add(threadTemp);
@@ -456,7 +464,7 @@ public class ThreadDAO {
 				String valueStr = df.format(rs.getFloat("avgScore"));
 				valueStr = valueStr.replace(',', '.');
 
-				//Log.in(df.format(rs.getFloat("avgScore")) + " " + valueStr);
+				// Log.in(df.format(rs.getFloat("avgScore")) + " " + valueStr);
 				threadTemp.setAvgScore(Float.parseFloat(valueStr));
 				threadTemp.setAvgScoreInt((int) threadTemp.getAvgScore());
 				temp.add(threadTemp);
@@ -613,7 +621,8 @@ public class ThreadDAO {
 			lngUp = lng + epxilong;
 			latDown = lat - epxilong;
 			lngDown = lng - epxilong;
-			//Log.in("Met: " + meter + ", Ex: " + epxilong + "Lat: " + lat + ", Lng: " + lng);
+			// Log.in("Met: " + meter + ", Ex: " + epxilong + "Lat: " + lat + ",
+			// Lng: " + lng);
 			filter += " Thread.latitude between " + latDown + " and " + latUp + " and Thread.longitude between "
 					+ lngDown + " and " + lngUp + "";
 			count++;
@@ -649,7 +658,8 @@ public class ThreadDAO {
 				filter += " AND  ";
 			count++;
 			String nameAscii = Check.removeAccent(thread.getName());
-			filter += " cast(Thread.name as varchar(100)) COLLATE SQL_Latin1_General_CP1253_CI_AI like '%" + thread.getName() + "%' or Thread.name like '%" + nameAscii + "' ";
+			filter += " cast(Thread.name as varchar(100)) COLLATE SQL_Latin1_General_CP1253_CI_AI like '%"
+					+ thread.getName() + "%' or Thread.name like '%" + nameAscii + "' ";
 		}
 
 		/* START COUNT */
@@ -657,7 +667,7 @@ public class ThreadDAO {
 			// Dem co bao nhieu dong ket qua dung voi dieu kien tim kiem
 			String sqlCount = "select count(Thread.threadId) as total from  Thread inner join Village on Village.villageId = Thread.villageId inner join District on District.districtId = Village.districtId inner join Province on Province.provinceId = District.provinceId"
 					+ filter;
-			//Log.in(sqlCount);
+			// Log.in(sqlCount);
 			// return null;
 			PreparedStatement pr = connection.prepareStatement(sqlCount);
 			rs = pr.executeQuery();
@@ -693,7 +703,7 @@ public class ThreadDAO {
 			// Câu lệnh truy vấn
 			String sql = "select Thread.*, temp.avgScore from Thread inner join Village on Village.villageId = Thread.villageId inner join District on District.districtId = Village.districtId inner join Province on Province.provinceId = District.provinceId inner join (select Thread.threadId, avg(Cast(Rate.score as Float)) as avgScore, avg(Rate.score) as avgScoreInt from Thread left join Rate on Thread.threadId = Rate.threadId group by Thread.threadId) temp on Thread.threadId = temp.threadId  "
 					+ filter;
-			//Log.in(sql);
+			// Log.in(sql);
 			Log.in("SQL: " + sql);
 			PreparedStatement pr = connection.prepareStatement(sql);
 
@@ -721,7 +731,7 @@ public class ThreadDAO {
 				String valueStr = df.format(rs.getFloat("avgScore"));
 				valueStr = valueStr.replace(',', '.');
 
-				//Log.in(df.format(rs.getFloat("avgScore")) + " " + valueStr);
+				// Log.in(df.format(rs.getFloat("avgScore")) + " " + valueStr);
 				threadTemp.setAvgScore(Float.parseFloat(valueStr));
 				threadTemp.setAvgScoreInt((int) threadTemp.getAvgScore());
 				threadTemp.setTotalPage(totalPage);
@@ -739,7 +749,160 @@ public class ThreadDAO {
 		return temp;
 	}
 
-	public void edit(Thread thread) {
+	public boolean edit(ThreadForm thread) {
 
+		// Mở kết nối
+		connect();
+		try {
+
+			// Câu lệnh select
+			String sql = "update Thread set categoryId=?, name=?, address=?, latitude=?, longitude=?, content=?, price=?, electricFee=?, waterFee=?, otherFee=?, area=?, wifi=?, waterHeater=?, conditioner=?, fridge=?, attic=?, camera=?, waterSource=?, direction=?, numOfToilets=?, numOfPeople=?, object=?, villageId=?, kindOf=?, imageThumb=? where threadId=?";
+			
+			PreparedStatement pr = connection.prepareStatement(sql);
+
+			// Truyền các tham số
+			pr.setInt(1, thread.getCategoryId());
+			pr.setString(2, thread.getName());
+			pr.setString(3, thread.getAddress());
+			pr.setDouble(4, thread.getLatitude());
+			pr.setDouble(5, thread.getLongitude());
+			pr.setString(6, thread.getContent());
+			pr.setLong(7, thread.getPrice());
+			pr.setInt(8, thread.getElectricFee());
+			pr.setInt(9, thread.getWaterFee());
+			pr.setInt(10, thread.getOtherFee());
+			pr.setInt(11, thread.getArea());
+			pr.setBoolean(12, thread.isWifi());
+			pr.setBoolean(13, thread.isWaterHeater());
+			pr.setBoolean(14, thread.isConditioner());
+			pr.setBoolean(15, thread.isFridge());
+			pr.setBoolean(16, thread.isAttic());
+			pr.setBoolean(17, thread.isCamera());
+			pr.setInt(18, thread.getWaterSource());
+			pr.setString(19, thread.getDirection());
+			pr.setInt(20, thread.getNumOfToilets());
+			pr.setInt(21, thread.getNumOfPeople());
+			pr.setInt(22, thread.getObject());
+			pr.setInt(23, thread.getVillageId());
+			pr.setBoolean(24, thread.isKindOf());
+			pr.setString(25, thread.getImageThumb());
+			pr.setInt(26, thread.getThreadId());
+
+			// Thực hiện
+			int count = -1;
+			try {
+				count = pr.executeUpdate();
+				Log.in("Dau vao " + thread.toString());
+			} catch (Exception e) {
+				Log.in(e.getMessage());
+			}
+			// Đóng kết nối
+			pr.close();
+			connection.close();
+			if (count > 0) {
+				System.out.println("success");
+				return true;
+			} else {
+				System.out.println("stuck somewhere");
+				return false;
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+
+	}
+
+	public ArrayList<Thread> getListByAccount(Account account, int page) {
+
+		// Mở kết nối
+		connect();
+
+		// Biến lưu vị trí offset bắt đầu select, toognr số dòng trong csdl
+		int offset = 0, total = 0, totalPage = 0;
+
+		// Lưu kết quả truy vấn
+		ResultSet rs = null;
+
+		// Lưu thông tin account
+		ArrayList<Thread> temp = new ArrayList<Thread>();
+		try {
+
+			// Câu lệnh đếm có bao nhiêu dòng trong csdl
+			String sqlCount = "select count(threadId) as total from Thread where accountId = ?";
+			PreparedStatement pr = connection.prepareStatement(sqlCount);
+			pr.setInt(1, account.getAccountId());
+			rs = pr.executeQuery();
+			try {
+				if (rs.next()) {
+					// Lưu lại tổng số dòng
+					total = rs.getInt("total");
+					// Vị trí select = số trang * với số dòng trong 1 trang muốn
+					// lấy
+					offset = (page - 1) > 0 ? ((page - 1) * Pagination.itemPerPageView) : 0;
+
+					// Nếu vị trí vượt quá số donngf, thì lấy trang cuối cùng
+					if (offset >= total) {
+						offset = offset - (Pagination.itemPerPageView) > 0 ? offset - (Pagination.itemPerPageView) : 0;
+					}
+
+					// Tính toán tổng số trang
+					totalPage = (int) Math.ceil(1.0 * total / Pagination.itemPerPageView);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+
+			// Câu lệnh truy vấn
+			String sql = "select Thread.*, Category.name as categoryName, temp.avgScore from Thread inner join (select Thread.threadId, avg(Cast(Rate.score as Float)) as avgScore, avg(Rate.score) as avgScoreInt from Thread left join Rate on Thread.threadId = Rate.threadId group by Thread.threadId) temp on Thread.threadId = temp.threadId inner join Category on Category.categoryId = Thread.categoryId where accountId = ?  order by Thread.threadId "
+					+ " offset " + offset + " rows fetch next " + Pagination.itemPerPageView + " row only";
+			pr = connection.prepareStatement(sql);
+			//Log.in("query " + sql);
+			// Truyền tham số
+			pr.setInt(1, account.getAccountId());
+
+			// Thực hiện
+			rs = pr.executeQuery();
+
+			DecimalFormat numberFormat = new DecimalFormat("#.##");
+			while (rs.next()) {
+				Thread threadTemp = new Thread(rs.getInt("threadId"), rs.getInt("categoryId"), rs.getInt("accountId"),
+						rs.getString("name"), rs.getString("address"), rs.getDouble("latitude"),
+						rs.getDouble("longitude"), rs.getString("content"), rs.getLong("price"),
+						rs.getInt("electricFee"), rs.getInt("waterFee"), rs.getInt("otherFee"), rs.getInt("area"),
+						rs.getBoolean("wifi"), rs.getBoolean("waterHeater"), rs.getBoolean("conditioner"),
+						rs.getBoolean("fridge"), rs.getBoolean("attic"), rs.getBoolean("camera"),
+						rs.getInt("waterSource"), rs.getString("direction"), rs.getInt("numOfToilets"),
+						rs.getInt("numOfPeople"), rs.getInt("object"), rs.getInt("villageId"), rs.getString("created"),
+						rs.getInt("viewed"), rs.getInt("status"), rs.getString("imageThumb"));
+				if (threadTemp.getPrice() >= 1000000) {
+					threadTemp.setPriceString(
+							numberFormat.format(((double) (threadTemp.getPrice() / (1.0 * 1000000)))) + " triệu ");
+				} else if (threadTemp.getPrice() > 1000) {
+					threadTemp.setPriceString((threadTemp.getPrice() / 1000) + " ngàn ");
+				}
+				DecimalFormat df = new DecimalFormat("#.#");
+				String valueStr = df.format(rs.getFloat("avgScore"));
+				valueStr = valueStr.replace(',', '.');
+
+				// Log.in(df.format(rs.getFloat("avgScore")) + " " + valueStr);
+				threadTemp.setTotal(totalPage);
+				// Log.in("Tong so trang: " + totalPage);
+				threadTemp.setAvgScore(Float.parseFloat(valueStr));
+				threadTemp.setAvgScoreInt((int) threadTemp.getAvgScore());
+				threadTemp.setCategoryName(rs.getString("categoryName"));
+				temp.add(threadTemp);
+				// Log.in("Account co: " + threadTemp.toString());
+			}
+			// Log.in("Account co: " + temp.toString());
+			// Đóng kết nối
+			pr.close();
+			connection.close();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return temp;
 	}
 }

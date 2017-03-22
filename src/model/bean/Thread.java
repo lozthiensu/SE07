@@ -30,6 +30,10 @@ public class Thread {
 	Province province;
 	District district;
 	Village village;
+	boolean kindOf;
+
+	int provinceId;
+	int districtId;
 
 	String created;
 	int viewed;
@@ -43,6 +47,7 @@ public class Thread {
 	int page;
 	int totalPage;
 	boolean old;
+	String categoryName;
 
 	public Thread() {
 		super();
@@ -85,8 +90,32 @@ public class Thread {
 		this.imageThumb = imageThumb;
 	}
 
+	public int getProvinceId() {
+		return provinceId;
+	}
+
+	public void setProvinceId(int provinceId) {
+		this.provinceId = provinceId;
+	}
+
+	public int getDistrictId() {
+		return districtId;
+	}
+
+	public void setDistrictId(int districtId) {
+		this.districtId = districtId;
+	}
+
 	public int getRateNum() {
 		return rateNum;
+	}
+
+	public boolean isKindOf() {
+		return kindOf;
+	}
+
+	public void setKindOf(boolean kindOf) {
+		this.kindOf = kindOf;
 	}
 
 	public void setRateNum(int rateNum) {
@@ -415,15 +444,27 @@ public class Thread {
 
 	@Override
 	public String toString() {
-		return "Thread [threadId=" + threadId + ", categoryId=" + categoryId + ", accountId=" + accountId + ", name="
-				+ name + ", address=" + address + ", latitude=" + latitude + ", longitude=" + longitude + ", content="
-				+ content + ", price=" + price + ", electricFee=" + electricFee + ", waterFee=" + waterFee
-				+ ", otherFee=" + otherFee + ", area=" + area + ", wifi=" + wifi + ", waterHeater=" + waterHeater
-				+ ", conditioner=" + conditioner + ", fridge=" + fridge + ", attic=" + attic + ", camera=" + camera
-				+ ", waterSource=" + waterSource + ", direction=" + direction + ", numOfToilets=" + numOfToilets
-				+ ", numOfPeople=" + numOfPeople + ", object=" + object + ", villageId=" + villageId + ", created="
-				+ created + ", viewed=" + viewed + ", status=" + status + ", imageThumb=" + imageThumb
-				+ ", priceString=" + priceString + ", avgScore=" + avgScore + ", avgScoreInt=" + avgScoreInt + "]";
+		return "Thread [threadId=" + threadId + ", rateNum=" + rateNum + ", categoryId=" + categoryId + ", accountId="
+				+ accountId + ", name=" + name + ", address=" + address + ", latitude=" + latitude + ", longitude="
+				+ longitude + ", content=" + content + ", price=" + price + ", electricFee=" + electricFee
+				+ ", waterFee=" + waterFee + ", otherFee=" + otherFee + ", area=" + area + ", wifi=" + wifi
+				+ ", waterHeater=" + waterHeater + ", conditioner=" + conditioner + ", fridge=" + fridge + ", attic="
+				+ attic + ", camera=" + camera + ", waterSource=" + waterSource + ", direction=" + direction
+				+ ", numOfToilets=" + numOfToilets + ", numOfPeople=" + numOfPeople + ", object=" + object
+				+ ", villageId=" + villageId + ", province=" + province + ", district=" + district + ", village="
+				+ village + ", provinceId=" + provinceId + ", districtId=" + districtId + ", created=" + created
+				+ ", viewed=" + viewed + ", status=" + status + ", imageThumb=" + imageThumb + ", priceString="
+				+ priceString + ", avgScore=" + avgScore + ", avgScoreInt=" + avgScoreInt + ", total=" + total
+				+ ", far=" + far + ", page=" + page + ", totalPage=" + totalPage + ", old=" + old + ", categoryName="
+				+ categoryName + "]";
+	}
+
+	public String getCategoryName() {
+		return categoryName;
+	}
+
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
 	}
 
 }

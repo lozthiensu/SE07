@@ -39,6 +39,22 @@ body {
 	width: 250px;
 }
 
+.col-bon {
+	display: inline-block;
+	width: 400px !important;
+}
+
+.trun-text {
+	display: inline-block;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	/** IE6+, Firefox 7+, Opera 11+, Chrome, Safari **/
+	-o-text-overflow: ellipsis; /** Opera 9 & 10 **/
+	width: 100%;
+	/* note that this width will have to be smaller to see the effect */
+}
+
 .button-show-left {
 	background: #fff !important;
 }
@@ -83,9 +99,10 @@ body {
 	width: 1000px;
 	height: calc(100vh - 100px);
 }
+
 .main-content-form {
 	margin: 15px 5px 15px 5px;
-	background: #fff;  
+	background: #fff;
 }
 
 .title-in-admin {
@@ -107,4 +124,15 @@ body {
 .pagination-center {
 	display: table;
 	margin: 0 auto;
+}
+.scroll-box{
+    overflow: hidden;
+}
+::-webkit-scrollbar {
+    width: 0px;  /* remove scrollbar space */
+    background: transparent;  /* optional: just make scrollbar invisible */
+}
+/* optional: show position indicator in red */
+::-webkit-scrollbar-thumb {
+    background: #FF0000;
 }

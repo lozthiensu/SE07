@@ -50,6 +50,9 @@
 			<ul class="navbar-nav ml-auto">
 				<img src="img/avatar.jpg" alt="Hình đại diện" class="rounded-circle"
 					style="width: 40px; height: 40px; display: none;" id="imgAva">
+				<h5 data-toggle="modal" data-target="#modal-messenger">
+					<span class="badge red" id="numMessUnread">5</span>
+				</h5>
 				<li class="nav-item dropdown btn-group" id="menuAcc"
 					style="display: none;"><a
 					class="nav-link dropdown-toggle btn-right-menu-main"
@@ -87,12 +90,12 @@
 				</logic:iterate>
 
 			</ul>
-		</div> 
+		</div>
 		<div class="ws_script" style="position: absolute; left: -99%">
 			<a href="http://wowslider.com">bootstrap slider</a> by WOWSlider.com
 			v8.7
 		</div>
- 
+
 	</div>
 	<script type="text/javascript" src="engine1/wowslider.js"></script>
 	<script type="text/javascript" src="engine1/script.js"></script>
@@ -181,15 +184,17 @@
 											itemprop="reviewCount"><bean:write name="thread"
 												property="avgScore" /></strong>)
 									</div>
-									<div class="card-block text-center" style="margin-top:0px;">
+									<div class="card-block text-center" style="margin-top: 0px;">
 										<!--Title-->
 										<h4 class="card-title" style="">
-											<strong><i class="fa fa-money" style="font-size:25px;color:#000"></i> <bean:write name="thread"
-													property="priceString" />
-											</strong>
+											<strong><i class="fa fa-money"
+												style="font-size: 25px; color: #000"></i> <bean:write
+													name="thread" property="priceString" /> </strong>
 										</h4>
 										<h5 style="">
-											<i class="fa fa-area-chart" style="font-size:16px;color:#000"></i> <bean:write name="thread" property="area" />
+											<i class="fa fa-area-chart"
+												style="font-size: 16px; color: #000"></i>
+											<bean:write name="thread" property="area" />
 											m&#178;
 										</h5>
 										<p class="card-text truncase-detail" style="clear: both;">
@@ -197,7 +202,8 @@
 										</p>
 										<bean:define id="threadId" name="thread" property="threadId"></bean:define>
 										<bean:define id="name" name="thread" property="name"></bean:define>
-										<html:link styleClass="btn btn-success btn-fb" action="/view-thread-action?threadId=${threadId}">Xem</html:link>
+										<html:link styleClass="btn btn-success btn-fb"
+											action="/view-thread-action?threadId=${threadId}">Xem</html:link>
 
 										<!--Facebook-->
 										<a type="button" onclick="addToCompare(${threadId},'${name}')"

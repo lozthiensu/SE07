@@ -35,14 +35,14 @@ public class Check {
 			Date date2 = myFormat.parse(d2);
 			Log.in(date1 + " " + date2);
 			long diff = date1.getTime() - date2.getTime();
-			System.out.println("Days: " + TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS));
+			//System.out.println("Days: " + TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS));
 			int di = (int) TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
-			Log.in("So ngay: " + di);
+			//Log.in("So ngay: " + di);
 			if (di > 60) {
-				Log.in("True");
+				//Log.in("True");
 				return true;
 			}
-			Log.in("False");
+			//Log.in("False");
 			return false;
 		} catch (ParseException e) {
 			e.printStackTrace();
