@@ -60,7 +60,7 @@
 					aria-expanded="false"><span id="welcomeText"></span></a>
 					<div class="dropdown-menu dropdown dropdown-menu-right"
 						aria-labelledby="dropdownMenu1">
-						<a class="dropdown-item" href="./user/">Quản lý</a> <a
+							<a class="dropdown-item" href="./user/login.do">Quản lý</a> <a
 							class="dropdown-item" onclick="logout();">Đăng xuất</a>
 					</div></li>
 				<li class="nav-item" id="btnReg"><a
@@ -78,7 +78,9 @@
 	</nav>
 	<!--Carousel Wrapper-->
 	<!-- Start WOWSlider.com BODY section -->
-	<div id="wowslider-container1">
+	<div id="wowslider-container1" style="    font-size: 10px;
+    position: fixed;
+    z-index: 1;">
 		<div class="ws_images ">
 			<ul>
 				<logic:iterate name="homeViewForm" property="viewHighest" id="item">
@@ -103,7 +105,7 @@
 	<!-- End WOWSlider.com BODY section -->
 	<br>
 	<!--Navbar-->
-	<div class="container">
+	<div class="container" style="margin-top:460px; z-index:2;">
 		<nav
 			class="navbar navbar-toggleable-md navbar-dark green custom-nav-home hidden-md-down">
 		<button class="navbar-toggler navbar-toggler-right" type="button"
@@ -135,7 +137,7 @@
 
 	<!-- another version - flat style with animated hover effect -->
 
-	<div class="container container-white">
+	<div class="container container-white"  style="margin-top:0; z-index:3; background: #fff;">
 		<div class="row">
 			<div class="col-lg-12">
 

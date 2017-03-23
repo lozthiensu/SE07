@@ -15,468 +15,566 @@
 <link href="css/mdb.min.css" rel="stylesheet">
 <link href="css/style-view.css" rel="stylesheet">
 <link href="css/lightbox.min.css" rel="stylesheet">
+<link href="js/lightbox/photoswipe.css" rel="stylesheet">
 </head>
 <body>
+	<!-- Root element of PhotoSwipe. Must have class pswp. -->
+	<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
 
-	<jsp:include page="header.jsp" />
+		<!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+		<div class="pswp__bg"></div>
 
-	<nav class="navbar navbar-toggleable-md blur-bgimage fixed-top"
-		id="menuBeauti">
-	<div class="container" style="opacity: 1;">
-		<button class="navbar-toggler navbar-toggler-right" type="button"
-			data-toggle="collapse" data-target="#navbarNav1"
-			aria-controls="navbarNav1" aria-expanded="false"
-			aria-label="Toggle navigation">
-			<i class="fa fa-bars" aria-hidden="true"
-				style="color: #fff; font-size: 30px;"></i>
-		</button>
-		<a class="navbar-brand" href="./"> <strong><img
-				src="image/logo.png" height="30px;" /></strong>
-		</a>
-		<div class="collapse navbar-collapse" id="navbarNav1">
-			<ul class="navbar-nav mr-auto hidden-lg-up">
-				<logic:iterate name="viewThreadForm" property="categories" id="item">
-					<li class="nav-item"><a class="nav-link btn-right-menu-main"
-						href='./view-category-action.do?categoryId=<bean:write
-								name="item" property="categoryId" />'>
-							<i class="fa fa-folder-open-o" aria-hidden="true"></i> <bean:write
-								name="item" property="name" />
-					</a></li>
-				</logic:iterate>
-			</ul>
-			<ul class="navbar-nav ml-auto">
-				<img src="img/avatar.jpg" alt="Hình đại diện" class="rounded-circle"
-					style="width: 40px; height: 40px; display: none;" id="imgAva">
-				<li class="nav-item dropdown btn-group" id="menuAcc"
-					style="display: none;"><a
-					class="nav-link dropdown-toggle btn-right-menu-main"
-					id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true"
-					aria-expanded="false"><span id="welcomeText"></span></a>
-					<div class="dropdown-menu dropdown dropdown-menu-right"
-						aria-labelledby="dropdownMenu1">
-						<a class="dropdown-item" href="./user/">Quản lý</a> <a
-							class="dropdown-item" onclick="logout();">Đăng xuất</a>
-					</div></li>
-				<li class="nav-item" id="btnReg"><a
-					class="nav-link btn-right-menu-main" data-toggle="modal"
-					data-target="#modal-register">Đăng ký</a></li>
-				<li class="nav-item" id="btnLog"><a
-					class="nav-link  btn-right-menu-main" data-toggle="modal"
-					data-target="#modal-login">Đăng nhập</a></li>
-				<li class="nav-item" id="btnLog"><a
-					class="nav-link  btn-right-menu-main" data-toggle="modal"
-					data-target="#modal-compare">So sánh</a></li>
-			</ul>
+		<!-- Slides wrapper with overflow:hidden. -->
+		<div class="pswp__scroll-wrap">
+
+			<!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+			<div class="pswp__container">
+				<div class="pswp__item"></div>
+				<div class="pswp__item"></div>
+				<div class="pswp__item"></div>
+			</div>
+
+			<!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+			<div class="pswp__ui pswp__ui--hidden">
+
+				<div class="pswp__top-bar">
+
+					<!--  Controls are self-explanatory. Order can be changed. -->
+
+					<div class="pswp__counter"></div>
+
+					<button class="pswp__button pswp__button--close"
+						title="Close (Esc)"></button>
+
+					<button class="pswp__button pswp__button--share" title="Share"></button>
+
+					<button class="pswp__button pswp__button--fs"
+						title="Toggle fullscreen"></button>
+
+					<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+					<!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+					<!-- element will get class pswp__preloader--active when preloader is running -->
+					<div class="pswp__preloader">
+						<div class="pswp__preloader__icn">
+							<div class="pswp__preloader__cut">
+								<div class="pswp__preloader__donut"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div
+					class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+					<div class="pswp__share-tooltip"></div>
+				</div>
+
+				<button class="pswp__button pswp__button--arrow--left"
+					title="Previous (arrow left)"></button>
+
+				<button class="pswp__button pswp__button--arrow--right"
+					title="Next (arrow right)"></button>
+
+				<div class="pswp__caption">
+					<div class="pswp__caption__center"></div>
+				</div>
+
+			</div>
+
 		</div>
+
 	</div>
-	</nav>
-	<!-- End WOWSlider.com BODY section -->
-	<br>
-	<!--Navbar-->
-	<div class="container">
-		<nav
-			class="navbar navbar-toggleable-md navbar-dark green custom-nav-view-thread hidden-md-down">
-		<button class="navbar-toggler navbar-toggler-right" type="button"
-			data-toggle="collapse" data-target="#navbarNav1"
-			aria-controls="navbarNav1" aria-expanded="false"
-			aria-label="Toggle navigation">
-			<span class="navbar-toggler-icon"></span>
-		</button>
-		<div class="collapse navbar-collapse" id="navbarNav1">
-			<ul class="navbar-nav mr-auto">
+	<bean:define id="thread" name="viewThreadForm" property="thread"></bean:define>
+	<div
+		style="
+	background-image: url(<bean:write name="thread" property="imageThumb" />);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;height: 500px;
+	margin-top: 50px;
+    filter: blur(30px);"></div>
+	<div class="thread-content-1">
 
-				<logic:iterate name="viewThreadForm" property="categories" id="item">
-					<li class="nav-item"><a class="nav-link"
-						href='./view-category-action.do?categoryId=<bean:write
+		<jsp:include page="header.jsp" />
+
+		<nav class="navbar navbar-toggleable-md blur-bgimage fixed-top"
+			id="menuBeauti" style="background: #fff">
+		<div class="container" style="opacity: 1;">
+			<button class="navbar-toggler navbar-toggler-right" type="button"
+				data-toggle="collapse" data-target="#navbarNav1"
+				aria-controls="navbarNav1" aria-expanded="false"
+				aria-label="Toggle navigation">
+				<i class="fa fa-bars" aria-hidden="true"
+					style="color: #fff; font-size: 30px;"></i>
+			</button>
+			<a class="navbar-brand" href="./"> <strong><img
+					src="image/logo.png" height="30px;" /></strong>
+			</a>
+			<div class="collapse navbar-collapse" id="navbarNav1">
+				<ul class="navbar-nav mr-auto hidden-lg-up">
+					<logic:iterate name="viewThreadForm" property="categories"
+						id="item">
+						<li class="nav-item"><a class="nav-link btn-right-menu-main"
+							href='./view-category-action.do?categoryId=<bean:write
 								name="item" property="categoryId" />'>
-							<i class="fa fa-folder-open-o" aria-hidden="true"></i> <bean:write
-								name="item" property="name" />
-					</a></li>
-				</logic:iterate>
-
-			</ul>
-			<ul class="navbar-nav ml-auto">
-				<li class="nav-item"><a class="nav-link" href="./search.do"><i
-						class="fa fa-search" aria-hidden="true"></i> Tìm kiếm</a></li>
-			</ul>
+								<i class="fa fa-folder-open-o" aria-hidden="true"></i> <bean:write
+									name="item" property="name" />
+						</a></li>
+					</logic:iterate>
+				</ul>
+				<ul class="navbar-nav ml-auto">
+					<img src="img/avatar.jpg" alt="Hình đại diện"
+						class="rounded-circle"
+						style="width: 40px; height: 40px; display: none;" id="imgAva">
+					<li class="nav-item dropdown btn-group" id="menuAcc"
+						style="display: none;"><a
+						class="nav-link dropdown-toggle btn-right-menu-main"
+						id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true"
+						aria-expanded="false"><span id="welcomeText"></span></a>
+						<div class="dropdown-menu dropdown dropdown-menu-right"
+							aria-labelledby="dropdownMenu1">
+							<a class="dropdown-item" href="./user/login.do">Quản lý</a>
+							 <a
+								class="dropdown-item" onclick="logout();">Đăng xuất</a>
+						</div></li>
+					<li class="nav-item" id="btnReg"><a
+						class="nav-link btn-right-menu-main" data-toggle="modal"
+						data-target="#modal-register">Đăng ký</a></li>
+					<li class="nav-item" id="btnLog"><a
+						class="nav-link  btn-right-menu-main" data-toggle="modal"
+						data-target="#modal-login">Đăng nhập</a></li>
+					<li class="nav-item" id="btnLog"><a
+						class="nav-link  btn-right-menu-main" data-toggle="modal"
+						data-target="#modal-compare">So sánh</a></li>
+				</ul>
+			</div>
 		</div>
 		</nav>
 
-	</div>
-	<br>
-	<br>
-	<!--Navbar-->
-	<div class="container container-white">
-		<bean:define id="thread" name="viewThreadForm" property="thread"></bean:define>
+		<!--Navbar-->
+		<div class="container">
+			<nav
+				class="navbar navbar-toggleable-md navbar-dark green custom-nav-view-thread hidden-md-down"
+				style="    margin-top: 7px;">
+			<button class="navbar-toggler navbar-toggler-right" type="button"
+				data-toggle="collapse" data-target="#navbarNav1"
+				aria-controls="navbarNav1" aria-expanded="false"
+				aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarNav1">
+				<ul class="navbar-nav mr-auto">
 
-		<h2 class="text-center">
-			<bean:write name="thread" property="name" />
-		</h2>
-		<br>
-		<div class="row">
-			<div class="col-lg-9">
-				<div class="breadcrumb flat" style="width: 100%; margin-top: 10px;">
-					<a style="border: 1px solid #ddd;"><i class="fa fa-home"
-						aria-hidden="true" style="font-size: 35px;"></i></a> <a class="active"
-						href="#"> Thông tin chi tiết</a>
-				</div>
-				<div class="infoThread">
-					<div id="card-1" class="card-rotating effect__click">
-						<!--Back Side-->
-						<br> <br> <br>
-						<div class="text-left">
-							<!--Content-->
-							<p>
-								<bean:write name="thread" property="content" filter="false" />
-							</p>
-						</div>
-						<!--/.Back Side-->
-						<div class="row">
-							<logic:iterate name="viewThreadForm" property="images" id="item">
-								<div class="col-lg-3">
-									<a href="<bean:write
+					<logic:iterate name="viewThreadForm" property="categories"
+						id="item">
+						<li class="nav-item"><a class="nav-link"
+							href='./view-category-action.do?categoryId=<bean:write
+								name="item" property="categoryId" />'>
+								<i class="fa fa-folder-open-o" aria-hidden="true"></i> <bean:write
+									name="item" property="name" />
+						</a></li>
+					</logic:iterate>
+
+				</ul>
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item"><a class="nav-link" href="./search.do"><i
+							class="fa fa-search" aria-hidden="true"></i> Tìm kiếm</a></li>
+				</ul>
+			</div>
+			</nav>
+
+		</div>
+		<br> <br>
+		<!--Navbar-->
+		<div class="container-fluid">
+			<div class="row"
+				style="background: #fff; margin-top: 300px; position: relative; height: 150px;"></div>
+		</div>
+		<div class="container container-white " style="margin-top: -460px;">
+
+			<h2 class="text-center thread-name">
+				<bean:write name="thread" property="name" />
+			</h2>
+			<br>
+
+			<div class="row">
+				<div class="col-lg-9"
+					style="background: #fff; border-top-left-radius: 5px; border-top-right-radius: 5px;">
+					<div class="breadcrumb flat" style="width: 100%; margin-top: 10px;">
+						<a style="border: 1px solid #ddd;"><i class="fa fa-home"
+							aria-hidden="true" style="font-size: 35px;"></i></a> <a
+							class="active" href="#"> Thông tin chi tiết</a>
+					</div>
+					<div class="infoThread">
+						<div id="card-1" class="card-rotating effect__click">
+							<!--Back Side-->
+							<br> <br> <br>
+							<div class="text-left">
+								<!--Content-->
+								<p>
+									<bean:write name="thread" property="content" filter="false" />
+								</p>
+							</div>
+							<!--/.Back Side-->
+							<div class="row">
+								<div id="demo-test-gallery" class="demo-gallery">
+									<logic:iterate name="viewThreadForm" property="images"
+										id="item">
+										<a
+											href="<bean:write
 											name="item" property="src" />"
-										data-lightbox="example-set"
-										data-title="<bean:write
-											name="item" property="content" />">
-										<img class="img-fluid"
-										src="<bean:write
+											data-size="1600x1600"
+											data-med="<bean:write
 											name="item" property="src" />"
-										alt="<bean:write
-											name="item" property="content" />" />
-									</a>
+											data-med-size="1600x1024"
+											data-author="<bean:write
+											name="item" property="content" />"
+											class="demo-gallery__img--main"> <img
+											src="<bean:write
+											name="item" property="src" />"
+											alt="" class="col-3"/>
+										</a>
+									</logic:iterate>
 								</div>
-							</logic:iterate>
-						</div>
-						<div class="row">
-							<logic:iterate name="viewThreadForm" property="images360"
-								id="item">
-								<div class="col-lg-3">
-									<a
-										onclick="changeImage360('<bean:write
+							</div>
+							<div class="row">
+								<logic:iterate name="viewThreadForm" property="images360"
+									id="item">
+									<div class="col-lg-3">
+										<a
+											onclick="changeImage360('<bean:write
 											name="item" property="src" />', '<bean:write
 											name="item" property="content" />')">
-										<img class="img-fluid"
-										src="<bean:write
+											<img class="img-fluid"
+											src="<bean:write
 											name="item" property="src" />"
-										alt="<bean:write
+											alt="<bean:write
 											name="item" property="content" />" />
-									</a>
+										</a>
+									</div>
+								</logic:iterate>
+							</div>
+							<br> <br>
+
+
+							<div class="row infoThread">
+								<div id="map" class="z-depth-1"></div>
+								<div id="map2" class="z-depth-1"></div>
+							</div>
+							<div class="breadcrumb flat"
+								style="width: 100%; margin-top: 10px;">
+								<a style="border: 1px solid #ddd;"><i class="fa fa-home"
+									aria-hidden="true" style="font-size: 35px;"></i></a> <a
+									class="active" href="#"> Bình luận</a>
+							</div>
+							<div class="modal-body infoThread">
+
+								<section> <!--Leave a reply form-->
+								<div class="reply-form">
+									<p class="text-center" id="welcomeToRate">(Chức năng yêu
+										cầu đăng nhập)</p>
+
+									<!--Third row-->
+									<div class="row">
+										<!--Image column-->
+										<div class="col-sm-2 col-12">
+											<img src="image/avatar.jpg" style="height: 100px;"
+												id="imgAvaCMT">
+										</div>
+										<!--/.Image column-->
+
+										<!--Content column-->
+										<div class="col-sm-10 col-12">
+											<div class="md-form">
+												<textarea type="text" id="newContentRate"
+													class="md-textarea" length="200" maxlength="200"></textarea>
+												<label for="form8">Nội dung</label>
+												<div class="form-inline">
+
+													<fieldset class="form-group">
+														<input name="newScoreRate" type="radio" id="radio1"
+															checked="checked" value="1"> <label for="radio1">Rất
+															tệ</label>
+													</fieldset>
+
+													<fieldset class="form-group">
+														<input name="newScoreRate" type="radio" id="radio2"
+															value="2"> <label for="radio2">Tệ</label>
+													</fieldset>
+
+													<fieldset class="form-group">
+														<input name="newScoreRate" type="radio" id="radio3"
+															value="3"> <label for="radio3">Bình
+															thường</label>
+													</fieldset>
+
+													<fieldset class="form-group">
+														<input name="newScoreRate" type="radio" id="radio4"
+															value="4"> <label for="radio4">Tốt</label>
+													</fieldset>
+													<fieldset class="form-group">
+														<input name="newScoreRate" type="radio" id="radio5"
+															value="5"> <label for="radio5">Rất tốt</label>
+													</fieldset>
+
+												</div>
+											</div>
+
+										</div>
+
+										<div class="text-center">
+											<button class="btn btn-primary"
+												onclick="return submitRate();" id="btnAddRate">Gửi
+												bình luận</button>
+										</div>
+										<!--/.Content column-->
+
+									</div>
+									<!--/.Third row-->
 								</div>
-							</logic:iterate>
+								<!--/.Leave a reply form--> </section>
+							</div>
 						</div>
-						<br> <br>
+					</div>
+					<!--/.Rotating card-->
 
-
-						<div class="row infoThread">
-							<div id="map" class="z-depth-1"></div>
-							<div id="map2" class="z-depth-1"></div>
+					<!-- START COMMENTS -->
+					<!--Main wrapper-->
+					<div class="comments-list text-left infoThread">
+						<div class="section-heading">
+							<h3>
+								Số bình luận<span class="badge blue" id="ratesCountAjax"><bean:write
+										name="viewThreadForm" property="ratesCount" /></span>
+							</h3>
 						</div>
-						<div class="breadcrumb flat"
-							style="width: 100%; margin-top: 10px;">
-							<a style="border: 1px solid #ddd;"><i class="fa fa-home"
-								aria-hidden="true" style="font-size: 35px;"></i></a> <a
-								class="active" href="#"> Bình luận</a>
-						</div>
-						<div class="modal-body infoThread">
-
-							<section> <!--Leave a reply form-->
-							<div class="reply-form">
-								<p class="text-center" id="welcomeToRate">(Chức năng yêu cầu
-									đăng nhập)</p>
-
-								<!--Third row-->
+						<!--First row-->
+						<div id="listRate">
+							<logic:iterate name="viewThreadForm" property="rates" id="item">
 								<div class="row">
 									<!--Image column-->
 									<div class="col-sm-2 col-12">
-										<img src="image/avatar.jpg" style="height: 100px;"
-											id="imgAvaCMT">
+										<img src="<bean:write name="item" property="accountImage" />"
+											style="height: 100px;">
 									</div>
 									<!--/.Image column-->
-
 									<!--Content column-->
 									<div class="col-sm-10 col-12">
-										<div class="md-form">
-											<textarea type="text" id="newContentRate" class="md-textarea"
-												length="200" maxlength="200"></textarea>
-											<label for="form8">Nội dung</label>
-											<div class="form-inline">
-
-												<fieldset class="form-group">
-													<input name="newScoreRate" type="radio" id="radio1"
-														checked="checked" value="1"> <label for="radio1">Rất
-														tệ</label>
-												</fieldset>
-
-												<fieldset class="form-group">
-													<input name="newScoreRate" type="radio" id="radio2"
-														value="2"> <label for="radio2">Tệ</label>
-												</fieldset>
-
-												<fieldset class="form-group">
-													<input name="newScoreRate" type="radio" id="radio3"
-														value="3"> <label for="radio3">Bình thường</label>
-												</fieldset>
-
-												<fieldset class="form-group">
-													<input name="newScoreRate" type="radio" id="radio4"
-														value="4"> <label for="radio4">Tốt</label>
-												</fieldset>
-												<fieldset class="form-group">
-													<input name="newScoreRate" type="radio" id="radio5"
-														value="5"> <label for="radio5">Rất tốt</label>
-												</fieldset>
-
-											</div>
+										<a><h3 class="user-name">
+												<bean:write name="item" property="accountName" />
+											</h3></a>
+										<div class="card-data" style="padding: 0px;">
+											<ul>
+												<li class="comment-date"><i class="fa fa-commenting"
+													aria-hidden="true"></i> <span
+													class="score s<bean:write name="item" property="score" />"></span>
+												</li>
+												<li class="comment-date" style="float: right;"><i
+													class="fa fa-clock-o"></i> <bean:write name="item"
+														property="created" /></li>
+											</ul>
 										</div>
-
-									</div>
-
-									<div class="text-center">
-										<button class="btn btn-primary" onclick="return submitRate();"
-											id="btnAddRate">Gửi bình luận</button>
+										<p class="comment-text"
+											style="word-wrap: break-word; word-break: break-all;">
+											<bean:write name="item" property="content" />
+										</p>
 									</div>
 									<!--/.Content column-->
-
 								</div>
-								<!--/.Third row-->
-							</div>
-							<!--/.Leave a reply form--> </section>
+							</logic:iterate>
 						</div>
+
+						<!--/.First row-->
 					</div>
+					<!--/.Main wrapper-->
+					<!-- END COMMENTS -->
+
 				</div>
-				<!--/.Rotating card-->
-
-				<!-- START COMMENTS -->
-				<!--Main wrapper-->
-				<div class="comments-list text-left infoThread">
-					<div class="section-heading">
-						<h3>
-							Số bình luận<span class="badge blue" id="ratesCountAjax"><bean:write
-									name="viewThreadForm" property="ratesCount" /></span>
-						</h3>
-					</div>
-					<!--First row-->
-					<div id="listRate">
-						<logic:iterate name="viewThreadForm" property="rates" id="item">
-							<div class="row">
-								<!--Image column-->
-								<div class="col-sm-2 col-12">
-									<img src="<bean:write name="item" property="accountImage" />"
-										style="height: 100px;">
-								</div>
-								<!--/.Image column-->
-								<!--Content column-->
-								<div class="col-sm-10 col-12">
-									<a><h3 class="user-name">
-											<bean:write name="item" property="accountName" />
-										</h3></a>
-									<div class="card-data" style="padding: 0px;">
-										<ul>
-											<li class="comment-date"><i class="fa fa-commenting"
-												aria-hidden="true"></i> <span
-												class="score s<bean:write name="item" property="score" />"></span>
-											</li>
-											<li class="comment-date" style="float: right;"><i
-												class="fa fa-clock-o"></i> <bean:write name="item"
-													property="created" /></li>
-										</ul>
-									</div>
-									<p class="comment-text"
-										style="word-wrap: break-word; word-break: break-all;">
-										<bean:write name="item" property="content" />
-									</p>
-								</div>
-								<!--/.Content column-->
-							</div>
-						</logic:iterate>
-					</div>
-
-					<!--/.First row-->
-				</div>
-				<!--/.Main wrapper-->
-				<!-- END COMMENTS -->
-
-			</div>
-			<div class="col-lg-3">
-				<div class="card card-cascade hoverable " style="margin-top: 0px;">
+				<div class="col-lg-3">
 
 					<input style="display: none;" id="threadOld"
 						value="<bean:write name="thread" property="old" />"></input>
 					<div class="text-center">
 						<logic:equal name="thread" property="old" value="true">
 							<button type="button"
-								class="btn btn-danger waves-effect waves-light">Tin đã
-								quá lâu</button>
+								class="btn btn-danger waves-effect waves-light">
+								<b>Tin đã quá lâu</b>
+							</button>
 						</logic:equal>
 						<logic:equal name="thread" property="old" value="false">
 							<button type="button"
-								class="btn btn-success waves-effect waves-light">Tin
-								còn hạn</button>
+								class="btn btn-success waves-effect waves-light">
+								<b>Tin còn hạn</b>
+							</button>
 						</logic:equal>
 					</div>
-					<br>
-					<div class="row infoThread">
-						<!--Image column-->
-						<div class="col-sm-6 col-6 thread-avatar">
-							<img src="<bean:write name="thread" property="avatar" />"
-								style="height: 100px; width: 100px; border-radius: 50%; border: 10px solid #fff; box-shadow: 5px 5px 5px 0 rgba(0, 0, 0, .16), 0px 2px 5px 0 rgba(0, 0, 0, .12);">
+					<br> <br> <br> <br> <br>
+					<div class="card card-cascade hoverable" style="margin-top: 0px;">
+						<div class="row infoThread">
+							<!--Image column-->
+							<div class="col-md-12 col-12 ">
+								<div class=" thread-avatar">
+									<img src="<bean:write name="thread" property="avatar" />"
+										style="height: 200px; width: 200px; border-radius: 50%; border: 10px solid #fff; box-shadow: 0px 0px 5px 0 rgba(0, 0, 0, .16), 0px 0px 5px 0 rgba(0, 0, 0, .12);">
+								</div>
+							</div>
 						</div>
-						<!--/.Image column-->
-						<!--Content column-->
-						<div class="col-sm-6 col-6">
-							<a><h3 class="user-name" style="margin-left: -35px;">
-									<bean:write name="thread" property="phone" />
-								</h3></a> <span style="margin-left: -36px;"><bean:write
-									name="thread" property="email" /></span>
+						<!--/Card image-->
+						<!--Card content-->
+						<div class="card-block text-center infoThread"
+							style="margin-top: 0px;">
+							<!--Title-->
+							<h5 class="card-title">
+								<strong><bean:write name="thread" property="phone" />
+								</strong>
+							</h5>
+							<h5 class="card-title">
+								<strong><bean:write name="thread" property="email" />
+								</strong>
+							</h5>
+							<br>
+							<h4 class="card-title">
+								<strong>Giá: <bean:write name="thread"
+										property="priceString" />
+								</strong>
+							</h4>
+							<span class="text-left"> <span
+								class="score s<bean:write name="thread" property="avgScoreInt" />"></span>(<strong
+								itemprop="reviewCount"><bean:write name="thread"
+										property="avgScore" /></strong>)
+								<h5>
+									<font color="#607d8b">Ngày đăng:</font>
+									<bean:write name="thread" property="created" />
+								</h5>
+								<h5>
+									<font color="#607d8b">Lượt xem:</font>
+									<bean:write name="thread" property="viewed" />
+								</h5>
+								<h5>
+									<font color="#607d8b">Lượt đánh giá:</font>
+									<bean:write name="thread" property="rateNum" />
+								</h5>
+								<h5>
+									<font color="#607d8b">Địa chỉ:</font>
+									<bean:write name="thread" property="address" />
+								</h5>
+								<h5>
+									<font color="#607d8b">Giá điện:</font>
+									<bean:write name="thread" property="electricFee" />
+									đ/kí
+								</h5>
+								<h5>
+									<font color="#607d8b">Giá nước:</font>
+									<bean:write name="thread" property="waterFee" />
+									đ/m&sup3;
+								</h5>
+								<h5>
+									<font color="#607d8b">Phụ phí:</font>
+									<bean:write name="thread" property="otherFee" />
+									đ
+								</h5>
+								<h5>
+									<font color="#607d8b">Diện tích:</font>
+									<bean:write name="thread" property="area" />
+									m&#178;
+								</h5>
+								<h5>
+									<font color="#607d8b">Wifi:</font>
+									<logic:equal name="thread" property="wifi" value="true">
+								Có
+								</logic:equal>
+									<logic:notEqual name="thread" property="wifi" value="true">
+								Không
+								</logic:notEqual>
+								</h5>
+								<h5>
+									<font color="#607d8b">Máy nước nóng:</font>
+									<logic:equal name="thread" property="waterHeater" value="true">
+								Có
+								</logic:equal>
+									<logic:notEqual name="thread" property="waterHeater"
+										value="true">
+								Không
+								</logic:notEqual>
+								</h5>
+								<h5>
+									<font color="#607d8b">Điều hòa:</font>
+									<logic:equal name="thread" property="conditioner" value="true">
+								Có
+								</logic:equal>
+									<logic:notEqual name="thread" property="conditioner"
+										value="true">
+								Không
+								</logic:notEqual>
+								</h5>
+								<h5>
+									<font color="#607d8b">Tủ lạnh:</font>
+									<logic:equal name="thread" property="fridge" value="true">
+								Có
+								</logic:equal>
+									<logic:notEqual name="thread" property="fridge" value="true">
+								Không
+								</logic:notEqual>
+								</h5>
+								<h5>
+									<font color="#607d8b">Gác xếp:</font>
+									<logic:equal name="thread" property="attic" value="true">
+								Có
+								</logic:equal>
+									<logic:notEqual name="thread" property="attic" value="true">
+								Không
+								</logic:notEqual>
+								</h5>
+								<h5>
+									<font color="#607d8b">Camera an ninh:</font>
+									<logic:equal name="thread" property="camera" value="true">
+								Có
+								</logic:equal>
+									<logic:notEqual name="thread" property="camera" value="true">
+								Không
+								</logic:notEqual>
+								</h5>
+								<h5>
+									<font color="#607d8b">Nguồn nước:</font>
+									<bean:write name="thread" property="waterSource" />
+								</h5>
+								<h5>
+									<font color="#607d8b">Số toilet:</font>
+									<bean:write name="thread" property="numOfToilets" />
+								</h5>
+								<h5>
+									<font color="#607d8b">Hướng phòng:</font>
+									<bean:write name="thread" property="direction" />
+								</h5>
+								<h5>
+									<font color="#607d8b">Tỉnh:</font>
+									<bean:define id="province" name="thread" property="province"></bean:define>
+									<bean:write name="province" property="name" />
+								</h5>
+								<h5>
+									<font color="#607d8b">Quân/Huyện:</font>
+									<bean:define id="district" name="thread" property="district"></bean:define>
+									<bean:write name="district" property="name" />
+								</h5>
+								<h5>
+									<font color="#607d8b">Xã:</font>
+									<bean:define id="village" name="thread" property="village"></bean:define>
+									<bean:write name="village" property="name" />
+								</h5>
+							</span>
+							<!--/.Card content-->
 						</div>
-						<!--/.Content column-->
-					</div>
-					<!--/Card image-->
-					<!--Card content-->
-					<div class="card-block text-center infoThread"
-						style="margin-top: 0px;">
-						<!--Title-->
-						<h4 class="card-title">
-							<strong>Giá: <bean:write name="thread" property="priceString" />
-							</strong>
-						</h4> 
-						<span class="text-left"> <span
-							class="score s<bean:write name="thread" property="avgScoreInt" />"></span>(<strong
-							itemprop="reviewCount"><bean:write name="thread"
-									property="avgScore" /></strong>)
-							<h5>
-								<font color="#607d8b">Ngày đăng:</font>
-								<bean:write name="thread" property="created" />
-							</h5>
-							<h5>
-								<font color="#607d8b">Lượt xem:</font>
-								<bean:write name="thread" property="viewed" />
-							</h5>
-							<h5>
-								<font color="#607d8b">Lượt đánh giá:</font>
-								<bean:write name="thread" property="rateNum" />
-							</h5>
-							<h5>
-								<font color="#607d8b">Địa chỉ:</font>
-								<bean:write name="thread" property="address" />
-							</h5>
-							<h5>
-								<font color="#607d8b">Giá điện:</font>
-								<bean:write name="thread" property="electricFee" />
-								đ/kí
-							</h5>
-							<h5>
-								<font color="#607d8b">Giá nước:</font>
-								<bean:write name="thread" property="waterFee" />
-								đ/m&sup3;
-							</h5>
-							<h5>
-								<font color="#607d8b">Phụ phí:</font>
-								<bean:write name="thread" property="otherFee" />
-								đ
-							</h5>
-							<h5>
-								<font color="#607d8b">Diện tích:</font>
-								<bean:write name="thread" property="area" />
-								m&#178;
-							</h5>
-							<h5>
-								<font color="#607d8b">Wifi:</font>
-								<logic:equal name="thread" property="wifi" value="true">
-								Có
-								</logic:equal>
-								<logic:notEqual name="thread" property="wifi" value="true">
-								Không
-								</logic:notEqual>
-							</h5>
-							<h5>
-								<font color="#607d8b">Máy nước nóng:</font>
-								<logic:equal name="thread" property="waterHeater" value="true">
-								Có
-								</logic:equal>
-								<logic:notEqual name="thread" property="waterHeater"
-									value="true">
-								Không
-								</logic:notEqual>
-							</h5>
-							<h5>
-								<font color="#607d8b">Điều hòa:</font>
-								<logic:equal name="thread" property="conditioner" value="true">
-								Có
-								</logic:equal>
-								<logic:notEqual name="thread" property="conditioner"
-									value="true">
-								Không
-								</logic:notEqual>
-							</h5>
-							<h5>
-								<font color="#607d8b">Tủ lạnh:</font>
-								<logic:equal name="thread" property="fridge" value="true">
-								Có
-								</logic:equal>
-								<logic:notEqual name="thread" property="fridge" value="true">
-								Không
-								</logic:notEqual>
-							</h5>
-							<h5>
-								<font color="#607d8b">Gác xếp:</font>
-								<logic:equal name="thread" property="attic" value="true">
-								Có
-								</logic:equal>
-								<logic:notEqual name="thread" property="attic" value="true">
-								Không
-								</logic:notEqual>
-							</h5>
-							<h5>
-								<font color="#607d8b">Camera an ninh:</font>
-								<logic:equal name="thread" property="camera" value="true">
-								Có
-								</logic:equal>
-								<logic:notEqual name="thread" property="camera" value="true">
-								Không
-								</logic:notEqual>
-							</h5>
-							<h5>
-								<font color="#607d8b">Nguồn nước:</font>
-								<bean:write name="thread" property="waterSource" />
-							</h5>
-							<h5>
-								<font color="#607d8b">Số toilet:</font>
-								<bean:write name="thread" property="numOfToilets" />
-							</h5>
-							<h5>
-								<font color="#607d8b">Hướng phòng:</font>
-								<bean:write name="thread" property="direction" />
-							</h5>
-							<h5>
-								<font color="#607d8b">Tỉnh:</font>
-								<bean:define id="province" name="thread" property="province"></bean:define>
-								<bean:write name="province" property="name" />
-							</h5>
-							<h5>
-								<font color="#607d8b">Quân/Huyện:</font>
-								<bean:define id="district" name="thread" property="district"></bean:define>
-								<bean:write name="district" property="name" />
-							</h5>
-							<h5>
-								<font color="#607d8b">Xã:</font>
-								<bean:define id="village" name="thread" property="village"></bean:define>
-								<bean:write name="village" property="name" />
-							</h5>
-						</span>
-						<!--/.Card content-->
 					</div>
 				</div>
 			</div>
-		</div>
-		<!--Slide new start -->
-		<div class="breadcrumb flat" style="clear: both;">
-			<a style="border: 1px solid #ddd;"><i class="fa fa-home"
-				aria-hidden="true" style="font-size: 35px;"></i></a> <a class="active">
-				Bài viết liên quan</a>
-		</div>
-		<div class="row">
+			<!--Slide new start -->
+			<div class="breadcrumb flat" style="clear: both;">
+				<a style="border: 1px solid #ddd;"><i class="fa fa-home"
+					aria-hidden="true" style="font-size: 35px;"></i></a> <a class="active">
+					Bài viết liên quan</a>
+			</div>
 			<div class="row">
 				<!--Carousel Wrapper-->
 				<logic:iterate name="viewThreadForm" property="relateThreads"
@@ -542,20 +640,21 @@
 					</div>
 					<!--/.Card-->
 				</logic:iterate>
+
 			</div>
-
+			<br>
 		</div>
-		<br>
-	</div>
 
-	<script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
-	<script type="text/javascript" src="js/tether.min.js"></script>
-	<script type="text/javascript" src="js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="js/mdb.min.js"></script>
-	<script type="text/javascript" src="js/lightbox-plus-jquery.min.js"></script>
+		<script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
+		<script type="text/javascript" src="js/tether.min.js"></script>
+		<script type="text/javascript" src="js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="js/mdb.min.js"></script>
+		<script type="text/javascript" src="js/lightbox/photoswipe.min.js"></script>
+		<script type="text/javascript"
+			src="js/lightbox/photoswipe-ui-default.min.js"></script>
 
-	<jsp:include page="footer.jsp" />
-	<script>
+		<jsp:include page="footer.jsp" />
+		<script>
 		var stick = function() {
 			var size = $(window).width();
 			var doc = document.documentElement;
@@ -570,7 +669,7 @@
 					$("#menuBeauti")
 							.css("background-color", "rgba(0,0,0,0.75)");
 				} else {
-					$("#menuBeauti").css("background-color", "rgba(0,0,0,0)");
+					$("#menuBeauti").css("background-color", "rgba(255,255,255,1)");
 				}
 			} else {
 				$("#menuBeauti").css({
@@ -584,6 +683,7 @@
 			stick();
 		});
 		$(document).ready(function() {
+			stick();
 			$('#btnAddRate').prop('disabled', true); //TO DISABLED
 			$('input[name=newScoreRate]:checked').prop('checked', false); //TO UNCHECK  
 			$('input[name=newScoreRate]').prop('disabled', true); //TO DISABLED  
@@ -624,7 +724,7 @@
 			}
 		});
 	</script>
-	<script>
+		<script>
 		function submitRate(){
 			content = $("#newContentRate").val();
 			score = parseInt($('input[name=newScoreRate]:checked').val());
@@ -768,10 +868,307 @@
 			initMap();
 		}
 	</script>
-	<script async defer
-		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-H_xa-vjvVRk59cgxAFSBHwj2huBV-B4&callback=initialize">
+		<script async defer
+			src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-H_xa-vjvVRk59cgxAFSBHwj2huBV-B4&callback=initialize">
 		
 	</script>
+		<script type="text/javascript">
+    (function() {
+
+		var initPhotoSwipeFromDOM = function(gallerySelector) {
+
+			var parseThumbnailElements = function(el) {
+			    var thumbElements = el.childNodes,
+			        numNodes = thumbElements.length,
+			        items = [],
+			        el,
+			        childElements,
+			        thumbnailEl,
+			        size,
+			        item;
+
+			    for(var i = 0; i < numNodes; i++) {
+			        el = thumbElements[i];
+
+			        // include only element nodes 
+			        if(el.nodeType !== 1) {
+			          continue;
+			        }
+
+			        childElements = el.children;
+
+			        size = el.getAttribute('data-size').split('x');
+
+			        // create slide object
+			        item = {
+						src: el.getAttribute('href'),
+						w: parseInt(size[0], 10),
+						h: parseInt(size[1], 10),
+						author: el.getAttribute('data-author')
+			        };
+
+			        item.el = el; // save link to element for getThumbBoundsFn
+
+			        if(childElements.length > 0) {
+			          item.msrc = childElements[0].getAttribute('src'); // thumbnail url
+			          if(childElements.length > 1) {
+			              item.title = childElements[1].innerHTML; // caption (contents of figure)
+			          }
+			        }
+
+
+					var mediumSrc = el.getAttribute('data-med');
+		          	if(mediumSrc) {
+		            	size = el.getAttribute('data-med-size').split('x');
+		            	// "medium-sized" image
+		            	item.m = {
+		              		src: mediumSrc,
+		              		w: parseInt(size[0], 10),
+		              		h: parseInt(size[1], 10)
+		            	};
+		          	}
+		          	// original image
+		          	item.o = {
+		          		src: item.src,
+		          		w: item.w,
+		          		h: item.h
+		          	};
+
+			        items.push(item);
+			    }
+
+			    return items;
+			};
+
+			// find nearest parent element
+			var closest = function closest(el, fn) {
+			    return el && ( fn(el) ? el : closest(el.parentNode, fn) );
+			};
+
+			var onThumbnailsClick = function(e) {
+			    e = e || window.event;
+			    e.preventDefault ? e.preventDefault() : e.returnValue = false;
+
+			    var eTarget = e.target || e.srcElement;
+
+			    var clickedListItem = closest(eTarget, function(el) {
+			        return el.tagName === 'A';
+			    });
+
+			    if(!clickedListItem) {
+			        return;
+			    }
+
+			    var clickedGallery = clickedListItem.parentNode;
+
+			    var childNodes = clickedListItem.parentNode.childNodes,
+			        numChildNodes = childNodes.length,
+			        nodeIndex = 0,
+			        index;
+
+			    for (var i = 0; i < numChildNodes; i++) {
+			        if(childNodes[i].nodeType !== 1) { 
+			            continue; 
+			        }
+
+			        if(childNodes[i] === clickedListItem) {
+			            index = nodeIndex;
+			            break;
+			        }
+			        nodeIndex++;
+			    }
+
+			    if(index >= 0) {
+			        openPhotoSwipe( index, clickedGallery );
+			    }
+			    return false;
+			};
+
+			var photoswipeParseHash = function() {
+				var hash = window.location.hash.substring(1),
+			    params = {};
+
+			    if(hash.length < 5) { // pid=1
+			        return params;
+			    }
+
+			    var vars = hash.split('&');
+			    for (var i = 0; i < vars.length; i++) {
+			        if(!vars[i]) {
+			            continue;
+			        }
+			        var pair = vars[i].split('=');  
+			        if(pair.length < 2) {
+			            continue;
+			        }           
+			        params[pair[0]] = pair[1];
+			    }
+
+			    if(params.gid) {
+			    	params.gid = parseInt(params.gid, 10);
+			    }
+
+			    return params;
+			};
+
+			var openPhotoSwipe = function(index, galleryElement, disableAnimation, fromURL) {
+			    var pswpElement = document.querySelectorAll('.pswp')[0],
+			        gallery,
+			        options,
+			        items;
+
+				items = parseThumbnailElements(galleryElement);
+
+			    // define options (if needed)
+			    options = {
+
+			        galleryUID: galleryElement.getAttribute('data-pswp-uid'),
+
+			        getThumbBoundsFn: function(index) {
+			            // See Options->getThumbBoundsFn section of docs for more info
+			            var thumbnail = items[index].el.children[0],
+			                pageYScroll = window.pageYOffset || document.documentElement.scrollTop,
+			                rect = thumbnail.getBoundingClientRect(); 
+
+			            return {x:rect.left, y:rect.top + pageYScroll, w:rect.width};
+			        },
+
+			        addCaptionHTMLFn: function(item, captionEl, isFake) {
+						if(!item.title) {
+							captionEl.children[0].innerText = '';
+							return false;
+						}
+						captionEl.children[0].innerHTML = item.title +  '<br/><small>Photo: ' + item.author + '</small>';
+						return true;
+			        }
+					
+			    };
+
+
+			    if(fromURL) {
+			    	if(options.galleryPIDs) {
+			    		// parse real index when custom PIDs are used 
+			    		// http://photoswipe.com/documentation/faq.html#custom-pid-in-url
+			    		for(var j = 0; j < items.length; j++) {
+			    			if(items[j].pid == index) {
+			    				options.index = j;
+			    				break;
+			    			}
+			    		}
+				    } else {
+				    	options.index = parseInt(index, 10) - 1;
+				    }
+			    } else {
+			    	options.index = parseInt(index, 10);
+			    }
+
+			    // exit if index not found
+			    if( isNaN(options.index) ) {
+			    	return;
+			    }
+
+
+
+				var radios = document.getElementsByName('gallery-style');
+				for (var i = 0, length = radios.length; i < length; i++) {
+				    if (radios[i].checked) {
+				        if(radios[i].id == 'radio-all-controls') {
+
+				        } else if(radios[i].id == 'radio-minimal-black') {
+				        	options.mainClass = 'pswp--minimal--dark';
+					        options.barsSize = {top:0,bottom:0};
+							options.captionEl = false;
+							options.fullscreenEl = false;
+							options.shareEl = false;
+							options.bgOpacity = 0.85;
+							options.tapToClose = true;
+							options.tapToToggleControls = false;
+				        }
+				        break;
+				    }
+				}
+
+			    if(disableAnimation) {
+			        options.showAnimationDuration = 0;
+			    }
+
+			    // Pass data to PhotoSwipe and initialize it
+			    gallery = new PhotoSwipe( pswpElement, PhotoSwipeUI_Default, items, options);
+
+			    // see: http://photoswipe.com/documentation/responsive-images.html
+				var realViewportWidth,
+				    useLargeImages = false,
+				    firstResize = true,
+				    imageSrcWillChange;
+
+				gallery.listen('beforeResize', function() {
+
+					var dpiRatio = window.devicePixelRatio ? window.devicePixelRatio : 1;
+					dpiRatio = Math.min(dpiRatio, 2.5);
+				    realViewportWidth = gallery.viewportSize.x * dpiRatio;
+
+
+				    if(realViewportWidth >= 1200 || (!gallery.likelyTouchDevice && realViewportWidth > 800) || screen.width > 1200 ) {
+				    	if(!useLargeImages) {
+				    		useLargeImages = true;
+				        	imageSrcWillChange = true;
+				    	}
+				        
+				    } else {
+				    	if(useLargeImages) {
+				    		useLargeImages = false;
+				        	imageSrcWillChange = true;
+				    	}
+				    }
+
+				    if(imageSrcWillChange && !firstResize) {
+				        gallery.invalidateCurrItems();
+				    }
+
+				    if(firstResize) {
+				        firstResize = false;
+				    }
+
+				    imageSrcWillChange = false;
+
+				});
+
+				gallery.listen('gettingData', function(index, item) {
+				    if( useLargeImages ) {
+				        item.src = item.o.src;
+				        item.w = item.o.w;
+				        item.h = item.o.h;
+				    } else {
+				        item.src = item.m.src;
+				        item.w = item.m.w;
+				        item.h = item.m.h;
+				    }
+				});
+
+			    gallery.init();
+			};
+
+			// select all gallery elements
+			var galleryElements = document.querySelectorAll( gallerySelector );
+			for(var i = 0, l = galleryElements.length; i < l; i++) {
+				galleryElements[i].setAttribute('data-pswp-uid', i+1);
+				galleryElements[i].onclick = onThumbnailsClick;
+			}
+
+			// Parse URL and open gallery if it contains #&pid=3&gid=1
+			var hashData = photoswipeParseHash();
+			if(hashData.pid && hashData.gid) {
+				openPhotoSwipe( hashData.pid,  galleryElements[ hashData.gid - 1 ], true, true );
+			}
+		};
+
+		initPhotoSwipeFromDOM('.demo-gallery');
+
+	})();
+
+	</script>
+
+	</div>
 </body>
 
 </html>

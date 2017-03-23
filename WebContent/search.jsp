@@ -26,7 +26,7 @@
 }
 
 #infowindow-content .title {
-	font-weight: bold; 
+	font-weight: bold;
 }
 
 #infowindow-content {
@@ -127,7 +127,7 @@
 					aria-expanded="false"><span id="welcomeText"></span></a>
 					<div class="dropdown-menu dropdown dropdown-menu-right"
 						aria-labelledby="dropdownMenu1">
-						<a class="dropdown-item" href="./user/">Quản lý</a> <a
+							<a class="dropdown-item" href="./user/login.do">Quản lý</a> <a
 							class="dropdown-item" onclick="logout();">Đăng xuất</a>
 					</div></li>
 				<li class="nav-item" id="btnReg"><a
@@ -479,9 +479,10 @@
 		<!--/.Navbar-->
 		<div class="breadcrumb flat">
 			<a style="border: 1px solid #ddd;"><i class="fa fa-home"
-				aria-hidden="true" style="font-size: 35px;"></i></a> <a class="active" > Kết quả tìm kiếm</a>
+				aria-hidden="true" style="font-size: 35px;"></i></a> <a class="active">
+				Kết quả tìm kiếm</a>
 		</div>
-		<div class="col-lg-12"> 
+		<div class="col-lg-12">
 			<div class="row" id="resultThreads"></div>
 			<br> <br> <br>
 			<div style="display: table; margin: 0 auto;" id="pagination"></div>
@@ -510,7 +511,8 @@
 					$("#menuBeauti")
 							.css("background-color", "rgba(0,0,0,0.75)");
 				} else {
-					$("#menuBeauti").css("background-color", "rgba(0,0,0,0)");
+					$("#menuBeauti").css("background-color",
+							"rgba(255,255,255,1)");
 				}
 			} else {
 				$("#menuBeauti").css({
@@ -529,6 +531,7 @@
 		$(document)
 				.ready(
 						function() {
+							stick();
 							createCookie('page', 1, 1);
 							$('.mdb-select').material_select();
 							$('#slbProvince')
@@ -725,25 +728,26 @@
 													'click',
 													(function(marker, i) {
 														return function() {
-															infowindow.setContent('<div class="col-md-12"><div class="card card-cascade hoverable"style="margin-top: 40px;"><div class="view overlay hm-white-slight"style="margin-top: -15px; width: 90%; margin-left: 5%; min-height: 200px; max-height: 200px;"><img class="img-fluid"src="'+threads[i].imageThumb+'"style="border-radius: 3px; width: auto; min-height: 200px;"style=" "><div class="mask waves-effect waves-light"></div></div><div class="card-block  card-block-tren"><a class="activator" style="margin-top: -5px;"><i class="fa fa-eye" aria-hidden="true"></i> '
-																	+ threads[i].viewed
-																	+ '</a><span class="score s'+threads[i].avgScoreInt+'" style="margin-top: -15px;"></span> (<strong itemprop="reviewCount">'
-																	+ threads[i].avgScore
-																	+ '</strong>)</div><div class="card-block text-center" style="margin-top: 0px;"><h4 class="card-title"><strong><i class="fa fa-money" style="font-size:25px;color:#000"></i> '
-																	+ threads[i].price
-																	+ '</strong></h4><h5><i class="fa fa-area-chart" style="font-size:16px;color:#000"></i> '
-																	+ threads[i].area
-																	+ 'm&#178;</h5><p class="card-text truncase-detail">'
-																	+ threads[i].name
-																	+ '</p><a class="btn btn-success btn-fb" href="./view-thread-action.do?threadId='
-																	+ threads[i].threadId
-																	+ '">Xem</a><a type="button" onclick="addToCompare('
-																	+ threads[i].threadId
-																	+ ','
-																	+ "'"
-																	+ threads[i].name
-																	+ "'"
-																	+ ')" class="btn-floating btn-small btn-fb"><i class="fa fa-compress"></i></a></div></div></div>');
+															infowindow
+																	.setContent('<div class="col-md-12"><div class="card card-cascade hoverable"style="margin-top: 40px;"><div class="view overlay hm-white-slight"style="margin-top: -15px; width: 90%; margin-left: 5%; min-height: 200px; max-height: 200px;"><img class="img-fluid"src="'+threads[i].imageThumb+'"style="border-radius: 3px; width: auto; min-height: 200px;"style=" "><div class="mask waves-effect waves-light"></div></div><div class="card-block  card-block-tren"><a class="activator" style="margin-top: -5px;"><i class="fa fa-eye" aria-hidden="true"></i> '
+																			+ threads[i].viewed
+																			+ '</a><span class="score s'+threads[i].avgScoreInt+'" style="margin-top: -15px;"></span> (<strong itemprop="reviewCount">'
+																			+ threads[i].avgScore
+																			+ '</strong>)</div><div class="card-block text-center" style="margin-top: 0px;"><h4 class="card-title"><strong><i class="fa fa-money" style="font-size:25px;color:#000"></i> '
+																			+ threads[i].price
+																			+ '</strong></h4><h5><i class="fa fa-area-chart" style="font-size:16px;color:#000"></i> '
+																			+ threads[i].area
+																			+ 'm&#178;</h5><p class="card-text truncase-detail">'
+																			+ threads[i].name
+																			+ '</p><a class="btn btn-success btn-fb" href="./view-thread-action.do?threadId='
+																			+ threads[i].threadId
+																			+ '">Xem</a><a type="button" onclick="addToCompare('
+																			+ threads[i].threadId
+																			+ ','
+																			+ "'"
+																			+ threads[i].name
+																			+ "'"
+																			+ ')" class="btn-floating btn-small btn-fb"><i class="fa fa-compress"></i></a></div></div></div>');
 															infowindow
 																	.open(map,
 																			marker);

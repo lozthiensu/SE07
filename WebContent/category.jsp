@@ -65,8 +65,8 @@
 					aria-expanded="false"><span id="welcomeText"></span></a>
 					<div class="dropdown-menu dropdown dropdown-menu-right"
 						aria-labelledby="dropdownMenu1">
-						<a class="dropdown-item" href="./user/">Quản lý</a>
-						<a class="dropdown-item" onclick="logout();">Đăng xuất</a>
+							<a class="dropdown-item" href="./user/login.do">Quản lý</a> <a
+							class="dropdown-item" onclick="logout();">Đăng xuất</a>
 					</div></li>
 				<li class="nav-item" id="btnReg"><a
 					class="nav-link btn-right-menu-main" data-toggle="modal"
@@ -125,7 +125,9 @@
 			<bean:define id="category" name="viewCategoryForm"
 				property="category"></bean:define>
 			<a style="border: 1px solid #ddd;"><i class="fa fa-home"
-				aria-hidden="true" style="font-size: 35px;"></i></a> <a class="active" > <bean:write name="category" property="name" /></a>
+				aria-hidden="true" style="font-size: 35px;"></i></a> <a class="active">
+				<bean:write name="category" property="name" />
+			</a>
 		</div>
 		<div class="row">
 			<div class="col-lg-12">
@@ -167,26 +169,28 @@
 								<div class="card-block text-center" style="margin-top: 0px;">
 									<!--Title-->
 									<h4 class="card-title">
-										<strong><i class="fa fa-money" style="font-size:25px;color:#000"></i> <bean:write name="thread"
-												property="priceString" />
-										</strong>
+										<strong><i class="fa fa-money"
+											style="font-size: 25px; color: #000"></i> <bean:write
+												name="thread" property="priceString" /> </strong>
 									</h4>
 									<h5>
-										<i class="fa fa-area-chart" style="font-size:16px;color:#000"></i> <bean:write name="thread" property="area" />
+										<i class="fa fa-area-chart"
+											style="font-size: 16px; color: #000"></i>
+										<bean:write name="thread" property="area" />
 										m&#178;
 									</h5>
 									<p class="card-text truncase-detail">
 										<bean:write name="thread" property="name" />
 									</p>
-										<bean:define id="threadId" name="thread" property="threadId"></bean:define>
-										<bean:define id="name" name="thread" property="name"></bean:define>
-										<html:link styleClass="btn btn-success btn-fb"
-											action="/view-thread-action?threadId=${threadId}">Xem</html:link>
+									<bean:define id="threadId" name="thread" property="threadId"></bean:define>
+									<bean:define id="name" name="thread" property="name"></bean:define>
+									<html:link styleClass="btn btn-success btn-fb"
+										action="/view-thread-action?threadId=${threadId}">Xem</html:link>
 
-										<!--Facebook-->
-										<a type="button" onclick="addToCompare(${threadId},'${name}')"
-											class="btn-floating btn-small btn-fb"><i
-											class="fa fa-compress"></i></a>
+									<!--Facebook-->
+									<a type="button" onclick="addToCompare(${threadId},'${name}')"
+										class="btn-floating btn-small btn-fb"><i
+										class="fa fa-compress"></i></a>
 									<!--Twitter-->
 								</div>
 								<!--/.Card content-->
@@ -203,8 +207,7 @@
 					int totalNum = Integer.parseInt(totalPage.toString());
 					int pageNum = Integer.parseInt(pageCurrent.toString());
 				%>
-				<br>
-				<br>
+				<br> <br>
 				<nav class="pagination-center">
 				<ul class="pagination pagination-md pg-amber">
 					<li onclick='viewPage(1);' class="page-item"><a
@@ -289,7 +292,7 @@
 					$("#menuBeauti")
 							.css("background-color", "rgba(0,0,0,0.75)");
 				} else {
-					$("#menuBeauti").css("background-color", "rgba(0,0,0,0)");
+					$("#menuBeauti").css("background-color", "rgba(255,255,255,1)");
 				}
 			} else {
 				$("#menuBeauti").css({
@@ -315,9 +318,8 @@
 						if (top > 360) {
 							$("#menuBeauti").css("background-color",
 									"rgba(0,0,0,0.75)");
-						} else {
-							$("#menuBeauti").css("background-color",
-									"rgba(0,0,0,0.1)");
+						} else {					$("#menuBeauti").css("background-color", "rgba(255,255,255,1)");
+
 						}
 					} else {
 						$("#menuBeauti").css({
