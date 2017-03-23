@@ -69,6 +69,8 @@ public class ThreadForm extends ActionForm {
 	ArrayList<Village> villages;
 	String imagesString;
 
+	String waterSourceString;
+
 	public ThreadForm() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -135,6 +137,14 @@ public class ThreadForm extends ActionForm {
 
 	public String getImagesString() {
 		return imagesString;
+	}
+
+	public String getWaterSourceString() {
+		return waterSourceString;
+	}
+
+	public void setWaterSourceString(String waterSourceString) {
+		this.waterSourceString = waterSourceString;
 	}
 
 	public void setImagesString(String imagesString) {

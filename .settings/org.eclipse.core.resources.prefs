@@ -7,6 +7,7 @@ encoding//src/action/admin/account/AddAccountAction.java=UTF-8
 encoding//src/action/admin/account/DeleteAccountAction.java=UTF-8
 encoding//src/action/admin/account/EditAccountAction.java=UTF-8
 encoding//src/action/home/SearchThreadAction.java=UTF-8
+encoding//src/action/user/thread/AddThreadAction.java=UTF-8
 encoding//src/action/user/thread/DeleteThreadAction.java=UTF-8
 encoding//src/action/user/thread/EditThreadAction.java=UTF-8
 encoding//src/action/user/thread/ThreadListAction.java=UTF-8

@@ -96,7 +96,7 @@ body {
 .main-content {
 	margin: 15px 15px 15px 15px;
 	background: #fff;
-	width: 1000px;
+	/* width: 1000px; */
 	height: calc(100vh - 100px);
 }
 
@@ -135,4 +135,11 @@ body {
 /* optional: show position indicator in red */
 ::-webkit-scrollbar-thumb {
     background: #FF0000;
+}
+
+
+.un-active{
+	background: #ccc;
+    padding: 7px;
+    margin: -7px;
 }

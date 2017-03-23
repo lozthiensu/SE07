@@ -167,16 +167,23 @@ Configuration 1.3//EN" "http://struts.apache.org/dtds/struts-config_1_3.dtd">
 		</action>
 
 		<!-- User edit thread -->
-		<action input="/index.jsp" name="threadForm"
-			path="/user/edit-thread-action" scope="request"
-			type="action.user.thread.EditThreadAction" validate="true">
+		<action input="/index.jsp" name="threadForm" path="/user/edit-thread-action"
+			scope="request" type="action.user.thread.EditThreadAction" validate="true">
 			<forward name="edit" path="/user/editthread.jsp" />
 			<forward name="edited" path="/user/thread-manager-action.do"
 				redirect="true" />
 		</action>
 
+		<!-- Them moi thread -->
+		<action input="/index.jsp" name="threadForm" path="/user/add-thread-action"
+			scope="request" type="action.user.thread.AddThreadAction" validate="true">
+			<forward name="success" path="/user/thread-manager-action.do"
+				redirect="true" />
+			<forward name="failed" path="/user/addthread.jsp" />
+		</action>
+
+
 		<!-- KET THUC ACTION CHO USER -->
 	</action-mappings>
 	<message-resources parameter="static.ApplicationResources" />
-
 </struts-config>

@@ -57,8 +57,8 @@ public class ThreadListAction extends Action {
 		ArrayList<Thread> threads = new ArrayList<Thread>();
 		threads = threadBO.getListByAccount(accountData, page);
 		threadListForm.setThreads(threads);
-		Log.in(threads.get(0).getTotal() + " totalPage");
 		try {
+			Log.in(threads.get(0).getTotal() + " totalPage");
 			if (threads.get(0).getTotal() > 0)
 				threadListForm.setTotalPage(threads.get(0).getTotal());
 		} catch (Exception e) {

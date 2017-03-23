@@ -22,6 +22,7 @@ public class Thread {
 	boolean attic;
 	boolean camera;
 	int waterSource;
+	String waterSourceString;
 	String direction;
 	int numOfToilets;
 	int numOfPeople;
@@ -127,6 +128,14 @@ public class Thread {
 
 	public int getDistrictId() {
 		return districtId;
+	}
+
+	public String getWaterSourceString() {
+		return waterSourceString;
+	}
+
+	public void setWaterSourceString(String waterSourceString) {
+		this.waterSourceString = waterSourceString;
 	}
 
 	public void setDistrictId(int districtId) {

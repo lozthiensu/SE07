@@ -46,4 +46,8 @@ public class ThreadBO {
 	public boolean edit(ThreadForm thread) { 
 		return threadDAO.edit(thread);
 	}
+
+	public int add(ThreadForm threadForm) {
+		return threadDAO.add(threadForm);
+	}
 }

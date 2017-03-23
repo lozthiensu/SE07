@@ -40,7 +40,7 @@ public class ViewThreadAction extends Action {
 		thread.setThreadId(viewThreadForm.getThreadId());
 		viewThreadForm.setThread(threadBO.getById(thread));
 		
-		Log.in("Id bai viet " + viewThreadForm.getThreadId());
+		//Log.in("Id bai viet " + viewThreadForm.getThreadId());
 		
 		
 
@@ -48,17 +48,17 @@ public class ViewThreadAction extends Action {
 			Log.in("Thoat");
 			return mapping.findForward("failed");
 		}
-		Log.in("Wifi: " + viewThreadForm.getThread().isWifi() + " , Old: " + viewThreadForm.getThread().isOld());
+		//Log.in("Wifi: " + viewThreadForm.getThread().isWifi() + " , Old: " + viewThreadForm.getThread().isOld());
 		
 		ArrayList<Category> categories = new ArrayList<Category>();
 		categories = categoryBO.getList();
 		viewThreadForm.setCategories(categories);
 		viewThreadForm.setImages(imageBO.getListByThread(thread));
-		Log.in("Image: " + imageBO.getListByThread(thread));
+		//Log.in("Image: " + imageBO.getListByThread(thread));
 		viewThreadForm.setImages360(imageBO.getList360ByThread(thread));
 		viewThreadForm.setRelateThreads(threadBO.getRelateThreadsByThread(thread));
 		
-		Log.in("Lien quan: " + viewThreadForm.getRelateThreads().toString());
+		//Log.in("Lien quan: " + viewThreadForm.getRelateThreads().toString());
 		
 		
 		ArrayList<Rate> rates = rateBO.getListByThread(thread);

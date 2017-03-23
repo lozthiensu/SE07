@@ -177,7 +177,7 @@
 				<div class="clearfix"></div>
 				<div class="row" style="width: 100%">
 					<div class="col-lg-12 col-12">
-						<h2 class="title-in-admin">Sửa bài viết</h2>
+						<h2 class="title-in-admin">Thêm bài viết</h2>
 					</div>
 					<!-- <div class="col-lg-4 col-6 text-right">
 						<button class="btn btn-primary" onclick="history.go(-1);">Quay
@@ -185,7 +185,7 @@
 					</div> -->
 				</div>
 
-				<html:form action="/user/edit-thread-action" method="post"
+				<html:form action="/user/add-thread-action" method="post"
 					styleClass="form-admin-right">
 					<div class="card-block">
 						<html:hidden styleId="idAction" property="action"></html:hidden>
@@ -193,6 +193,7 @@
 						<html:hidden styleClass="form-control" property="accountId"></html:hidden>
 						<html:hidden styleClass="form-control" property="latitude"></html:hidden>
 						<html:hidden styleClass="form-control" property="longitude"></html:hidden>
+
 						<bean:define id="kindOf" name="threadForm" property="kindOf"></bean:define>
 						<fieldset class="form-group">
 							<input type="checkbox" id="kindOf" name="kindOf"
@@ -263,7 +264,8 @@
 
 						<label for="form3">Nội dung </label>
 						<div class="md-form">
-							<html:textarea styleId="content" property="content" styleClass="form-control"></html:textarea>
+							<html:textarea styleId="content" property="content"
+								styleClass="form-control"></html:textarea>
 						</div>
 
 						<div class="md-form">
@@ -304,8 +306,8 @@
 								<%out.print(wifi);
 				if ("true".equals(wifi.toString())) {
 					out.print(" checked=\"checked\" ");
-				}%>  value="false" />
-							<label for="wifi">Wifi</label>
+				}%>
+								value="false" /> <label for="wifi">Wifi</label>
 						</fieldset>
 						<fieldset class="form-group">
 							<input type="checkbox" id="waterHeater" name="waterHeater"
@@ -382,7 +384,7 @@
 							<html:text property="imageThumb" styleClass="form-control"></html:text>
 							<label for="form3">Hình đại diện cho phòng</label>
 						</div>
-						
+
 						<div class="md-form">
 							<html:text property="imagesString" styleClass="form-control"></html:text>
 							<label for="form3">Hình ảnh về phòng</label>
@@ -427,8 +429,8 @@
 								map = new google.maps.Map(document
 										.getElementById('map'), {
 									center : {
-										lat : parseFloat('<bean:write name="threadForm" property="latitude" />'),
-										lng : parseFloat('<bean:write name="threadForm" property="longitude" />')
+										lat : 15.9782827,
+										lng : 108.2631494
 									},
 									zoom : 16
 								});
@@ -455,13 +457,6 @@
 									map : map,
 									anchorPoint : new google.maps.Point(0, -29)
 								});
-
-								marker
-										.setPosition({
-											lat : parseFloat('<bean:write name="threadForm" property="latitude" />'),
-											lng : parseFloat('<bean:write name="threadForm" property="longitude" />')
-										});
-								marker.setVisible(true);
 								autocomplete
 										.addListener(
 												'place_changed',
@@ -559,8 +554,8 @@
 							async defer></script>
 
 						<div class="text-center">
-							<button onclick="return submitEditForm();"
-								class="btn btn-default button-login-admin">Sửa</button>
+							<button onclick="return submitAddForm();"
+								class="btn btn-default button-login-admin">Thêm</button>
 							<button class="btn btn-primary" onclick="history.go(-1);">Quay
 								lại</button>
 						</div>
@@ -686,7 +681,7 @@
 														});
 											});
 						});
-		function submitEditForm() {
+		function submitAddForm() {
 			villageId = $('[name="villageId"]').val();
 			
 			name = $('[name="name"]').val(); 

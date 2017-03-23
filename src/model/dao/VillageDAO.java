@@ -45,8 +45,9 @@ public class VillageDAO {
 		try {
 
 			// Câu lệnh truy vấn
-			String sql = "select * from Village";
+			String sql = "select * from Village where districtId = ?";
 			PreparedStatement pr = connection.prepareStatement(sql);
+			pr.setInt(1, district.getDistrictId());
 
 			// Thực hiện
 			rs = pr.executeQuery();

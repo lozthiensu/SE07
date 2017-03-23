@@ -538,7 +538,7 @@
 								</h5>
 								<h5>
 									<font color="#607d8b">Nguồn nước:</font>
-									<bean:write name="thread" property="waterSource" />
+									<bean:write name="thread" property="waterSourceString" />
 								</h5>
 								<h5>
 									<font color="#607d8b">Số toilet:</font>

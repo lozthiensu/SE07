@@ -57,7 +57,7 @@ public class ThreadDAO {
 		try {
 
 			// Câu lệnh đếm có bao nhiêu dòng trong csdl
-			String sql = "select Thread.* from Thread";
+			String sql = "select Thread.* from Thread order by threadId desc";
 			PreparedStatement pr = connection.prepareStatement(sql);
 			rs = pr.executeQuery();
 
@@ -178,55 +178,7 @@ public class ThreadDAO {
 		return false;
 	}
 
-	public void add(Thread thread) {
-
-		// Mở kết nối
-		connect();
-		try {
-
-			// Câu lệnh select
-			String sql = "insert into Thread(categoryId, accountId, name, address, latitude, longitude, content, price, electricFee, waterFee, otherFee, area, wifi, waterHeater, conditioner, fridge, attic, camera, waterSource, direction, numOfToilets, numOfPeople, object, villageId, created, viewed, status ) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-			PreparedStatement pr = connection.prepareStatement(sql);
-
-			// Truyền các tham số
-			pr.setInt(1, thread.getCategoryId());
-			pr.setInt(2, thread.getAccountId());
-			pr.setString(3, thread.getName());
-			pr.setString(4, thread.getAddress());
-			pr.setDouble(5, thread.getLatitude());
-			pr.setDouble(6, thread.getLongitude());
-			pr.setString(7, thread.getContent());
-			pr.setLong(8, thread.getPrice());
-			pr.setInt(9, thread.getElectricFee());
-			pr.setInt(10, thread.getWaterFee());
-			pr.setInt(11, thread.getOtherFee());
-			pr.setInt(12, thread.getArea());
-			pr.setBoolean(13, thread.isWifi());
-			pr.setBoolean(14, thread.isWaterHeater());
-			pr.setBoolean(15, thread.isConditioner());
-			pr.setBoolean(16, thread.isFridge());
-			pr.setBoolean(17, thread.isAttic());
-			pr.setBoolean(18, thread.isCamera());
-			pr.setInt(19, thread.getWaterSource());
-			pr.setString(20, thread.getDirection());
-			pr.setInt(21, thread.getNumOfToilets());
-			pr.setInt(22, thread.getNumOfPeople());
-			pr.setInt(23, thread.getObject());
-			pr.setInt(24, thread.getVillageId());
-			pr.setString(25, thread.getCreated());
-			pr.setInt(26, thread.getViewed());
-			pr.setInt(27, thread.getStatus());
-			// Thực hiện
-			pr.executeUpdate();
-
-			// Đóng kết nối
-			pr.close();
-			connection.close();
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
+	
 
 	public Thread getById(Thread thread) {
 
@@ -290,6 +242,17 @@ public class ThreadDAO {
 				threadData.setPhone(rs.getString("phone"));
 				threadData.setAvatar(rs.getString("avatar"));
 				
+				String waterSourceString = "Không xác định";
+				if(threadData.getWaterSource() == 1)
+					waterSourceString = "Giếng đào";
+				else if(threadData.getWaterSource() == 1)
+					waterSourceString = "Giếng đóng-khoan";
+				else if(threadData.getWaterSource() == 1)
+					waterSourceString = "Nước máy";
+				else if(threadData.getWaterSource() == 1)
+					waterSourceString = "Không xác định";
+				
+				threadData.setWaterSourceString(waterSourceString);
 				try {
 					if (Check.old(rs.getString("created"))) {
 						// Log.in("Set true dao");
@@ -341,7 +304,7 @@ public class ThreadDAO {
 		try {
 
 			// Câu lệnh đếm có bao nhiêu dòng trong csdl
-			String sqlCount = "select count(threadId) as total from Thread where categoryId = ?";
+			String sqlCount = "select count(threadId) as total from Thread where categoryId = ? and status = 1 ";
 			PreparedStatement pr = connection.prepareStatement(sqlCount);
 			pr.setInt(1, category.getCategoryId());
 			rs = pr.executeQuery();
@@ -366,7 +329,7 @@ public class ThreadDAO {
 			}
 
 			// Câu lệnh truy vấn
-			String sql = "select Thread.*, temp.avgScore from Thread inner join (select Thread.threadId, avg(Cast(Rate.score as Float)) as avgScore, avg(Rate.score) as avgScoreInt from Thread left join Rate on Thread.threadId = Rate.threadId group by Thread.threadId) temp on Thread.threadId = temp.threadId where categoryId = ?  order by Thread.threadId "
+			String sql = "select Thread.*, temp.avgScore from Thread inner join (select Thread.threadId, avg(Cast(Rate.score as Float)) as avgScore, avg(Rate.score) as avgScoreInt from Thread left join Rate on Thread.threadId = Rate.threadId group by Thread.threadId) temp on Thread.threadId = temp.threadId where categoryId = ? and status = 1 order by Thread.threadId desc"
 					+ " offset " + offset + " rows fetch next " + Pagination.itemPerPageView + " row only";
 			pr = connection.prepareStatement(sql);
 			// Log.in("query " + sql);
@@ -428,7 +391,7 @@ public class ThreadDAO {
 		try {
 			int categoryId = 0;
 			// Câu lệnh truy vấn
-			String sql = "select categoryId from Thread where threadId = ?";
+			String sql = "select categoryId from Thread where threadId = ? and status = 1";
 			PreparedStatement pr = connection.prepareStatement(sql);
 
 			// Truyền các biến vào câu lệnh để thực thi
@@ -440,7 +403,7 @@ public class ThreadDAO {
 			}
 
 			DecimalFormat numberFormat = new DecimalFormat("#.##");
-			sql = "select Thread.* , temp.avgScore from Thread inner join (select Thread.threadId, avg(Cast(Rate.score as Float)) as avgScore, avg(Rate.score) as avgScoreInt from Thread left join Rate on Thread.threadId = Rate.threadId group by Thread.threadId) temp on Thread.threadId = temp.threadId where categoryId = ?  order by threadId OFFSET 0 ROWS FETCH NEXT 6 ROWS ONLY";
+			sql = "select Thread.* , temp.avgScore from Thread inner join (select Thread.threadId, avg(Cast(Rate.score as Float)) as avgScore, avg(Rate.score) as avgScoreInt from Thread left join Rate on Thread.threadId = Rate.threadId group by Thread.threadId) temp on Thread.threadId = temp.threadId where categoryId = ? and status = 1 order by threadId OFFSET 0 ROWS FETCH NEXT 6 ROWS ONLY";
 
 			pr = connection.prepareStatement(sql);
 
@@ -666,7 +629,7 @@ public class ThreadDAO {
 			filter += " cast(Thread.name as varchar(100)) COLLATE SQL_Latin1_General_CP1253_CI_AI like '%"
 					+ thread.getName() + "%' or Thread.name like '%" + nameAscii + "' ";
 		}
-
+		filter += " and status = 1 ";
 		/* START COUNT */
 		try {
 			// Dem co bao nhieu dong ket qua dung voi dieu kien tim kiem
@@ -861,7 +824,7 @@ public class ThreadDAO {
 			}
 
 			// Câu lệnh truy vấn
-			String sql = "select Thread.*, Category.name as categoryName, temp.avgScore from Thread inner join (select Thread.threadId, avg(Cast(Rate.score as Float)) as avgScore, avg(Rate.score) as avgScoreInt from Thread left join Rate on Thread.threadId = Rate.threadId group by Thread.threadId) temp on Thread.threadId = temp.threadId inner join Category on Category.categoryId = Thread.categoryId where accountId = ?  order by Thread.threadId "
+			String sql = "select Thread.*, Category.name as categoryName, temp.avgScore from Thread inner join (select Thread.threadId, avg(Cast(Rate.score as Float)) as avgScore, avg(Rate.score) as avgScoreInt from Thread left join Rate on Thread.threadId = Rate.threadId group by Thread.threadId) temp on Thread.threadId = temp.threadId inner join Category on Category.categoryId = Thread.categoryId where accountId = ?  order by Thread.threadId desc "
 					+ " offset " + offset + " rows fetch next " + Pagination.itemPerPageView + " row only";
 			pr = connection.prepareStatement(sql);
 			//Log.in("query " + sql);
@@ -910,5 +873,74 @@ public class ThreadDAO {
 			e.printStackTrace();
 		}
 		return temp;
+	}
+
+	public int add(ThreadForm thread) { 
+		// Mở kết nối
+		connect();
+		try {
+
+			// Câu lệnh select
+			String sql = "insert into Thread(categoryId, accountId, name, address, latitude, longitude, content, price, electricFee, waterFee, otherFee, area, wifi, waterHeater, conditioner, fridge, attic, camera, waterSource, direction, numOfToilets, numOfPeople, object, villageId, created, viewed, status, imageThumb, kindOf ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+			PreparedStatement pr = connection.prepareStatement(sql);
+
+			// Truyền các tham số
+			pr.setInt(1, thread.getCategoryId());
+			pr.setInt(2, thread.getAccountId());
+			pr.setString(3, thread.getName());
+			pr.setString(4, thread.getAddress());
+			pr.setDouble(5, thread.getLatitude());
+			pr.setDouble(6, thread.getLongitude());
+			pr.setString(7, thread.getContent());
+			pr.setLong(8, thread.getPrice());
+			pr.setInt(9, thread.getElectricFee());
+			pr.setInt(10, thread.getWaterFee());
+			pr.setInt(11, thread.getOtherFee());
+			pr.setInt(12, thread.getArea());
+			pr.setBoolean(13, thread.isWifi());
+			pr.setBoolean(14, thread.isWaterHeater());
+			pr.setBoolean(15, thread.isConditioner());
+			pr.setBoolean(16, thread.isFridge());
+			pr.setBoolean(17, thread.isAttic());
+			pr.setBoolean(18, thread.isCamera());
+			pr.setInt(19, thread.getWaterSource());
+			pr.setString(20, thread.getDirection());
+			pr.setInt(21, thread.getNumOfToilets());
+			pr.setInt(22, thread.getNumOfPeople());
+			pr.setInt(23, thread.getObject());
+			pr.setInt(24, thread.getVillageId());
+			pr.setDate(25, java.sql.Date.valueOf(java.time.LocalDate.now()));
+			pr.setInt(26, 0);
+			pr.setInt(27, 0);
+			pr.setString(28, thread.getImageThumb().length() > 5 ?  thread.getImageThumb() : "image/default.jpg");
+			pr.setBoolean(29, thread.isKindOf());
+			
+			// Thực hiện
+			int count = pr.executeUpdate();
+			if(count > 0){ 
+				pr = connection.prepareStatement("select top 1 threadId from Thread where accountId = ? order by threadId desc");
+				pr.setInt(1, thread.getAccountId());
+
+				ResultSet rs = null;
+				rs = pr.executeQuery();
+				int threadId = 0;
+				if (rs.next()) {
+					threadId = rs.getInt("threadId");
+				}
+				// Đóng kết nối
+				pr.close();
+				connection.close();
+				return threadId;
+				
+			}else{
+				pr.close();
+				connection.close();
+				return 0;
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return 0;
 	}
 }

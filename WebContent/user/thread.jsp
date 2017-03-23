@@ -33,12 +33,12 @@
 		<ul class="navbar-nav mr-auto">
 		</ul>
 		<ul class="navbar-nav ml-auto">
-			<img src="../img/avatar.jpg" alt="Hình đại diện" class="rounded-circle"
-				style="width: 40px; height: 40px">
+			<img src="../img/avatar.jpg" alt="Hình đại diện"
+				class="rounded-circle" style="width: 40px; height: 40px">
 			<li class="nav-item dropdown btn-group"><a
 				class="nav-link dropdown-toggle" id="dropdownMenu1"
 				data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admin</a>
-				<div class="dropdown-menu dropdown" aria-labelledby="dropdownMenu1">
+				<div class="dropdown-menu dropdown dropdown-menu-right" aria-labelledby="dropdownMenu1">
 					<a class="dropdown-item">Đăng xuất</a>
 				</div></li>
 		</ul>
@@ -51,24 +51,26 @@
 				<button type="button"
 					class="btn btn-elegant button-side-menu-left button-dash-board">
 					<i class="fa fa-globe icon-in-button" style="color: #2C97BE"
-						aria-hidden="true"></i>Bai viet
+						aria-hidden="true"></i>Bài viết
 				</button>
 			</div>
 			<div class="row">
 				<button type="button" class="btn btn-elegant button-side-menu-left">
-					<i class="fa fa-group icon-in-button" aria-hidden="true"></i>Binh luan
+					<i class="fa fa-group icon-in-button" aria-hidden="true"></i>Bình
+					luận
 				</button>
 			</div>
 		</div>
 		<div class="col-lg-10 col-md-12 col-12 scroll-box">
-			<div class="main-content hoverable" style=" overflow-y: scroll;">
+			<div class="main-content hoverable" style="overflow-y: scroll;">
 				<div class="clearfix"></div>
 				<div class="row" style="width: 100%; height: 60px;">
 					<div class="col-lg-8">
 						<h2 class="title-in-admin">Danh sách bài viết</h2>
 					</div>
 					<div class="col-lg-4 text-right">
-						<html:link styleClass="btn btn-success" action="/user/add-thread-action">
+						<html:link styleClass="btn btn-success"
+							action="/user/add-thread-action">
 							<i class="fa fa-language icon-in-button" aria-hidden="true"></i> Thêm mới</html:link>
 					</div>
 				</div>
@@ -82,7 +84,8 @@
 					</div>
 					<logic:iterate name="threadListForm" property="threads" id="item">
 						<hr>
-						<div>
+						<div
+							class="<logic:equal name="item" property="status" value="0">un-active</logic:equal>">
 							<div class="col-mot">
 								<bean:write name="item" property="threadId" />
 							</div>
@@ -96,8 +99,10 @@
 								<bean:write name="item" property="categoryName" />
 							</div>
 							<div class="col-hai">
-								<button onclick="editItem(<bean:write name="item" property="threadId" />)" type="button" class="btn btn-action"
-									data-toggle="tooltip" data-placement="top" title="Remove item">
+								<button
+									onclick="editItem(<bean:write name="item" property="threadId" />)"
+									type="button" class="btn btn-action" data-toggle="tooltip"
+									data-placement="top" title="Remove item">
 									<i class="fa fa-pencil teal-text icon-btn-action"></i>
 								</button>
 								<button
@@ -110,14 +115,14 @@
 						</div>
 					</logic:iterate>
 				</div>
-				<bean:define id="totalPage" name="threadListForm" property="totalPage"></bean:define>
+				<bean:define id="totalPage" name="threadListForm"
+					property="totalPage"></bean:define>
 				<bean:define id="pageCurrent" name="threadListForm" property="page"></bean:define>
 				<%
 					int totalNum = Integer.parseInt(totalPage.toString());
 					int pageNum = Integer.parseInt(pageCurrent.toString());
 				%>
-				<br>
-				<br>
+				<br> <br>
 				<nav class="pagination-center">
 				<ul class="pagination pagination-md pg-amber">
 					<li onclick='viewPage(1);' class="page-item"><a
@@ -152,8 +157,8 @@
 				</nav>
 
 				<html:form action="/user/thread-manager-action" method="get">
-					<html:hidden styleId="pageId" name="threadListForm"
-						property="page" styleClass="form-control"></html:hidden>
+					<html:hidden styleId="pageId" name="threadListForm" property="page"
+						styleClass="form-control"></html:hidden>
 				</html:form>
 			</div>
 		</div>
