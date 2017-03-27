@@ -10,81 +10,51 @@ import java.util.ArrayList;
 
 import model.bean.Account;
 import model.bean.Login;
-import statics.InfoSQLServer;
+import statics.SQLServer;
 import statics.Log;
 import statics.Pagination;
 
 public class AccountDAO {
 
-	// Khai báo các biến để kết nối vs csdl, lưu tại class InfoSQLServer
-	String url = InfoSQLServer.url;
-	String userName = InfoSQLServer.userName;
-	String password = InfoSQLServer.password;
-	Connection connection;
-
-	void connect() {
-		try {
-			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-			connection = DriverManager.getConnection(url, userName, password);
-			//System.out.println("Ket noi thanh cong");
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("Ket noi loi");
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-			System.out.println("JDBC loi");
-		}
-	}
-
-	// Lấy danh sách tài khoản ở trang
+	// Get list account by page
 	public ArrayList<Account> getListAccount(int page) {
-		// Mở kết nối
-		connect();
 
-		// Biến lưu vị trí offset bắt đầu select, toognr số dòng trong csdl
+		// Open connect
+		SQLServer.connect();
+
+		// Initialize
 		int offset = 0, total;
-		// Biến lưu kết quả từ truy vấn
 		ResultSet rs = null;
-
-		// Lưu danh sách account từ csdl
+		PreparedStatement pr = null;
 		ArrayList<Account> temp = new ArrayList<Account>();
 
 		try {
-
-			// Câu lệnh đếm có bao nhiêu dòng trong csdl
+			// Count total page
 			String sqlCount = "select count(accountId) as total from Account";
-			PreparedStatement pr = connection.prepareStatement(sqlCount);
+			pr = SQLServer.connection.prepareStatement(sqlCount);
 			rs = pr.executeQuery();
 			try {
 				if (rs.next()) {
-					// Lưu lại tổng số dòng
 					total = rs.getInt("total");
-					// Vị trí select = số trang * với số dòng trong 1 trang muốn
-					// lấy
 					offset = (page - 1) > 0 ? ((page - 1) * Pagination.itemPerPage) : 0;
-
-					// Nếu vị trí vượt quá số donngf, thì lấy trang cuối cùng
 					if (offset >= total) {
 						offset -= (Pagination.itemPerPage);
 					}
-
-					// Lưu lại số trang hiện tại
 					Pagination.page = page;
-					// Tính toán tổng số trang
 					Pagination.totalPage = (int) Math.ceil(1.0 * total / Pagination.itemPerPage);
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 
+			// Select data
 			String sql = "select * from Account order by accountId" + " offset " + offset + " rows fetch next "
 					+ Pagination.itemPerPage + " row only";
-			pr = connection.prepareStatement(sql);
+			pr = SQLServer.connection.prepareStatement(sql);
 			rs = pr.executeQuery();
 
 			try {
 				while (rs.next()) {
-					// Thêm vào arraylist temp
 					temp.add(new Account(rs.getInt("accountId"), rs.getInt("level"), 1, rs.getString("name"),
 							rs.getString("email"), rs.getString("password"), rs.getString("phone"),
 							rs.getInt("status")));
@@ -92,104 +62,100 @@ public class AccountDAO {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-			// Đóng kết nối
-			pr.close();
-			connection.close();
+
 		} catch (SQLException e) {
 			e.printStackTrace();
+
+		} finally { // Close connect
+			try {
+				rs.close();
+			} catch (Exception e2) {
+			}
+			try {
+				pr.close();
+			} catch (Exception e2) {
+			}
+			SQLServer.disconnect();
 		}
-		// Trả về kết quả
+
+		// Return
 		return temp;
 	}
 
 	public void deleteAccount(Account account) {
 
-		// Mở kết nối
-		connect();
+		// Open connect
+		SQLServer.connect();
+		PreparedStatement pr = null;
+		int count = 0;
 		try {
-
-			// Câu lệnh xóa
+			// Delete
 			String sql = "delete from Account where accountId = ?";
-			PreparedStatement pr = connection.prepareStatement(sql);
-
-			// Truyền accounId vào
+			pr = SQLServer.connection.prepareStatement(sql);
 			pr.setInt(1, account.getAccountId());
-
-			// Thực hiện query update
-			pr.executeUpdate();
-
-			// Đóng kết nối
-			pr.close();
-			connection.close();
-
+			count = pr.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {// Close connect
+			try {
+				pr.close();
+			} catch (Exception e2) {
+			}
+			SQLServer.disconnect();
 		}
+		// return count;
 	}
 
 	public boolean addAccount(Account account) {
 
-		// Mở kết nối
-		connect();
+		// Open connect
+		SQLServer.connect();
+		int count = 0;
+		PreparedStatement pr = null;
 		try {
 
-			// Câu lệnh select
-			String sql = "insert into Account(level,categoryId,name,email,password,phone,status)"
-					+ " VALUES(?,?,?,?,?,?,?)";
-			PreparedStatement pr = connection.prepareStatement(sql);
-
-			// Truyền các tham số
+			// Insert
+			String sql = "insert into Account(level,categoryId,name,email,password,phone,status,avatar)"
+					+ " VALUES(?,?,?,?,?,?,?,?)";
+			pr = SQLServer.connection.prepareStatement(sql);
 			pr.setInt(1, account.getLevel());
-			pr.setNull(2, java.sql.Types.INTEGER); /* Kiểu null của int */
+			pr.setNull(2, java.sql.Types.INTEGER);
 			pr.setString(3, account.getName());
 			pr.setString(4, account.getEmail());
 			pr.setString(5, account.getPassword());
 			pr.setString(6, account.getPhone());
 			pr.setInt(7, account.getStatus());
-
-			// Thực hiện
-			int count = pr.executeUpdate();
-			// Đóng kết nối
-			pr.close();
-			connection.close();
-			if (count > 0) {
-				System.out.println("success");
-				return true;
-			} else {
-				System.out.println("stuck somewhere");
-				return false;
-			}
+			pr.setString(8, "image/avatar.jpg");
+			count = pr.executeUpdate();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally { // Close connect
+			try {
+				pr.close();
+			} catch (Exception e) {
+			}
+			SQLServer.disconnect();
 		}
-		return false;
+		return count > 0 ? true : false;
 	}
 
 	public Account getAccountById(Account account) {
 
-		// Mở kết nối
-		connect();
+		// Open connect
+		SQLServer.connect();
 
-		// Lưu kết quả truy vấn
+		// Initialize
 		ResultSet rs = null;
-
-		// Lưu thông tin account
+		PreparedStatement pr = null;
 		Account accountData = new Account();
 
 		try {
-
-			// Câu lệnh truy vấn
+			// Select
 			String sql = "select * from  Account where accountId = ?";
-			PreparedStatement pr = connection.prepareStatement(sql);
-
-			// Truyền tham số
+			pr = SQLServer.connection.prepareStatement(sql);
 			pr.setInt(1, account.getAccountId());
-
-			// Thực hiện
 			rs = pr.executeQuery();
-
-			// Lấy kết quả đưa vào accountData
 			if (rs.next()) {
 				accountData.setAccountId(rs.getInt(1));
 				accountData.setLevel(rs.getInt(2));
@@ -200,178 +166,179 @@ public class AccountDAO {
 				accountData.setStatus(rs.getInt(8));
 				return accountData;
 			}
-
-			// Đóng kết nối
-			pr.close();
-			connection.close();
-
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally { // Close connect
+			try {
+				rs.close();
+			} catch (Exception e2) {
+			}
+			try {
+				pr.close();
+			} catch (Exception e2) {
+			}
+			SQLServer.disconnect();
 		}
 		return account;
 	}
 
 	public void editAccount(Account account) {
 
-		// Mở kết nối
-		connect();
+		// Open connect
+		SQLServer.connect();
+		PreparedStatement pr = null;
 		try {
 
-			// Nếu mật khẩu lớn hơn 6 kí tự, thì thực hiện đổi mật khẩu
 			if (account.getPassword().length() >= 6) {
-				// Câu lệnh update
-				String sql = "update Account set level = ?, categoryId = ?, name = ?, email = ?, password = ?, phone = ?, status = ? where accountId = ?";
-				PreparedStatement pr = connection.prepareStatement(sql);
 
-				// Truyền tham số
+				String sql = "update Account set level = ?, categoryId = ?, name = ?, email = ?, password = ?, phone = ?, status = ? where accountId = ?";
+				pr = SQLServer.connection.prepareStatement(sql);
 				pr.setInt(1, account.getLevel());
-				pr.setNull(2, java.sql.Types.INTEGER); /* Kiểu null của int */
+				pr.setNull(2, java.sql.Types.INTEGER);
 				pr.setString(3, account.getName());
 				pr.setString(4, account.getEmail());
 				pr.setString(5, account.getPassword());
 				pr.setString(6, account.getPhone());
 				pr.setInt(7, account.getStatus());
 				pr.setInt(8, account.getAccountId());
-
-				Log.in("Sua co pass");
-				// Thực thi
 				pr.executeUpdate();
 
-				// Đóng kết nối
 				pr.close();
-				connection.close();
+				SQLServer.connection.close();
 
 			} else {
-				// Ngược lại không đổi mật khẩu
-				String sql = "update Account set level = ?, categoryId = ?, name = ?, email = ?, phone = ?, status = ? where accountId = ?";
-				PreparedStatement pr = connection.prepareStatement(sql);
 
-				// Truyền tham số
+				String sql = "update Account set level = ?, categoryId = ?, name = ?, email = ?, phone = ?, status = ? where accountId = ?";
+				pr = SQLServer.connection.prepareStatement(sql);
 				pr.setInt(1, account.getLevel());
-				pr.setNull(2, java.sql.Types.INTEGER); /* Kiểu null của int */
+				pr.setNull(2, java.sql.Types.INTEGER);
 				pr.setString(3, account.getName());
 				pr.setString(4, account.getEmail());
 				pr.setString(5, account.getPhone());
 				pr.setInt(6, account.getStatus());
 				pr.setInt(7, account.getAccountId());
-
-				Log.in("Sua k0 pass");
-				// Thực thi
 				pr.executeUpdate();
-
-				// Đóng kết nối
-				pr.close();
-				connection.close();
 
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally { // Close connect
+			try {
+				pr.close();
+			} catch (Exception e2) {
+			}
+			SQLServer.disconnect();
 		}
 	}
 
 	public boolean checkEmail(Account account) {
-		// Mở kết nối
-		connect();
 
-		// Khai báo biến rs để chứa kết quả
+		// Open connect
+		SQLServer.connect();
+		PreparedStatement pr = null;
 		ResultSet rs = null;
+		boolean exits = true;
+
 		try {
 
-			// Câu lẹnh kiểm tra đăng nhập
 			String sql = "select name from Account where email = ?";
-			PreparedStatement pr = connection.prepareStatement(sql);
+			pr = SQLServer.connection.prepareStatement(sql);
 
-			// Truyền các biến vào câu lệnh để thực thi
 			pr.setString(1, account.getEmail());
 			rs = pr.executeQuery();
 
 			if (rs.next()) {
-				Log.in("EMail ton tai");
-				// Nếu kết quả trả về khác null, đăng nhập thành công, return
-				// true
-				return false;
+				exits = false;
 			}
-
-			// Đóng kết nối
-			pr.close();
-			connection.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally { // Close connect
+			try {
+				rs.close();
+			} catch (Exception e2) {
+			}
+			try {
+				pr.close();
+			} catch (Exception e2) {
+			}
+			SQLServer.disconnect();
 		}
-		// Đăng nhập thất bại, return false
-		Log.in("EMail k0 ton tai");
-		return true;
+		return exits;
 	}
 
 	// Kiểm tra đăng nhập với đối tượng loginAccount
 	public int checkLogin(Account account) {
 
-		// Mở kết nối
-		connect();
+		// Open connect
+		SQLServer.connect();
 		int accountId = -1;
-		// Khai báo biến rs để chứa kết quả
 		ResultSet rs = null;
+		PreparedStatement pr = null;
+
 		try {
 
-			// Câu lẹnh kiểm tra đăng nhập
+			// Select
 			String sql = "select accountId from Account where email = ? AND password = ?";
-			PreparedStatement pr = connection.prepareStatement(sql);
-
-			// Truyền các biến vào câu lệnh để thực thi
+			pr = SQLServer.connection.prepareStatement(sql);
 			pr.setString(1, account.getEmail());
 			pr.setString(2, account.getPassword());
 			rs = pr.executeQuery();
 
 			if (rs.next()) {
-				// Nếu kết quả trả về khác null, đăng nhập thành công, return
-				// true
 				accountId = rs.getInt("accountId");
-				return accountId;
 			}
 
-			// Đóng kết nối
-			pr.close();
-			connection.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally { // Close connect
+			try {
+				rs.close();
+			} catch (Exception e2) {
+			}
+			try {
+				pr.close();
+			} catch (Exception e2) {
+			}
+			SQLServer.disconnect();
 		}
-		// Đăng nhập thất bại, return false
 		return accountId;
-
 	}
 
 	public Account checkLoginAccount(Account account) {
-		// Mở kết nối
-		connect();
+		// Open connect
+		SQLServer.connect();
 		Account accountData = new Account();
-		// Khai báo biến rs để chứa kết quả
 		ResultSet rs = null;
+		PreparedStatement pr = null;
 		try {
 
-			// Câu lẹnh kiểm tra đăng nhập
+			// Select
 			String sql = "select * from Account where email = ? and password = ? and level = 3";
-			PreparedStatement pr = connection.prepareStatement(sql);
-			Log.in(sql);
-			// Truyền các biến vào câu lệnh để thực thi
+			pr = SQLServer.connection.prepareStatement(sql);
 			pr.setString(1, account.getEmail());
 			pr.setString(2, account.getPassword());
 			rs = pr.executeQuery();
 
 			if (rs.next()) {
-				// Nếu kết quả trả về khác null, đăng nhập thành công, return
-				// true
 				accountData = new Account(rs.getInt("accountId"), rs.getInt("level"), rs.getInt("categoryId"),
-						rs.getString("name"), rs.getString("email"), rs.getString("password"), rs.getString("phone"), rs.getInt("status"));
+						rs.getString("name"), rs.getString("email"), rs.getString("password"), rs.getString("phone"),
+						rs.getInt("status"));
 				accountData.setAvatar(rs.getString("avatar"));
 			}
 
-			// Đóng kết nối
-			pr.close();
-			connection.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally { // Close connect
+			try {
+				rs.close();
+			} catch (Exception e2) {
+			}
+			try {
+				pr.close();
+			} catch (Exception e2) {
+			}
+			SQLServer.disconnect();
 		}
-		// Đăng nhập thất bại, return false
 		return accountData;
 	}
 }

@@ -38,10 +38,8 @@ public class ThreadListAction extends Action {
 		} catch (Exception e) {
 			return mapping.findForward("failed");
 		}
-		//Log.in(account.toString());
 		Account accountData = accountBO.checkLoginAccount(account);
 		if (accountData.getAccountId() > 0) {
-			Log.in(accountData.toString());
 			Gson gson = new Gson();
 			String json = gson.toJson(accountData);
 			httpSession.setAttribute("email", accountData.getEmail());
@@ -51,14 +49,12 @@ public class ThreadListAction extends Action {
 			return mapping.findForward("failed");
 		}
 
-		// Lấy số trang cần xem
 		int page = threadListForm.getPage();
 
 		ArrayList<Thread> threads = new ArrayList<Thread>();
 		threads = threadBO.getListByAccount(accountData, page);
 		threadListForm.setThreads(threads);
 		try {
-			Log.in(threads.get(0).getTotal() + " totalPage");
 			if (threads.get(0).getTotal() > 0)
 				threadListForm.setTotalPage(threads.get(0).getTotal());
 		} catch (Exception e) {

@@ -9,16 +9,16 @@ import java.util.ArrayList;
 
 import model.bean.Account;
 import model.bean.Category;
-import statics.InfoSQLServer;
+import statics.SQLServer;
 import statics.Log;
 import statics.Pagination;
 
 public class CategoryDAO {
 
 	// Khai báo các biến để kết nối vs csdl, lưu tại class InfoSQLServer
-	String url = InfoSQLServer.url;
-	String userName = InfoSQLServer.userName;
-	String password = InfoSQLServer.password;
+	String url = SQLServer.url;
+	String userName = SQLServer.userName;
+	String password = SQLServer.password;
 	Connection connection;
 
 	void connect() {

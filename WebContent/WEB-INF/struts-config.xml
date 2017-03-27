@@ -13,6 +13,8 @@ Configuration 1.3//EN" "http://struts.apache.org/dtds/struts-config_1_3.dtd">
 		<form-bean name="accountListForm" type="form.admin.account.AccountListForm" />
 		<form-bean name="accountForm" type="form.admin.account.AccountForm" />
 		<form-bean name="deleteForm" type="form.admin.account.DeleteForm" />
+		<form-bean name="dashBoardForm" type="form.admin.DashBoardForm" />
+		
 		<!-- KET THUC FORM CHO TRANG ADMIN -->
 
 
@@ -50,7 +52,7 @@ Configuration 1.3//EN" "http://struts.apache.org/dtds/struts-config_1_3.dtd">
 		<!-- Dang nhap -->
 		<action input="/admin/login.jsp" name="loginForm" path="/admin/login-action"
 			scope="request" type="action.admin.LoginAction">
-			<forward name="success" path="/admin/account-action.do"
+			<forward name="success" path="/admin/dashboard-action.do"
 				redirect="true" />
 			<forward name="failed" path="/admin/login.jsp" />
 		</action>
@@ -85,6 +87,13 @@ Configuration 1.3//EN" "http://struts.apache.org/dtds/struts-config_1_3.dtd">
 			<forward name="editAccount" path="/admin/editaccount.jsp" />
 			<forward name="editedAccount" path="/admin/account-action.do"
 				redirect="true" />
+		</action>
+		
+		
+		<!-- Thong ke -->
+		<action input="/admin/login.jsp" name="dashBoardForm" path="/admin/dashboard-action"
+			scope="request" type="action.admin.DashBoardAction">
+			<forward name="success" path="/admin/dashboard.jsp" />
 		</action>
 		<!-- KET THUC QUAN LY TAI KHOAN -->
 		<!-- KET THUC ACTION CHO TRANG ADMIN -->

@@ -44,6 +44,7 @@ public class AccountAction extends Action {
 
 		account.setEmail(accountHomeForm.getEmail());
 		account.setPassword(accountHomeForm.getPassword());
+		account.setLevel(3);
 		String action = accountHomeForm.getAction();
 		if (action.equals("register")) {
 			if (accountBO.addAccount(account) == true) {
@@ -105,7 +106,6 @@ public class AccountAction extends Action {
 				httpSession.setAttribute("password", accountData.getPassword());
 				httpSession.setAttribute("accountId", accountData.getAccountId());
 				accountData.setPassword("");
-				Log.in(json);
 				out.print(json);
 			} else {
 				Gson gson = new Gson();

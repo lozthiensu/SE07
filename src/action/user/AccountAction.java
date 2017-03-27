@@ -33,9 +33,7 @@ public class AccountAction extends Action {
 		response.setHeader("cache-control", "no-cache");
 		
 		/* BAT DAU KIEM TRA DANG NHAP */
-		
-		//http://localhost:8080/Mock_SE7/user/login.do
-		
+				
 		Account account = new Account();
 		AccountBO accountBO = new AccountBO();
 		HttpSession httpSession = request.getSession();
@@ -45,10 +43,8 @@ public class AccountAction extends Action {
 		} catch (Exception e) {
 			return mapping.findForward("failed");
 		}
-		Log.in(account.toString());
 		Account accountData = accountBO.checkLoginAccount(account);
 		if (accountData.getAccountId() > 0) {
-			Log.in(accountData.toString());
 			Gson gson = new Gson();
 			String json = gson.toJson(accountData);
 			httpSession.setAttribute("email", accountData.getEmail());

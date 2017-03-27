@@ -84,15 +84,10 @@
 
 			</div>
 			<!--Footer-->
-			<div class="modal-footer">
-				<div class="options text-right">
-					<p>
-						Chưa có tài khoản? <a href="#">Đăng ký</a>
-					</p>
-				</div>
+<!-- 			<div class="modal-footer"> 
 				<button type="button" class="btn btn-warning ml-auto"
 					data-dismiss="modal">Đóng</button>
-			</div>
+			</div> -->
 		</div>
 		<!--/.Content-->
 	</div>
@@ -181,22 +176,15 @@
 				</div>
 			</div>
 			<!--Footer-->
-			<div class="modal-footer">
+<!-- 			<div class="modal-footer">
 				<div class="row">
-					<div class="col-md-6">
-						<div class="options">
-							<p>
-								Đã có tài khoản? <a href="#">Đăng nhập</a>
-							</p>
-						</div>
-					</div>
-					<div class="col-md-6">
+					<div class="col-md-12">
 						<button type="button" class="btn btn-warning ml-auto"
 							data-dismiss="modal">Đóng</button>
 					</div>
 				</div>
 
-			</div>
+			</div> -->
 		</div>
 		<!--/.Content-->
 	</div>
@@ -229,6 +217,12 @@
 		} else if (password.length < 1) {
 			showError("Mật khẩu không được bỏ trống hoặc quá ngắn");
 			return false;
+		}else if (password != re_password) {
+			showError("Mật khẩu không khớp");
+			return false;
+		}else if (validateEmail(email) == false) {
+			showError("Email không hợp lệ");
+			return false;
 		}
 		$.ajax({
 			type : "POST",
@@ -236,12 +230,10 @@
 			data : "email=" + email + "&password=" + password
 					+ "&action=register",
 			success : function(res) {
-				if (res == "success") {
-					log("tc");
+				if (res == "success") { 
 					showSuccess("Đăng ký thành công");
 					return true;
 				} else {
-					log("tb");
 					showError("Đăng ký thất bại");
 					return false;
 				}
@@ -250,6 +242,10 @@
 				alert('Error: ' + e);
 			}
 		});
+	}
+	function validateEmail(email) {
+	    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+	    return re.test(email);
 	}
 	function loginAjax() {
 		email = $("#emailLog").val();

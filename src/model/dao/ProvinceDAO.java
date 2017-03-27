@@ -10,14 +10,14 @@ import java.util.ArrayList;
 import model.bean.Image;
 import model.bean.Province;
 import model.bean.Thread;
-import statics.InfoSQLServer;
+import statics.SQLServer;
 
 public class ProvinceDAO {
 
 	// Khai báo các biến để kết nối vs csdl, lưu tại class InfoSQLServer
-	String url = InfoSQLServer.url;
-	String userName = InfoSQLServer.userName;
-	String password = InfoSQLServer.password;
+	String url = SQLServer.url;
+	String userName = SQLServer.userName;
+	String password = SQLServer.password;
 	Connection connection;
 
 	void connect() {
