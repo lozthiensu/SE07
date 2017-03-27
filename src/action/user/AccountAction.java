@@ -28,11 +28,11 @@ public class AccountAction extends Action {
 			HttpServletResponse response) throws Exception {
 
 		AccountHomeForm accountHomeForm = (AccountHomeForm) form;
-
+		
 		response.setContentType("text/text;charset=utf-8");
 		response.setHeader("cache-control", "no-cache");
 		
-		/* BAT DAU KIEM TRA DANG NHAP */
+		/* START CHECK LOGIN */
 				
 		Account account = new Account();
 		AccountBO accountBO = new AccountBO();
@@ -54,7 +54,8 @@ public class AccountAction extends Action {
 		} else {
 			return mapping.findForward("failed");
 		} 
-		/* KET THUC KIEM TRA DANG NHAP */
+		
+		/* END CHECK LOGIN */
 		
 	}
 }

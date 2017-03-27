@@ -58,6 +58,7 @@ public class AddThreadAction extends Action {
 
 		request.setCharacterEncoding("UTF-8");
 
+		// BO object
 		ThreadBO threadBO = new ThreadBO();
 		CategoryBO categoryBO = new CategoryBO();
 		ProvinceBO provinceBO = new ProvinceBO();
@@ -68,35 +69,36 @@ public class AddThreadAction extends Action {
 
 		ThreadForm threadForm = (ThreadForm) form;
 		Thread thread = new Thread();
-
-		String action = action = threadForm.getAction();
-
+		String action = threadForm.getAction();
 		threadForm.setAccountId(account.getAccountId());
+
+		// Get provinces, districts, villages, categories
 		threadForm.setCategories(categoryBO.getList());
 		threadForm.setProvinces(provinceBO.getList());
 		threadForm.setDistricts(new ArrayList<District>());
 		threadForm.setVillages(new ArrayList<Village>());
-
 		Province province = new Province(threadForm.getProvinceId(), "");
 		threadForm.setDistricts(districtBO.getList(province));
-
 		District district = new District(threadForm.getDistrictId(), 0, "");
 		threadForm.setVillages(villageBO.getList(district));
 
-		if ("submit".equals(action)) {
+		if ("submit".equals(action)) { // If press submit button
 			int threadId = threadBO.add(threadForm);
-			if (threadId > 0) {
+			if (threadId > 0) {// If add thread success
 				ArrayList<Thread> threads = new ArrayList<Thread>();
-				if(threadForm.isSendNotification() == true){
+				if (threadForm.isSendNotification() == true) {// If want to send
+																// notifications
 					threads = threadBO.searchByAdd(threadForm);
 					for (Thread thread2 : threads) {
-						String content = "<b>" + account.getName() + "</b> đã đánh đăng bài phù hợp với bài viết của bạn";
-						Notification notification = new Notification(0, threadId, 0,
-								thread2.getAccountId(), content, "", "", false);
+						String content = "<b>" + account.getName()
+								+ "</b> đã đánh đăng bài phù hợp với bài viết của bạn";
+						Notification notification = new Notification(0, threadId, 0, thread2.getAccountId(), content,
+								"", "", false);
 						notification.setAccountIdPush(account.getAccountId());
 						notificationBO.add(notification);
 					}
 				}
+				// Add images for thread was added
 				ArrayList<Image> images = new ArrayList<Image>();
 				String imagesString = threadForm.getImagesString();
 				String[] imagesArr = imagesString.split(",");
@@ -107,7 +109,7 @@ public class AddThreadAction extends Action {
 				return mapping.findForward("success");
 			}
 			return mapping.findForward("failed");
-		} else {
+		} else { // If don't press submit button
 			return mapping.findForward("failed");
 		}
 	}

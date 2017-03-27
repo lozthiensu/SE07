@@ -82,6 +82,7 @@ public class AccountDAO {
 		return temp;
 	}
 
+	// Delete
 	public void deleteAccount(Account account) {
 
 		// Open connect
@@ -106,6 +107,7 @@ public class AccountDAO {
 		// return count;
 	}
 
+	// Add
 	public boolean addAccount(Account account) {
 
 		// Open connect
@@ -140,6 +142,7 @@ public class AccountDAO {
 		return count > 0 ? true : false;
 	}
 
+	// Get by accountId
 	public Account getAccountById(Account account) {
 
 		// Open connect
@@ -182,6 +185,7 @@ public class AccountDAO {
 		return account;
 	}
 
+	// Edit
 	public void editAccount(Account account) {
 
 		// Open connect
@@ -231,6 +235,7 @@ public class AccountDAO {
 		}
 	}
 
+	// Check email exits
 	public boolean checkEmail(Account account) {
 
 		// Open connect
@@ -266,7 +271,7 @@ public class AccountDAO {
 		return exits;
 	}
 
-	// Kiểm tra đăng nhập với đối tượng loginAccount
+	// Login
 	public int checkLogin(Account account) {
 
 		// Open connect
@@ -304,6 +309,7 @@ public class AccountDAO {
 		return accountId;
 	}
 
+	// Login user
 	public Account checkLoginAccount(Account account) {
 		// Open connect
 		SQLServer.connect();

@@ -35,9 +35,10 @@ public class EditThreadAction extends Action {
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 
-		
+		/* START CHECK LOGIN */
 		Account account = new Account();
-		AccountBO accountBO = new AccountBO(); 
+		AccountBO accountBO = new AccountBO();
+
 		HttpSession httpSession = request.getSession();
 		try {
 			account.setEmail(httpSession.getAttribute("email").toString());
@@ -45,10 +46,8 @@ public class EditThreadAction extends Action {
 		} catch (Exception e) {
 			return mapping.findForward("failed");
 		}
-		//Log.in(account.toString());
 		Account accountData = accountBO.checkLoginAccount(account);
 		if (accountData.getAccountId() > 0) {
-			//Log.in(accountData.toString());
 			Gson gson = new Gson();
 			String json = gson.toJson(accountData);
 			httpSession.setAttribute("email", accountData.getEmail());
@@ -56,86 +55,73 @@ public class EditThreadAction extends Action {
 			accountData.setPassword("");
 		} else {
 			return mapping.findForward("edited");
-		}	
-		
-		
+		}
+		/* END CHECK LOGIN */
+
 		request.setCharacterEncoding("UTF-8");
 
+		// BO object
 		ThreadForm threadForm = (ThreadForm) form;
-
 		ThreadBO threadBO = new ThreadBO();
 		CategoryBO categoryBO = new CategoryBO();
 		ProvinceBO provinceBO = new ProvinceBO();
 		DistrictBO districtBO = new DistrictBO();
 		VillageBO villageBO = new VillageBO();
 
-		int threadId = threadForm.getThreadId(); 
+		/* START CHECK THREAD OWNER */
+		int threadId = threadForm.getThreadId();
 		Thread thread = new Thread();
 		thread.setThreadId(threadId);
 
 		String action = action = threadForm.getAction();
-		//Log.in("Id bai viet de so sanh " + threadId);
-		
+
 		thread = threadBO.getById(thread);
-		//Log.in("Bai viet de so sanh: " + thread);
-		
-		
-		if(thread.getAccountId() != accountData.getAccountId()){
-			//Log.in("Bai viet khong thuoc quyen cua ban");
+
+		if (thread.getAccountId() != accountData.getAccountId()) {
 			Log.in(thread.toString());
 			Log.in(accountData.toString());
 			return mapping.findForward("edited");
 		}
-		
-		
+		/* END CHECK THREAD OWNER */
+
+		// Get provinces, districts, villages, categories
 		threadForm.setCategories(categoryBO.getList());
 		threadForm.setProvinces(provinceBO.getList());
 		threadForm.setDistricts(new ArrayList<District>());
 		threadForm.setVillages(new ArrayList<Village>());
 		threadForm.setThreadId(threadId);
-		
 		Province province = new Province(thread.getProvinceId(), "");
-		Log.in(province.toString());
 		threadForm.setDistricts(districtBO.getList(province));
-
 		District district = new District(thread.getDistrictId(), 0, "");
-		Log.in(district.toString());
 		threadForm.setVillages(villageBO.getList(district));
-		
 		ImageBO imageBO = new ImageBO();
-		
-		
-		if ("submit".equals(action)) {
+
+		if ("submit".equals(action)) { // If press submit button
 			ArrayList<Image> images = new ArrayList<Image>();
 			String imagesString = threadForm.getImagesString();
 			String[] imagesArr = imagesString.split(",");
 			for (String string : imagesArr) {
 				images.add(new Image(0, threadForm.getThreadId(), string, threadForm.getName(), false));
 			}
-			if (threadBO.edit(threadForm) == true) {
-				Log.in("Dem di sua: " + threadForm.toString());
-				
-				//Xoa het ảnh cu 
+			if (threadBO.edit(threadForm) == true) { // Delete all image old
 				imageBO.delete(threadForm);
 				imageBO.insert(images);
 				return mapping.findForward("edited");
 			}
-
-			Log.in("Sua that bai");
 			return mapping.findForward("edit");
-		} else {
+		} else { // If don't press submit button
 
 			ArrayList<Image> imagesTemp = imageBO.getListByThread(thread);
 			String imagesStringTemp = "";
 			for (Image image : imagesTemp) {
-				if(imagesStringTemp != "")
+				if (imagesStringTemp != "")
 					imagesStringTemp += ",";
 				imagesStringTemp += image.getSrc().toString();
 			}
 			threadForm.setImagesString(imagesStringTemp);
 			Log.in("Image: " + imagesStringTemp);
-			
-			/* DUA LEN FORM */
+
+			/* START BRING TO FORM */
 			threadForm.setThreadId(threadId);
 			threadForm.setCategoryId(thread.getCategoryId());
 			threadForm.setAccountId(thread.getAccountId());
@@ -170,8 +156,8 @@ public class EditThreadAction extends Action {
 			threadForm.setArea(thread.getArea());
 			threadForm.setOtherFee(thread.getOtherFee());
 			threadForm.setKindOf(thread.isKindOf());
-			
-			Log.in("Doc ra: " + threadForm.toString());
+			/* END BRING TO FORM */
+
 			return mapping.findForward("edit");
 		}
 

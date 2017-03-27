@@ -28,6 +28,7 @@ public class ThreadListAction extends Action {
 
 		ThreadListForm threadListForm = (ThreadListForm) form;
 
+		/* START CHECK LOGIN */
 		Account account = new Account();
 		AccountBO accountBO = new AccountBO();
 		ThreadBO threadBO = new ThreadBO();
@@ -48,9 +49,9 @@ public class ThreadListAction extends Action {
 		} else {
 			return mapping.findForward("failed");
 		}
+		/* END CHECK LOGIN */
 
 		int page = threadListForm.getPage();
-
 		ArrayList<Thread> threads = new ArrayList<Thread>();
 		threads = threadBO.getListByAccount(accountData, page);
 		threadListForm.setThreads(threads);

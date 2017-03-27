@@ -37,6 +37,7 @@ public class AccountAction extends Action {
 		response.setHeader("cache-control", "no-cache");
 		PrintWriter out = response.getWriter();
 
+		// BO object
 		Account account = new Account();
 		AccountBO accountBO = new AccountBO();
 		LoginBO loginBO = new LoginBO();
@@ -46,13 +47,15 @@ public class AccountAction extends Action {
 		account.setPassword(accountHomeForm.getPassword());
 		account.setLevel(3);
 		String action = accountHomeForm.getAction();
-		if (action.equals("register")) {
+
+		if (action.equals("register")) { // Register
 			if (accountBO.addAccount(account) == true) {
 				out.print("success");
 			} else {
 				out.print("failed");
 			}
-		} else if (action.equals("getNotification")) {
+		} else if (action.equals("getNotification")) { // Get notifications
+
 			HttpSession httpSession = request.getSession();
 			String email = (String) httpSession.getAttribute("email");
 			String password = (String) httpSession.getAttribute("password");
@@ -73,7 +76,7 @@ public class AccountAction extends Action {
 				String json = gson.toJson(notifications);
 				out.print(json);
 			}
-		} else if (action.equals("read")) {
+		} else if (action.equals("read")) { // Read notifications
 			HttpSession httpSession = request.getSession();
 			String email = (String) httpSession.getAttribute("email");
 			String password = (String) httpSession.getAttribute("password");
@@ -96,7 +99,7 @@ public class AccountAction extends Action {
 			} else {
 				out.print("failed");
 			}
-		} else if (action.equals("login")) {
+		} else if (action.equals("login")) { // Check login
 			Account accountData = accountBO.checkLoginAccount(account);
 			if (accountData.getAccountId() > 0) {
 				Gson gson = new Gson();
@@ -112,10 +115,10 @@ public class AccountAction extends Action {
 				String json = gson.toJson(accountData);
 				out.print(json);
 			}
-		} else if (action.equals("logout")) {
+		} else if (action.equals("logout")) { // Logout
 			HttpSession httpSession = request.getSession();
 			httpSession.invalidate();
-		} else if (action.equals("checkEmail")) {
+		} else if (action.equals("checkEmail")) { // Check email exits
 			if (accountBO.checkEmail(account) == true) {
 				out.print("success");
 			} else {

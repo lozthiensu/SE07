@@ -24,9 +24,9 @@ public class DeleteThreadAction extends Action {
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 
-		
+		/* START CHECK LOGIN */
 		Account account = new Account();
-		AccountBO accountBO = new AccountBO(); 
+		AccountBO accountBO = new AccountBO();
 		HttpSession httpSession = request.getSession();
 		try {
 			account.setEmail(httpSession.getAttribute("email").toString());
@@ -34,10 +34,8 @@ public class DeleteThreadAction extends Action {
 		} catch (Exception e) {
 			return mapping.findForward("failed");
 		}
-		//Log.in(account.toString());
 		Account accountData = accountBO.checkLoginAccount(account);
 		if (accountData.getAccountId() > 0) {
-			//Log.in(accountData.toString());
 			Gson gson = new Gson();
 			String json = gson.toJson(accountData);
 			httpSession.setAttribute("email", accountData.getEmail());
@@ -45,34 +43,25 @@ public class DeleteThreadAction extends Action {
 			accountData.setPassword("");
 		} else {
 			return mapping.findForward("failed");
-		}	
-		
-		
+		}
+		/* END CHECK LOGIN */
+
 		DeleteThreadForm deleteThreadForm = (DeleteThreadForm) form;
-
 		ThreadBO threadBO = new ThreadBO();
-
 		int threadId = deleteThreadForm.getThreadId();
-
 		Thread thread = new Thread();
 		thread.setThreadId(threadId);
-
 		thread = threadBO.getById(thread);
-		if(thread.getAccountId() != accountData.getAccountId()){
-			Log.in("Bai viet khong thuoc quyen cua ban");
-			Log.in(thread.toString());
-			Log.in(accountData.toString());
+
+		// Check thread owner
+		if (thread.getAccountId() != accountData.getAccountId()) {
 			return mapping.findForward("failed");
 		}
-		
-		
-		Log.in(thread.toString());
-		
+
+		// Delete
 		if (threadBO.delete(thread) == true) {
-			Log.in("Da xoa");
 			return mapping.findForward("deleted");
 		} else {
-			Log.in("Khong xoa");
 			return mapping.findForward("failed");
 		}
 	}
