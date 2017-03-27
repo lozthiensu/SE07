@@ -50,6 +50,14 @@
 			<ul class="navbar-nav ml-auto">
 				<img src="img/avatar.jpg" alt="Hình đại diện" class="rounded-circle"
 					style="width: 40px; height: 40px; display: none;" id="imgAva">
+				<li class="dropdown" id="notificationBag">
+					<span class="badge red" id="numMessUnread" data-toggle="dropdown" aria-haspopup="true"
+					aria-expanded="false"></span>
+					<div class="dropdown-menu dropdown dropdown-menu-right"
+						aria-labelledby="numMessUnread">
+							<span id="listNoti"></span>
+					</div>
+				</li>
 				<li class="nav-item dropdown btn-group" id="menuAcc"
 					style="display: none;"><a
 					class="nav-link dropdown-toggle btn-right-menu-main"
@@ -122,12 +130,10 @@
 				<strong>Giá</strong>
 			</div>
 			<div class="col-lg-4">
-				<bean:write name="thread" property="price" />
-				đ
+				<bean:write name="thread" property="priceString" />
 			</div>
 			<div class="col-lg-4">
-				<bean:write name="thread2" property="price" />
-				đ
+				<bean:write name="thread2" property="priceString" />
 			</div>
 		</div>
 		<div class="row row-compare">

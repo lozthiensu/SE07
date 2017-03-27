@@ -129,6 +129,13 @@
 					<img src="img/avatar.jpg" alt="Hình đại diện"
 						class="rounded-circle"
 						style="width: 40px; height: 40px; display: none;" id="imgAva">
+					<li class="dropdown" id="notificationBag"><span
+						class="badge red" id="numMessUnread" data-toggle="dropdown"
+						aria-haspopup="true" aria-expanded="false"></span>
+						<div class="dropdown-menu dropdown dropdown-menu-right"
+							aria-labelledby="numMessUnread">
+							<span id="listNoti"></span>
+						</div></li>
 					<li class="nav-item dropdown btn-group" id="menuAcc"
 						style="display: none;"><a
 						class="nav-link dropdown-toggle btn-right-menu-main"
@@ -136,8 +143,7 @@
 						aria-expanded="false"><span id="welcomeText"></span></a>
 						<div class="dropdown-menu dropdown dropdown-menu-right"
 							aria-labelledby="dropdownMenu1">
-							<a class="dropdown-item" href="./user/login.do">Quản lý</a>
-							 <a
+							<a class="dropdown-item" href="./user/login.do">Quản lý</a> <a
 								class="dropdown-item" onclick="logout();">Đăng xuất</a>
 						</div></li>
 					<li class="nav-item" id="btnReg"><a
@@ -235,7 +241,7 @@
 											class="demo-gallery__img--main"> <img
 											src="<bean:write
 											name="item" property="src" />"
-											alt="" class="col-3"/>
+											alt="" class="col-3" />
 										</a>
 									</logic:iterate>
 								</div>
@@ -353,7 +359,8 @@
 						<!--First row-->
 						<div id="listRate">
 							<logic:iterate name="viewThreadForm" property="rates" id="item">
-								<div class="row">
+								<div class="row"
+									id="rate-<bean:write name="item" property="rateId" />">
 									<!--Image column-->
 									<div class="col-sm-2 col-12">
 										<img src="<bean:write name="item" property="accountImage" />"
@@ -362,13 +369,24 @@
 									<!--/.Image column-->
 									<!--Content column-->
 									<div class="col-sm-10 col-12">
-										<a><h3 class="user-name">
-												<bean:write name="item" property="accountName" />
-											</h3></a>
+										<div>
+											<span style="font-size: 30px;" class="user-name"> <bean:write
+													name="item" property="accountName" />
+											</span>
+											<logic:equal name="item" property="can" value="true">
+												<span class="rate-button-func"
+													onclick="deleteRate(<bean:write name="item" property="rateId" />)">
+													<i class="fa fa-times red-text icon-btn-action"></i>
+												</span>
+												<span class="rate-button-func"
+													onclick="editRate(<bean:write name="item" property="rateId" />)">
+													<i class="fa fa-pencil-square-o grey-text icon-btn-action"></i>
+												</span>
+											</logic:equal>
+										</div>
 										<div class="card-data" style="padding: 0px;">
 											<ul>
-												<li class="comment-date"><i class="fa fa-commenting"
-													aria-hidden="true"></i> <span
+												<li class="comment-date"><span
 													class="score s<bean:write name="item" property="score" />"></span>
 												</li>
 												<li class="comment-date" style="float: right;"><i
@@ -377,6 +395,7 @@
 											</ul>
 										</div>
 										<p class="comment-text"
+											id="content-rate-<bean:write name="item" property="rateId" />"
 											style="word-wrap: break-word; word-break: break-all;">
 											<bean:write name="item" property="content" />
 										</p>
@@ -688,7 +707,6 @@
 			$('input[name=newScoreRate]:checked').prop('checked', false); //TO UNCHECK  
 			$('input[name=newScoreRate]').prop('disabled', true); //TO DISABLED  
 			email = readCookie('email');
-			log(email);
 			if (email != undefined && email.length > 6) {
 				$('#btnAddRate').prop('disabled', false); //TO ENABLE
 				$('input[name=newScoreRate]').prop('disabled', false); //TO ENABLE 
@@ -696,9 +714,7 @@
 			}else{
 				$("#welcomeToRate").html("Chức năng yêu cầu đăng nhập");
 			}	
-			log($("#threadOld").val());
 			if($("#threadOld").val() == 'true'){
-				log(true + "ne");
 				$('.infoThread')
 				.css({
 				   'filter'         : 'blur(2px)',
@@ -710,7 +726,6 @@
 				$('#btnAddRate').prop('disabled', true); //TO DISABLEDnewContentRate
 				$('#newContentRate').prop('disabled', true); //TO DISABLED
 			}else if( $("#threadOld").val() != 'true' && email != undefined && email.length > 6 ){
-				log(false + "ne");
 				$('.infoThread')
 				.css({
 				   'filter'         : 'blur(0px)',
@@ -763,40 +778,8 @@
 				data : "threadId=" + threadId + "&content=" + content + "&score=" + score + "&accountId=" + accountId + "&email=" + email + "&action=addNew",
 				success : function(res) {
 					log(res);
-					var obj = JSON.parse(res);
-					log(obj);
-					if (obj != undefined) {
-						$("#newContentRate").val("");
-						$('input[name=newScoreRate]:checked').prop('checked', false);
-						var n = obj.length;
-						var stringResults = '';
-						for (var i = 0; i < n; i++) {
-							log("Dan in ra: " + i);
-							stringResults +=''+
-						'<div class="row">'+
-							'<div class="col-sm-2 col-12">'+
-							'<img src='+obj[i].accountImage+' style="height: 100px;">'+
-							'</div>'+
-							'<div class="col-sm-10 col-12">'+
-								'<a><h3 class="user-name">'+
-								obj[i].accountName +
-									'</h3></a>'+
-								'<div class="card-data" style="padding:0px;">'+
-									'<ul>'+
-										'<li class="comment-date"><i class="fa fa-commenting" aria-hidden="true"></i>'+
-										'<span class="score s'+obj[i].score+'"></span>'+
-										'</li>'+
-										'<li class="comment-date" style="    float: right;"><i class="fa fa-clock-o"></i>'+obj[i].created+'</li>'+
-									'</ul>'+
-								'</div>'+
-								'<p class="comment-text">'+
-								obj[i].content+
-								'</p>'+
-							'</div>' +
-						'</div>';
-						}
-						$('#listRate').html(stringResults);
-						$('#ratesCountAjax').html(n);
+					if (res == "success") {
+						getRates();
 					}else{
 						showError("Lỗi không xác định");
 					}
@@ -861,6 +844,136 @@
 				position : uluru,
 				map : map
 			});
+		}
+		function getRates(){
+			threadId = parseInt('<bean:write name="thread" property="threadId" />');
+			$.ajax({
+				type : "POST",
+				url : "/Mock_SE7/home-rate-action.do",
+				data : "threadId=" + threadId + "&action=get",
+				success : function(res) {
+					log(res);
+					var obj = JSON.parse(res);
+					log(obj);
+					if (obj != undefined) {
+						$("#newContentRate").val("");
+						$('input[name=newScoreRate]:checked').prop('checked', false);
+						var n = obj.length;
+						var stringResults = '';
+						for (var i = 0; i < n; i++) {
+							deleteBtn = "";
+							if(obj[i].can == true){
+								deleteBtn = '<span class="rate-button-func"'+
+								'onclick="deleteRate('+ obj[i].rateId +')">'+
+								'<i class="fa fa-times red-text icon-btn-action"></i>'+
+							'</span><span class="rate-button-func" onclick="editRate('+obj[i].rateId+')"> <i class="fa fa-pencil-square-o grey-text icon-btn-action"></i></span>';
+							}
+							log("Dan in ra: " + i);
+							stringResults +=''+
+						'<div id="div-content-rate-'+obj[i].rateId+'" class="row">'+
+							'<div class="col-sm-2 col-12">'+
+							'<img src='+obj[i].accountImage+' style="height: 100px;">'+
+							'</div>'+
+							'<div class="col-sm-10 col-12">'+
+								'<div>'+
+									'<span style="font-size: 30px;" class="user-name">' + obj[i].accountName +
+									'</span>'+
+									deleteBtn +
+								'</div>'+
+								'<div class="card-data" style="padding:0px;">'+
+									'<ul>'+
+										'<li class="comment-date">'+
+										'<span class="score s'+obj[i].score+'"></span>'+
+										'</li>'+
+										'<li class="comment-date" style=" float: right;"><i class="fa fa-clock-o"></i>'+obj[i].created+'</li>'+
+									'</ul>'+
+								'</div>'+
+								'<p p class="comment-text" id="content-rate-'+obj[i].rateId+'" style="word-wrap: break-word; word-break: break-all;">' + obj[i].content+
+								'</p>'+
+							'</div>' +
+						'</div>';
+						}
+						log(stringResults)
+						$('#listRate').html(stringResults);
+						$('#ratesCountAjax').html(n);
+					}else{
+						showError("Lỗi không xác định");
+					}
+				},
+				error : function(e) {
+					showError("Lỗi không xác định " + e);
+				}
+			});
+		}
+		function deleteRate(rateId){
+			swal({
+				  title: "Bạn có chắc?",
+				  text: "Dữ liệu bị xóa sẽ mất vĩnh viễn!",
+				  type: "warning",
+				  showCancelButton: true,
+				  confirmButtonColor: "#DD6B55",
+				  confirmButtonText: "Đồng ý!",
+				  closeOnConfirm: true
+				},
+				function(){
+					threadId = parseInt('<bean:write name="thread" property="threadId" />');
+					$.ajax({
+						type : "POST",
+						url : "/Mock_SE7/home-rate-action.do",
+						data : "rateId=" + rateId + "&threadId=" + threadId + "&action=delete",
+						success : function(res) {
+							log(res);
+							if (res == "success") {
+								getRates();
+							}else{
+								showError("Lỗi không xác định");
+							}
+						},
+						error : function(e) {
+							showError("Lỗi không xác định " + e);
+						}
+					});
+				});
+		}
+
+		function editRate(rateId){
+		    var divHtml = $('#content-rate-' + rateId ).html().trim();
+		    log(';' + divHtml + 'a');
+		    if(divHtml != null && divHtml.length > 1){
+			    var editableText = $('<div class="md-form" id="div-content-rate-'+rateId+'" ><textarea id="content-rate-'+rateId+'"  type="text" class="md-textarea" length="200" maxlength="200"></textarea><label for="form8">Nội dung</label><div class="text-center"><button class="btn btn-primary" onclick="return submitEdit('+rateId+');" >Sửa</button><button class="btn btn-primary" onclick="return cancelEdit('+rateId+');" >Hủy</button></div></div>');
+			    $('#content-rate-' + rateId ).replaceWith(editableText);
+			    $('#content-rate-' + rateId ).val(divHtml);
+			    $('#content-rate-' + rateId ).focus();
+		    }
+		}
+
+		function submitEdit(rateId){
+		    content = $('#content-rate-' + rateId ).val().trim();
+		    log(';' + content + 'a');
+			$.ajax({
+				type : "POST",
+				url : "/Mock_SE7/home-rate-action.do",
+				data : "rateId=" + rateId + "&content=" + content + "&action=update",
+				success : function(res) {
+					log(res);
+					if (res == "success") {
+						getRates();
+					}else{
+						showError("Lỗi không xác định");
+					}
+				},
+				error : function(e) {
+					showError("Lỗi không xác định " + e);
+				}
+			});
+		}
+		
+		function cancelEdit(rateId){
+		    var html = $('#content-rate-' + rateId ).val();
+		    log(html + "ádasd");
+		    var viewableText = $('<p class="comment-text" id="content-rate-'+rateId+'" style="word-wrap: break-word; word-break: break-all;"></p>');
+		    $('#div-content-rate-' + rateId ).replaceWith(viewableText);
+		    $('#content-rate-' + rateId ).html(html);
 		}
 
 		function initialize() {

@@ -51,7 +51,7 @@
 			<div class="row dash-board">
 				<a href="./thread-manager-action.do">
 					<button type="button"
-						class="btn btn-elegant button-side-menu-left button-dash-board">
+						class="btn btn-elegant button-side-menu-left">
 						<i class="fa fa-globe icon-in-button" style="color: #2C97BE"
 							aria-hidden="true"></i>Bài viết
 					</button>
@@ -59,7 +59,7 @@
 			</div>
 			<div class="row">
 				<a href="./rate-manager-action.do">
-					<button type="button" class="btn btn-elegant button-side-menu-left">
+					<button type="button" class="btn btn-elegant button-side-menu-left button-dash-board">
 						<i class="fa fa-group icon-in-button" aria-hidden="true"></i>Bình
 						luận
 					</button>
@@ -82,42 +82,30 @@
 				<div class="table-custom">
 					<div>
 						<div class="col-mot">Id</div>
-						<div class="col-bon trun-text">Tên</div>
+						<div class="col-bon trun-text">Nội dung</div>
 						<div class="col-hai">Ngày viết</div>
-						<div class="col-hai">Danh muc</div>
+						<div class="col-hai">Điểm</div>
 						<div class="col-hai">Thao tác</div>
 					</div>
-					<logic:iterate name="threadListForm" property="threads" id="item">
+					<logic:iterate name="rateListForm" property="rates" id="item">
 						<hr>
 						<div
-							class="<logic:equal name="item" property="status" value="0">un-active</logic:equal>">
+							class="">
 							<div class="col-mot">
-								<bean:write name="item" property="threadId" />
+								<bean:write name="item" property="rateId" />
 							</div>
 							<div class="col-bon trun-text">
-								<bean:write name="item" property="name" />
+								<bean:write name="item" property="content" />
 							</div>
 							<div class="col-hai">
 								<bean:write name="item" property="created" />
 							</div>
 							<div class="col-hai">
-								<bean:write name="item" property="categoryName" />
+								<bean:write name="item" property="score" />
 							</div>
-							<div class="col-ba">
+							<div class="col-mot">
 								<button
-									onclick="editItem(<bean:write name="item" property="threadId" />)"
-									type="button" class="btn btn-action" data-toggle="tooltip"
-									data-placement="top" title="Edit item">
-									<i class="fa fa-pencil teal-text icon-btn-action"></i>
-								</button>
-								<button
-									onclick="deleteItem(<bean:write name="item" property="threadId" />)"
-									type="button" class="btn btn-action" data-toggle="tooltip"
-									data-placement="top" title="Remove item">
-									<i class="fa fa-times red-text icon-btn-action"></i>
-								</button>
-								<button
-									onclick="viewItem(<bean:write name="item" property="threadId" />)"
+									onclick="viewItem(<bean:write name="item" property="threadId" />,<bean:write name="item" property="rateId" />)"
 									type="button" class="btn btn-action" data-toggle="tooltip"
 									data-placement="top" title="View item">
 									<i class="fa fa-eye blue-text icon-btn-action"></i>
@@ -126,9 +114,8 @@
 						</div>
 					</logic:iterate>
 				</div>
-				<bean:define id="totalPage" name="threadListForm"
-					property="totalPage"></bean:define>
-				<bean:define id="pageCurrent" name="threadListForm" property="page"></bean:define>
+				<bean:define id="totalPage" name="rateListForm" property="totalPage"></bean:define>
+				<bean:define id="pageCurrent" name="rateListForm" property="page"></bean:define>
 				<%
 					int totalNum = Integer.parseInt(totalPage.toString());
 					int pageNum = Integer.parseInt(pageCurrent.toString());
@@ -167,8 +154,8 @@
 				</ul>
 				</nav>
 
-				<html:form action="/user/thread-manager-action" method="get">
-					<html:hidden styleId="pageId" name="threadListForm" property="page"
+				<html:form action="/user/rate-manager-action" method="get">
+					<html:hidden styleId="pageId" name="rateListForm" property="page"
 						styleClass="form-control"></html:hidden>
 				</html:form>
 			</div>
@@ -189,7 +176,7 @@
 				.ready(
 						function() {
 							//Đọc lại giá trị page hiện tại từ Form Class
-							var pageStatic = parseInt('<bean:write name="threadListForm" property="page"/>');
+							var pageStatic = parseInt('<bean:write name="rateListForm" property="page"/>');
 							//Thêm class active vô id <li> của trang hiện tại
 							$(".page-item").eq(pageStatic + 1).addClass("active");
 						});
@@ -201,37 +188,14 @@
 			document.forms[0].submit();
 		};
 		//hàm sửa item
-		function editItem(id){
-			var curentUrl = window.location.href;
-			var index = curentUrl.lastIndexOf("/");
-			var url = curentUrl.substring(0, index);
-			window.location.href = url + "/edit-thread-action.do?threadId="+id; 
-		};
 		//Hàm xóa item
-		function deleteItem(id) {swal({
-			  title: "Bạn có chắc?",
-			  text: "Dữ liệu bị xóa sẽ mất vĩnh viễn!",
-			  type: "warning",
-			  showCancelButton: true,
-			  confirmButtonColor: "#DD6B55",
-			  confirmButtonText: "Đồng ý!",
-			  closeOnConfirm: false
-			},
-			function(){
-				var curentUrl = window.location.href;
-				var index = curentUrl.lastIndexOf("/");
-				var url = curentUrl.substring(0, index);
-				window.location.href = url + "/delete-thread-action.do?threadId="+id; 
-			});
-		};
-		//Hàm xóa item
-		function viewItem(id) {
+		function viewItem(threadId, rateId) {
 				var curentUrl = window.location.href;
 				index = curentUrl.lastIndexOf("/");
 				url = curentUrl.substring(0, index);
 				index = url.lastIndexOf("/");
 				url = url.substring(0, index);
-				window.open(url + "/view-thread-action.do?threadId="+id); 
+				window.open(url + "/view-thread-action.do?threadId="+threadId + "#rate-"+rateId); 
 		};
 		
 	</script>

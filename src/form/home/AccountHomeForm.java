@@ -18,6 +18,7 @@ public class AccountHomeForm extends ActionForm {
 	String rePassword;
 	String phone;
 	int status;
+	int notificationId;
 	String action;
 
 	public AccountHomeForm() {
@@ -47,6 +48,14 @@ public class AccountHomeForm extends ActionForm {
 
 	public int getLevel() {
 		return level;
+	}
+
+	public int getNotificationId() {
+		return notificationId;
+	}
+
+	public void setNotificationId(int notificationId) {
+		this.notificationId = notificationId;
 	}
 
 	public void setLevel(int level) {

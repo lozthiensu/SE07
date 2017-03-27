@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -14,6 +15,7 @@ import form.home.HomeViewForm;
 import form.home.ViewThreadForm;
 import model.bean.Category;
 import model.bean.CategoryWithThread;
+import model.bean.Login;
 import model.bean.Rate;
 import model.bean.Thread;
 import model.bo.CategoryBO;
@@ -59,9 +61,16 @@ public class ViewThreadAction extends Action {
 		viewThreadForm.setRelateThreads(threadBO.getRelateThreadsByThread(thread));
 		
 		//Log.in("Lien quan: " + viewThreadForm.getRelateThreads().toString());
+		HttpSession httpSession = request.getSession();
+
+		int accountId = 0;
+		try {
+			accountId = (Integer) httpSession.getAttribute("accountId");
+		} catch (Exception e) {
+		}
 		
-		
-		ArrayList<Rate> rates = rateBO.getListByThread(thread);
+		ArrayList<Rate> rates = rateBO.getListByThread(thread, accountId);
+		Log.in(rates);
 		viewThreadForm.setRates(rates);
 		viewThreadForm.setRatesCount(rates.size());
 		

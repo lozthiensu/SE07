@@ -265,6 +265,9 @@
 						var objAccount = JSON.parse(res);
 						log(objAccount);
 						if (objAccount.accountId >= 0) {
+							if (typeof getRates == 'function') {
+								getRates();
+							}
 							//showSuccess("Đăng nhập thành công");
 							createCookie("email", objAccount.email, 1);
 							createCookie("password", objAccount.password, 1);
@@ -274,6 +277,8 @@
 							$("#imgAvaCMT").attr("src", objAccount.avatar);
 							$("#welcomeText").html("Chào " + email);
 							$("#modal-login").modal('hide');
+							getNotification();
+							$("#notificationBag").show();
 							$("#btnReg").hide();
 							$("#btnLog").hide();
 							$("#imgAva").show();
@@ -333,11 +338,15 @@
 		return str;
 	}
 	function logout() {
+
 		$.ajax({
 			type : "POST",
 			url : "/Mock_SE7/home-account-action.do",
 			data : "action=logout",
 			success : function(res) {
+				if (typeof getRates == 'function') {
+					getRates();
+				}
 				log("Logout");
 			},
 			error : function(e) {
@@ -350,6 +359,7 @@
 		$("#btnReg").show();
 		$("#btnLog").show();
 		$("#imgAva").hide();
+		$("#notificationBag").hide();
 		$("#menuAcc").hide();
 		$('#btnAddRate').prop('disabled', true); //TO DISABLED
 		$('#newContentRate').prop('disabled', true); //TO DISABLED
@@ -358,7 +368,79 @@
 		$("#welcomeToRate").html("Chức năng yêu cầu đăng nhập");
 		$("#imgAvaCMT").attr("src", "image/avatar.jpg");
 	}
+	function getNotification() {
+		$
+				.ajax({
+					type : "POST",
+					url : "/Mock_SE7/home-account-action.do",
+					data : "action=getNotification",
+					success : function(res) {
+						obj = JSON.parse(res);
+						unRead = 0;
+						n = obj.length;
+						str = "";
+						for (i = 0; i < n; i++) {
+							un = '';
+							if (obj[i].bit != 1) {
+								unRead++;
+								un = 'item-unread';
+							}
+							str += '<a onclick="read('
+									+ obj[i].notificationId
+									+ ','
+									+ obj[i].threadId
+									+ ','
+									+ obj[i].rateId
+									+ ')" class="" >'
+									+ '<div class="row item-noti '+ un +'" style="min-width: 400px;">'
+									+ '	<div class="col-2">'
+									+ '		<img src="'+ obj[i].avatar +'"'
+									+ '			style=" height: 50px; width: 50px; border-radius: 50%;">'
+									+ '	</div>'
+									+ '	<div class="col-10">'
+									+ '	<div style="max-width: 400px;"> '
+									+ '		<span'
+							+'			style="word-wrap: break-word; word-break: break-all;">'
+									+ obj[i].content
+									+ '		</span>'
+									+ '		<br><span'
+							+'			style="word-wrap: break-word; word-break: break-all;">'
+									+ obj[i].timeCount + '		</span>'
+									+ '	</div>' + '	</div>' + '</div>' + '</a>';
+						}
+						$('#numMessUnread').html(unRead);
+						$('#listNoti').html(str);
+					},
+					error : function(e) {
+						alert('Error: ' + e);
+					}
+				});
+	}
+	function read(notificationId, threadId, rateId) {
+		log(notificationId + " " + threadId + " " + rateId);
+		$.ajax({
+			type : "POST",
+			url : "/Mock_SE7/home-account-action.do",
+			data : "action=read" + "&notificationId=" + notificationId,
+			success : function(res) {
+				log(res + " res");
+				if (res == "success") {
+					var curentUrl = window.location.href;
+					var index = curentUrl.lastIndexOf("/");
+					var url = curentUrl.substring(0, index);
+					window.location.href = url
+							+ "/view-thread-action.do?threadId=" + threadId
+							+ '#rate-' + rateId;
+				}
+			},
+			error : function(e) {
+				alert('Error: ' + e);
+			}
+		});
+
+	}
 	$(document).ready(function() {
+		getNotification();
 		$("#emailReg").keypress(function() {
 			checkEmail();
 		});
@@ -368,10 +450,11 @@
 
 		/* If login success, show avatar, hide button reg, log */
 		email = readCookie('email');
-		log(email);
+		//log(email);
 		if (email != undefined && email.length > 6) {
 			$("#welcomeText").html("Chào " + email);
 			$("#imgAva").show();
+			$("#notificationBag").show();
 			$("#menuAcc").show();
 			$("#btnReg").hide();
 			$("#btnLog").hide();
@@ -383,6 +466,7 @@
 			$("#btnReg").show();
 			$("#btnLog").show();
 			$("#imgAva").hide();
+			$("#notificationBag").hide();
 			$("#menuAcc").hide();
 			$("#welcomeText").html("");
 			$('#btnAddRate').prop('disabled', true); //TO DISABLED

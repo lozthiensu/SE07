@@ -75,6 +75,8 @@ body {
 	box-shadow: none;
 	text-align: left;
 	padding: 20px 30px;
+	    position: absolute;
+	    width: 100%
 }
 
 .icon-in-button {

@@ -39,6 +39,7 @@ Configuration 1.3//EN" "http://struts.apache.org/dtds/struts-config_1_3.dtd">
 		<form-bean name="threadListForm" type="form.user.thread.ThreadListForm" />
 		<form-bean name="deleteThreadForm" type="form.user.thread.DeleteThreadForm" />
 		<form-bean name="threadForm" type="form.user.thread.ThreadForm" />
+		<form-bean name="rateListForm" type="form.user.rate.RateListForm" />
 		<!-- KET THUC PHAN USER -->
 
 	</form-beans>
@@ -181,6 +182,14 @@ Configuration 1.3//EN" "http://struts.apache.org/dtds/struts-config_1_3.dtd">
 				redirect="true" />
 			<forward name="failed" path="/user/addthread.jsp" />
 		</action>
+		
+		<!-- User rate manager -->
+		<action input="/index.jsp" name="rateListForm" path="/user/rate-manager-action"
+			scope="request" type="action.user.rate.RateListAction">
+			<forward name="success" path="/user/rate.jsp" />
+			<forward name="failed" path="/index.jsp" redirect="true" />
+		</action>
+		
 
 
 		<!-- KET THUC ACTION CHO USER -->

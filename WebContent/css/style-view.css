@@ -513,3 +513,17 @@ footer.page-footer {
   -o-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
   transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1); */
 }
+.rate-button-func{
+	padding: 10px; 
+	float: right; 
+}
+.rate-button-func:hover{
+	background: #ccc;
+}
+.item-noti{
+	color: #000 !important;
+    margin: -10px -10px;
+}
+.item-unread{
+    background-image: linear-gradient(rgba(29, 33, 41, .04), rgba(29, 33, 41, .04));
+}

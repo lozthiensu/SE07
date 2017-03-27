@@ -9,6 +9,8 @@ public class Rate {
 	String accountImage;
 	String content;
 	int score;
+	int total;
+	boolean can;
 
 	public Rate() {
 		super();
@@ -47,8 +49,24 @@ public class Rate {
 		return accountId;
 	}
 
+	public boolean isCan() {
+		return can;
+	}
+
+	public void setCan(boolean can) {
+		this.can = can;
+	}
+
 	public void setAccountId(int accountId) {
 		this.accountId = accountId;
+	}
+
+	public int getTotal() {
+		return total;
+	}
+
+	public void setTotal(int total) {
+		this.total = total;
 	}
 
 	public String getCreated() {
@@ -95,7 +113,7 @@ public class Rate {
 	public String toString() {
 		return "Rate [rateId=" + rateId + ", threadId=" + threadId + ", accountId=" + accountId + ", created=" + created
 				+ ", accountName=" + accountName + ", accountImage=" + accountImage + ", content=" + content
-				+ ", score=" + score + "]";
+				+ ", score=" + score + ", can=" + can + "]";
 	}
 
 }

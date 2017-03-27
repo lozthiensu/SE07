@@ -17,8 +17,12 @@ import com.google.gson.Gson;
 import form.home.AccountHomeForm;
 import form.home.SearchThreadForm;
 import model.bean.Account;
+import model.bean.Login;
+import model.bean.Notification;
 import model.bean.Thread;
 import model.bo.AccountBO;
+import model.bo.LoginBO;
+import model.bo.NotificationBO;
 import model.bo.ThreadBO;
 import statics.Log;
 
@@ -35,10 +39,13 @@ public class AccountAction extends Action {
 
 		Account account = new Account();
 		AccountBO accountBO = new AccountBO();
+		LoginBO loginBO = new LoginBO();
+		NotificationBO notificationBO = new NotificationBO();
 
 		account.setEmail(accountHomeForm.getEmail());
 		account.setPassword(accountHomeForm.getPassword());
 		String action = accountHomeForm.getAction();
+		Log.in(action + " action");
 		if (action.equals("register")) {
 			if (accountBO.addAccount(account) == true) {
 				out.print("success");
@@ -46,6 +53,52 @@ public class AccountAction extends Action {
 			} else {
 				out.print("failed");
 				Log.in("thanh bai");
+			}
+		} else if (action.equals("getNotification")) {
+			HttpSession httpSession = request.getSession();
+			String email = (String) httpSession.getAttribute("email");
+			String password = (String) httpSession.getAttribute("password");
+
+			int accountId = 0;
+			try {
+				accountId = (Integer) httpSession.getAttribute("accountId");
+			} catch (Exception e) {
+			}
+
+			Log.in(email + " " + password + " session");
+			Gson gson = new Gson();
+			ArrayList<Notification> notifications = new ArrayList<Notification>();
+			if (loginBO.checkLogin(new Login(email, password)) == true) {
+				notifications = notificationBO.getListByAccount(accountId);
+				String json = gson.toJson(notifications);
+				out.print(json);
+			} else {
+				String json = gson.toJson(notifications);
+				out.print(json);
+			}
+		} else if (action.equals("read")) {
+			HttpSession httpSession = request.getSession();
+			String email = (String) httpSession.getAttribute("email");
+			String password = (String) httpSession.getAttribute("password");
+
+			int accountId = 0;
+			int notificationId = 0;
+			try {
+				accountId = (Integer) httpSession.getAttribute("accountId");
+				notificationId = accountHomeForm.getNotificationId();
+			} catch (Exception e) {
+			}
+			Gson gson = new Gson();
+			ArrayList<Notification> notifications = new ArrayList<Notification>();
+			if (loginBO.checkLogin(new Login(email, password)) == true) {
+				Log.in("Login thanh cong" + notificationId);
+				if (notificationBO.read(notificationId, accountId) == true) {
+					out.print("success");
+				} else {
+					out.print("failed");
+				}
+			} else {
+				out.print("failed");
 			}
 		} else if (action.equals("login")) {
 			Account accountData = accountBO.checkLoginAccount(account);
@@ -56,10 +109,8 @@ public class AccountAction extends Action {
 				HttpSession httpSession = request.getSession();
 				httpSession.setAttribute("email", accountData.getEmail());
 				httpSession.setAttribute("password", accountData.getPassword());
+				httpSession.setAttribute("accountId", accountData.getAccountId());
 				accountData.setPassword("");
-
-				Log.in(httpSession.getAttribute("email"));
-				// Log.in(json);
 				out.print(json);
 			} else {
 				Gson gson = null;
@@ -76,6 +127,7 @@ public class AccountAction extends Action {
 				out.print("failed");
 			}
 		}
+
 		out.flush();
 		return null;
 	}

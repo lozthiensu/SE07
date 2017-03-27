@@ -50,9 +50,14 @@
 			<ul class="navbar-nav ml-auto">
 				<img src="img/avatar.jpg" alt="Hình đại diện" class="rounded-circle"
 					style="width: 40px; height: 40px; display: none;" id="imgAva">
-				<h5 data-toggle="modal" data-target="#modal-messenger">
-					<span class="badge red" id="numMessUnread">5</span>
-				</h5>
+				<li class="dropdown" id="notificationBag">
+					<span class="badge red" id="numMessUnread" data-toggle="dropdown" aria-haspopup="true"
+					aria-expanded="false"></span>
+					<div class="dropdown-menu dropdown dropdown-menu-right"
+						aria-labelledby="numMessUnread">
+							<span id="listNoti"></span>
+					</div>
+				</li>
 				<li class="nav-item dropdown btn-group" id="menuAcc"
 					style="display: none;"><a
 					class="nav-link dropdown-toggle btn-right-menu-main"
