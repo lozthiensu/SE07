@@ -1,4 +1,4 @@
-package action.admin.account;
+package action.admin.category;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -14,16 +14,21 @@ import com.google.gson.Gson;
 
 import form.admin.account.AccountListForm;
 import form.admin.account.DeleteForm;
+import form.admin.category.DeleteCategoryForm;
 import model.bean.Account;
+import model.bean.Category;
 import model.bo.AccountBO;
+import model.bo.CategoryBO;
 import statics.Log;
 import statics.Pagination;
 
-public class DeleteAccountAction extends Action {
+public class DeleteCategoryAction extends Action {
 	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
-		
+
+		// Tương tác dữ liệu từ form
+		DeleteCategoryForm deleteCategoryForm = (DeleteCategoryForm) form;
 
 		/* START CHECK LOGIN */
 		Account account = new Account();
@@ -52,25 +57,25 @@ public class DeleteAccountAction extends Action {
 			return mapping.findForward("failed");
 		}
 		/* END CHECK LOGIN */
-		
-		//Tương tác dữ liệu từ form
-		DeleteForm deleteForm = (DeleteForm) form;
-		
-		//Tương tác với csdl
-		
-		//Lấy accountId từ form
-		int accountId = deleteForm.getAccountId();
-		
-		//Tạo ra đối tượng account
-		account = new Account();
-		
-		//Gán giá trị accountId
-		account.setAccountId(accountId);
-		
-		if( accountId >= 0 )
-			accountBO.deleteAccount(account);
 
-		//Trả v�? deletedAccount
-		return mapping.findForward("deletedAccount");
+		// Tương tác với csdl
+		CategoryBO categoryBO = new CategoryBO();
+
+		int categoryId = 0;
+		try {
+			categoryId = deleteCategoryForm.getCategoryId();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		// Tạo ra đối tượng account
+		Category category = new Category(categoryId, "");
+
+		// Gán giá trị accountId
+
+		if (categoryId >= 0)
+			categoryBO.delete(category);
+
+		// Trả v�? deletedAccount
+		return mapping.findForward("success");
 	}
 }

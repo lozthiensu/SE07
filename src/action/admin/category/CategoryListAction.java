@@ -1,4 +1,6 @@
-package action.admin.account;
+package action.admin.category;
+
+import java.util.ArrayList;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -12,18 +14,21 @@ import org.apache.struts.action.ActionMapping;
 
 import com.google.gson.Gson;
 
+import form.admin.LoginForm;
 import form.admin.account.AccountListForm;
-import form.admin.account.DeleteForm;
+import form.admin.category.CategoryListForm;
 import model.bean.Account;
 import model.bo.AccountBO;
+import model.bo.CategoryBO;
+import model.bo.LoginBO;
 import statics.Log;
 import statics.Pagination;
 
-public class DeleteAccountAction extends Action {
+public class CategoryListAction extends Action {
 	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
-		
+
 
 		/* START CHECK LOGIN */
 		Account account = new Account();
@@ -53,24 +58,14 @@ public class DeleteAccountAction extends Action {
 		}
 		/* END CHECK LOGIN */
 		
-		//Tương tác dữ liệu từ form
-		DeleteForm deleteForm = (DeleteForm) form;
-		
-		//Tương tác với csdl
-		
-		//Lấy accountId từ form
-		int accountId = deleteForm.getAccountId();
-		
-		//Tạo ra đối tượng account
-		account = new Account();
-		
-		//Gán giá trị accountId
-		account.setAccountId(accountId);
-		
-		if( accountId >= 0 )
-			accountBO.deleteAccount(account);
+		// accountListForm tương tác dữ liệu từ form
+		CategoryListForm categoryListForm = (CategoryListForm) form;
 
-		//Trả v�? deletedAccount
-		return mapping.findForward("deletedAccount");
+		// accountBO để tương tác vs csdl
+		CategoryBO categoryBO = new CategoryBO();
+
+		categoryListForm.setCategories(categoryBO.getList());
+		// Trả v�? trang listAccounts
+		return mapping.findForward("success");
 	}
 }

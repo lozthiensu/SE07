@@ -66,7 +66,7 @@
 				</a>
 			</div>
 			<div class="row dash-board">
-				<a href="./dashboard-action.do">
+				<a href="./category-manager-action.do">
 					<button type="button"
 						class="btn btn-elegant button-side-menu-left">
 						<i class="fa fa-globe icon-in-button" style="color: #2C97BE"

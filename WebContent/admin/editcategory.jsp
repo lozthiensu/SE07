@@ -49,8 +49,7 @@
 		<div class="col-lg-2 hidden-lg-down side-menu-left">
 			<div class="row dash-board">
 				<a href="./dashboard-action.do">
-					<button type="button"
-						class="btn btn-elegant button-side-menu-left">
+					<button type="button" class="btn btn-elegant button-side-menu-left">
 						<i class="fa fa-globe icon-in-button" style="color: #2C97BE"
 							aria-hidden="true"></i>Thống kê
 					</button>
@@ -58,7 +57,7 @@
 			</div>
 			<div class="row dash-board">
 				<a href="./account-manager-action.do">
-					<button type="button" class="btn btn-elegant button-side-menu-left button-dash-board">
+					<button type="button" class="btn btn-elegant button-side-menu-left">
 						<i class="fa fa-group icon-in-button" aria-hidden="true"></i>Tài
 						khoản
 					</button>
@@ -67,7 +66,7 @@
 			<div class="row dash-board">
 				<a href="./category-manager-action.do">
 					<button type="button"
-						class="btn btn-elegant button-side-menu-left">
+						class="btn btn-elegant button-side-menu-left button-dash-board">
 						<i class="fa fa-globe icon-in-button" style="color: #2C97BE"
 							aria-hidden="true"></i>Danh mục
 					</button>
@@ -78,63 +77,30 @@
 			<div class="row main-content-form hoverable">
 				<div class="clearfix"></div>
 				<div class="row" style="width: 100%">
-					<div class="col-lg-8 col-6">
+					<div class="col-lg-12 col-12">
 						<h2 class="title-in-admin">Tạo mới</h2>
 					</div>
-					<div class="col-lg-4 col-6 text-right">
+					<!-- <div class="col-lg-4 col-6 text-right">
 						<button class="btn btn-primary" onclick="history.go(-1);">Quay
 							lại</button>
-					</div>
+					</div> -->
 				</div>
 
-				<html:form action="/admin/add-account-action" method="post"
+				<html:form action="/admin/edit-category-action" method="post"
 					styleClass="form-admin-right">
 					<div class="card-block">
 						<html:hidden styleId="idAction" property="action"></html:hidden>
-						<div style="width: 48px; display: inline-block;">
-							<i class="fa fa-user prefix" style="font-size: 2rem;"></i>
-						</div>
-						<div style="width: calc(100% - 52px); display: inline-block;">
-							<html:select property="level" styleClass="mdb-select">
-								<html:option value="1">Quản trị viên</html:option>
-								<html:option value="2">Điều hành viên</html:option>
-								<html:option value="3">Người dùng</html:option>
-							</html:select>
-						</div>
+						<html:hidden styleClass="form-control" property="categoryId"></html:hidden>
 						<div class="md-form">
 							<i class="fa fa-user prefix"></i>
 							<html:text property="name" styleClass="form-control"></html:text>
-							<label for="form3">Họ tên</label>
+							<label for="form3">Tên</label>
 						</div>
-
-						<div class="md-form">
-							<i class="fa fa-envelope prefix"></i>
-							<html:text property="email" styleClass="form-control"></html:text>
-							<label for="form2">Email</label>
-						</div>
-
-						<div class="md-form">
-							<i class="fa fa-tag prefix"></i>
-							<html:text property="password" styleClass="form-control"></html:text>
-							<label for="form34">Mật khẩu</label>
-						</div>
-
-						<div class="md-form">
-							<i class="fa fa-pencil prefix"></i>
-							<html:text property="rePassword" styleClass="form-control"></html:text>
-							<label for="form8">Nhập lại mật khẩu</label>
-						</div>
-
-						<div class="md-form">
-							<i class="fa fa-pencil prefix"></i>
-							<html:text property="phone" styleClass="form-control"></html:text>
-							<label for="form8">Điện thoại</label>
-						</div>
-
 						<div class="text-center">
-							<button onclick="return submitAddForm();"
-								class="btn btn-default button-login-admin">Thêm</button>
-							<button type="reset" class="btn btn-warning">Hủy</button>
+							<button onclick="return submitEditForm();"
+								class="btn btn-default button-login-admin">Sửa</button>
+							<button class="btn btn-primary" onclick="history.go(-1);">Quay
+								lại</button>
 						</div>
 					</div>
 				</html:form>
@@ -151,32 +117,25 @@
 		var idAction = $("#idAction");
 		$(document).ready(function() {
 			$('.mdb-select').material_select();
-		});
-		function submitAddForm() {
-			var level, name, email, password, rePassword, phone;
-			level = $("[name='level']").val();
-			name = $("[name='name']").val();
-			email = $("[name='email']").val();
-			password = $("[name='password']").val();
-			rePassword = $("[name='rePassword']").val();
-			phone = $("[name='phone']").val();
-			if (level == undefined) {
-				showAlert("Quyền hạn không được bỏ trống");
-				return false;
-			} else if (email == undefined || email.length <= 6) {
-				showAlert("Email không được bỏ trống hoặc quá ngắn");
-				return false;
-			} else if (password == undefined || password.length <= 6) {
-				showAlert("Mật khẩu không được bỏ trống");
-				return false;
-			} else if (rePassword != password) {
-				showAlert("Mật khẩu không khớp");
-				return false;
-			}else{
-				idAction.val("submit");
-				document.forms[0].submit();
-				return true;
+			$('#level').on("change", function() {
+				level = $(this).val();
+				if (level == 2) {
+					$("#categoryId").show();
+				} else {
+					$("#categoryId").hide();
+				}
+			});
+			level = $('#level').val();
+			if (level == 2) {
+				$("#categoryId").show();
+			} else {
+				$("#categoryId").hide();
 			}
+		});
+		function submitEditForm() {
+			idAction.val("submit");
+			document.forms[0].submit();
+			return true;
 		}
 		function showAlert(text) {
 			sweetAlert("Lỗi", text, "error");

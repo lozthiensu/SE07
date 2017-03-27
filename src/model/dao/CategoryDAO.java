@@ -25,7 +25,7 @@ public class CategoryDAO {
 		PreparedStatement pr = null;
 		try {
 
-			String sql = "select * from Category";
+			String sql = "select * from Category order by categoryId desc";
 			pr = SQLServer.connection.prepareStatement(sql);
 			rs = pr.executeQuery();
 			try {

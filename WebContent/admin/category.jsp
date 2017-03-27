@@ -59,7 +59,7 @@
 			</div>
 			<div class="row dash-board">
 				<a href="./account-manager-action.do">
-					<button type="button" class="btn btn-elegant button-side-menu-left button-dash-board">
+					<button type="button" class="btn btn-elegant button-side-menu-left">
 						<i class="fa fa-group icon-in-button" aria-hidden="true"></i>Tài
 						khoản
 					</button>
@@ -68,7 +68,7 @@
 			<div class="row dash-board">
 				<a href="./category-manager-action.do">
 					<button type="button"
-						class="btn btn-elegant button-side-menu-left">
+						class="btn btn-elegant button-side-menu-left button-dash-board">
 						<i class="fa fa-globe icon-in-button" style="color: #2C97BE"
 							aria-hidden="true"></i>Danh mục
 					</button>
@@ -80,10 +80,10 @@
 				<div class="clearfix"></div>
 				<div class="row" style="width: 100%; height: 60px;">
 					<div class="col-lg-8">
-						<h2 class="title-in-admin">Danh sách tài khoản</h2>
+						<h2 class="title-in-admin">Danh sách danh mục</h2>
 					</div>
 					<div class="col-lg-4 text-right">
-						<html:link styleClass="btn btn-success" action="/admin/add-account-action">
+						<html:link styleClass="btn btn-success" action="/admin/add-category-action">
 							<i class="fa fa-language icon-in-button" aria-hidden="true"></i> Thêm mới</html:link>
 					</div>
 				</div>
@@ -91,32 +91,24 @@
 					<div>
 						<div class="col-mot">Id</div>
 						<div class="col-ba">Tên</div>
-						<div class="col-ba">Email</div>
-						<div class="col-hai">Điện thoại</div>
 						<div class="col-ba">Thao tác</div>
 					</div>
-					<logic:iterate name="accountListForm" property="accounts" id="item">
+					<logic:iterate name="categoryListForm" property="categories" id="item">
 						<hr>
 						<div>
 							<div class="col-mot">
-								<bean:write name="item" property="accountId" />
+								<bean:write name="item" property="categoryId" />
 							</div>
 							<div class="col-ba">
 								<bean:write name="item" property="name" />
 							</div>
 							<div class="col-ba">
-								<bean:write name="item" property="email" />
-							</div>
-							<div class="col-hai">
-								<bean:write name="item" property="phone" />
-							</div>
-							<div class="col-ba">
-								<button onclick="editItem(<bean:write name="item" property="accountId" />)" type="button" class="btn btn-action"
+								<button onclick="editItem(<bean:write name="item" property="categoryId" />)" type="button" class="btn btn-action"
 									data-toggle="tooltip" data-placement="top" title="Remove item">
 									<i class="fa fa-pencil teal-text icon-btn-action"></i>
 								</button>
 								<button
-									onclick="deleteItem(<bean:write name="item" property="accountId" />)"
+									onclick="deleteItem(<bean:write name="item" property="categoryId" />)"
 									type="button" class="btn btn-action" data-toggle="tooltip"
 									data-placement="top" title="Remove item">
 									<i class="fa fa-times red-text icon-btn-action"></i>
@@ -125,43 +117,9 @@
 						</div>
 					</logic:iterate>
 				</div>
-				<nav class="pagination-center">
-				<ul class="pagination pagination-md pg-amber">
-					<li
-						onclick='viewPage(1);'
-						class="page-item"><a class="page-link" saria-label="Previous">
-							<span aria-hidden="true">&laquo;</span>
-							<span aria-hidden="true">&laquo;</span>
-					</a></li>
-					<li
-						onclick='viewPage(<%out.println((Pagination.page - 1) > 1 ? (Pagination.page - 1) : 1);%>);'
-						class="page-item"><a class="page-link" saria-label="Previous">
-							<span aria-hidden="true">&laquo;</span>
-					</a></li>
-					<%
-						for (int i = 1; i <= Pagination.totalPage; i++) {
-							if (i != Pagination.page)
-								out.println("<li onclick='viewPage(" + i
-										+ ");' class=\"page-item\"><a class=\"page-link\" href=\"#\">" + i + "</a></li>");
-							else
-								out.println("<li onclick='viewPage(" + i
-										+ ");' class=\"page-item active\"><a class=\"page-link\" href=\"#\">" + i + "</a></li>");
-						}
-					%>
-					<li
-						onclick='viewPage(<%out.println((Pagination.page + 1) < Pagination.totalPage ? (Pagination.page + 1) : Pagination.totalPage);%>);'
-						class="page-item"><a class="page-link" aria-label="Next">
-							<span aria-hidden="true">&raquo;</span>
-					</a></li>
-					<li onclick='viewPage(<%out.println(Pagination.totalPage);%>);'
-						class="page-item"><a class="page-link" aria-label="Next">
-							<span aria-hidden="true">&raquo;</span><span aria-hidden="true">&raquo;</span>
-					</a></li>
-				</ul>
-				</nav>
 
-				<html:form action="/admin/account-manager-action" method="get">
-					<html:hidden styleId="pageId" name="accountListForm"
+				<html:form action="/admin/category-manager-action" method="get">
+					<html:hidden styleId="pageId" name="categoryListForm"
 						property="page" styleClass="form-control"></html:hidden>
 				</html:form>
 			</div>
@@ -182,7 +140,7 @@
 				.ready(
 						function() {
 							//Đọc lại giá trị page hiện tại từ Form Class
-							var pageStatic = parseInt('<bean:write name="accountListForm" property="page"/>');
+							var pageStatic = parseInt('<bean:write name="categoryListForm" property="page"/>');
 							//Thêm class active vô id <li> của trang hiện tại
 							$(".page-item").eq(pageStatic + 1).addClass("active");
 						});
@@ -198,7 +156,7 @@
 			var curentUrl = window.location.href;
 			var index = curentUrl.lastIndexOf("/");
 			var url = curentUrl.substring(0, index);
-			window.location.href = url + "/edit-account-action.do?accountId="+id; 
+			window.location.href = url + "/edit-category-action.do?categoryId="+id; 
 		};
 		//Hàm xóa item
 		function deleteItem(id) {swal({
@@ -214,7 +172,7 @@
 				var curentUrl = window.location.href;
 				var index = curentUrl.lastIndexOf("/");
 				var url = curentUrl.substring(0, index);
-				window.location.href = url + "/delete-account-action.do?accountId="+id; 
+				window.location.href = url + "/delete-category-action.do?categoryId="+id; 
 			});
 		};
 		

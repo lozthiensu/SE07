@@ -49,8 +49,7 @@
 		<div class="col-lg-2 hidden-lg-down side-menu-left">
 			<div class="row dash-board">
 				<a href="./dashboard-action.do">
-					<button type="button"
-						class="btn btn-elegant button-side-menu-left">
+					<button type="button" class="btn btn-elegant button-side-menu-left">
 						<i class="fa fa-globe icon-in-button" style="color: #2C97BE"
 							aria-hidden="true"></i>Thống kê
 					</button>
@@ -58,16 +57,16 @@
 			</div>
 			<div class="row dash-board">
 				<a href="./account-manager-action.do">
-					<button type="button" class="btn btn-elegant button-side-menu-left button-dash-board">
+					<button type="button"
+						class="btn btn-elegant button-side-menu-left button-dash-board">
 						<i class="fa fa-group icon-in-button" aria-hidden="true"></i>Tài
 						khoản
 					</button>
 				</a>
 			</div>
 			<div class="row dash-board">
-				<a href="./dashboard-action.do">
-					<button type="button"
-						class="btn btn-elegant button-side-menu-left">
+				<a href="./category-manager-action.do">
+					<button type="button" class="btn btn-elegant button-side-menu-left">
 						<i class="fa fa-globe icon-in-button" style="color: #2C97BE"
 							aria-hidden="true"></i>Danh mục
 					</button>

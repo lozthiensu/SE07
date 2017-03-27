@@ -1,4 +1,4 @@
-package action.admin.account;
+package action.admin.category;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -6,24 +6,28 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
 
 import com.google.gson.Gson;
 
-import form.admin.account.AccountListForm;
-import form.admin.account.DeleteForm;
+import common.StringProcess;
+import form.admin.account.AccountForm;
+import form.admin.category.CategoryForm;
 import model.bean.Account;
+import model.bean.Category;
 import model.bo.AccountBO;
+import model.bo.CategoryBO;
 import statics.Log;
-import statics.Pagination;
 
-public class DeleteAccountAction extends Action {
+public class AddCategoryAction extends Action {
 	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
-		
+		request.setCharacterEncoding("UTF-8");
 
 		/* START CHECK LOGIN */
 		Account account = new Account();
@@ -52,25 +56,25 @@ public class DeleteAccountAction extends Action {
 			return mapping.findForward("failed");
 		}
 		/* END CHECK LOGIN */
-		
-		//Tương tác dữ liệu từ form
-		DeleteForm deleteForm = (DeleteForm) form;
-		
-		//Tương tác với csdl
-		
-		//Lấy accountId từ form
-		int accountId = deleteForm.getAccountId();
-		
-		//Tạo ra đối tượng account
-		account = new Account();
-		
-		//Gán giá trị accountId
-		account.setAccountId(accountId);
-		
-		if( accountId >= 0 )
-			accountBO.deleteAccount(account);
 
-		//Trả v�? deletedAccount
-		return mapping.findForward("deletedAccount");
+		// accountListForm tương tác dữ liệu từ form
+		CategoryForm categoryForm = (CategoryForm) form;
+
+		// accountBO để tương tác vs csdl
+		CategoryBO categoryBO = new CategoryBO();
+
+		// Lưu lại hành động từ form
+		String action = categoryForm.getAction();
+
+		if ("submit".equals(action)) {
+			Category category = new Category(0, categoryForm.getName());
+			categoryBO.add(category);
+			// Thêm thành công và chuyển trang
+			return mapping.findForward("success");
+
+		} else {
+
+			return mapping.findForward("failed");
+		}
 	}
 }

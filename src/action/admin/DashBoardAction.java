@@ -22,15 +22,16 @@ import statics.Log;
 public class DashBoardAction extends Action {
 	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
-			HttpServletResponse response)
-			throws Exception { /* START CHECK LOGIN */
+			HttpServletResponse response) throws Exception {
+
+		/* START CHECK LOGIN */
 		Account account = new Account();
 		AccountBO accountBO = new AccountBO();
 		HttpSession httpSession = request.getSession();
 
 		response.setContentType("text/text;charset=utf-8");
 		response.setHeader("cache-control", "no-cache");
-		
+
 		try {
 			account.setEmail(httpSession.getAttribute("emailAdmin").toString());
 			account.setPassword(httpSession.getAttribute("passwordAdmin").toString());
@@ -59,7 +60,7 @@ public class DashBoardAction extends Action {
 		dashBoard.setJsonRate(gson.toJson(dashBoard.getChartRate()));
 
 		dashBoardForm.setDashBoard(dashBoard);
-		
+
 		return mapping.findForward("success");
 
 	}
