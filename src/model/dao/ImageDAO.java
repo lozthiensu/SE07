@@ -16,171 +16,147 @@ import statics.Log;
 
 public class ImageDAO {
 
-	// Khai báo các biến để kết nối vs csdl, lưu tại class InfoSQLServer
-	String url = SQLServer.url;
-	String userName = SQLServer.userName;
-	String password = SQLServer.password;
-	Connection connection;
-
-	void connect() {
-		try {
-			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-			connection = DriverManager.getConnection(url, userName, password);
-			//System.out.println("Ket noi thanh cong");
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("Ket noi loi");
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-			System.out.println("JDBC loi");
-		}
-	}
-
 	public ArrayList<Image> getListByThread(Thread thread) {
 
-		// Mở kết nối
-		connect();
+		// Open connect
+		SQLServer.connect();
 
-		// Lưu kết quả truy vấn
 		ResultSet rs = null;
-
-		// Lưu thông tin account
 		ArrayList<Image> images = new ArrayList<Image>();
+		PreparedStatement pr = null;
+
 		try {
 
-			// Câu lệnh truy vấn
+			// Select
 			String sql = "select * from Image where threadId = ? and image360 = 0";
-			PreparedStatement pr = connection.prepareStatement(sql);
-
-			// Truyền tham số
+			pr = SQLServer.connection.prepareStatement(sql);
 			pr.setInt(1, thread.getThreadId());
-
-			// Thực hiện
 			rs = pr.executeQuery();
-
-			// Lấy kết quả đưa vào accountData
 			while (rs.next()) {
 				images.add(new Image(rs.getInt("imageId"), rs.getInt("threadId"), rs.getString("src"),
 						rs.getString("content"), rs.getBoolean("image360")));
 			}
 
-			// Đóng kết nối
-			pr.close();
-			connection.close();
-
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally { // Close connect
+			try {
+				rs.close();
+			} catch (Exception e2) {
+			}
+			try {
+				pr.close();
+			} catch (Exception e2) {
+			}
+			SQLServer.disconnect();
 		}
 		return images;
 	}
 
-	public ArrayList<Image> getList360ByThread(Thread thread) {// Mở kết nối
-		connect();
+	public ArrayList<Image> getList360ByThread(Thread thread) {
 
-		// Lưu kết quả truy vấn
+		// Open connect
+		SQLServer.connect();
+
 		ResultSet rs = null;
-
-		// Lưu thông tin account
 		ArrayList<Image> images = new ArrayList<Image>();
+		PreparedStatement pr = null;
+
 		try {
 
-			// Câu lệnh truy vấn
 			String sql = "select * from Image where threadId = ? and image360 = 1";
-			PreparedStatement pr = connection.prepareStatement(sql);
-
-			// Truyền tham số
+			pr = SQLServer.connection.prepareStatement(sql);
 			pr.setInt(1, thread.getThreadId());
-
-			// Thực hiện
 			rs = pr.executeQuery();
 
-			// Lấy kết quả đưa vào accountData
 			while (rs.next()) {
 				images.add(new Image(rs.getInt("imageId"), rs.getInt("threadId"), rs.getString("src"),
 						rs.getString("content"), rs.getBoolean("image360")));
 			}
 
-			// Đóng kết nối
-			pr.close();
-			connection.close();
-
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally { // Close connect
+			try {
+				rs.close();
+			} catch (Exception e2) {
+			}
+			try {
+				pr.close();
+			} catch (Exception e2) {
+			}
+			SQLServer.disconnect();
 		}
 		return images;
 	}
 
 	public boolean delete(ThreadForm threadForm) {
-		connect();
 
-		// Lưu kết quả truy vấn
+		// Open connect
+		SQLServer.connect();
+
 		ResultSet rs = null;
-
-		// Lưu thông tin account
 		ArrayList<Image> images = new ArrayList<Image>();
+		PreparedStatement pr = null;
+		int count = 0;
 		try {
 
-			// Câu lệnh truy vấn
 			String sql = "delete from Image where threadId = ?";
-			PreparedStatement pr = connection.prepareStatement(sql);
-
-			// Truyền tham số
+			pr = SQLServer.connection.prepareStatement(sql);
 			pr.setInt(1, threadForm.getThreadId());
-
-			// Thực hiện
-			int count = pr.executeUpdate();
-
-			// Đóng kết nối
-			pr.close();
-			connection.close();
-
-			if (count > 0)
-				return true;
+			count = pr.executeUpdate();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally { // Close connect
+			try {
+				rs.close();
+			} catch (Exception e2) {
+			}
+			try {
+				pr.close();
+			} catch (Exception e2) {
+			}
+			SQLServer.disconnect();
 		}
-		return false;
+
+		return count > 0 ? true : false;
 
 	}
 
 	public boolean insert(ArrayList<Image> images) {
-		connect();
 
-		// Lưu kết quả truy vấn
+		// Open connect
+		SQLServer.connect();
+
 		ResultSet rs = null;
-
-		// Lưu thông tin account
+		PreparedStatement pr = null;
+		int count = 0;
 		try {
 
-			PreparedStatement pr = null;
 			for (Image image : images) {
-				// Câu lệnh truy vấn
 				String sql = "insert into Image(threadId, src, content, image360) VALUES(?,?,?,?)";
-				pr = connection.prepareStatement(sql);
-				
-				// Truyền tham số
+				pr = SQLServer.connection.prepareStatement(sql);
 				pr.setInt(1, image.getThreadId());
 				pr.setString(2, image.getSrc());
 				pr.setString(3, image.getContent());
 				pr.setBoolean(4, false);
-
-				// Thực hiện
-				int count = pr.executeUpdate();
-				if(count > 0)
-					Log.in("THem moi thanh cong" + image.toString());
-				else
-					Log.in("Them moi that bai");
-
+				count = pr.executeUpdate();
 			}
-			// Đóng kết nối
-			pr.close();
-			connection.close();
-			return true;
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally { // Close connect
+			try {
+				rs.close();
+			} catch (Exception e2) {
+			}
+			try {
+				pr.close();
+			} catch (Exception e2) {
+			}
+			SQLServer.disconnect();
 		}
-		return false;
+		return count > 0 ? true : false;
 	}
 }
