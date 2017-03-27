@@ -343,15 +343,15 @@ public class AccountDAO {
 	public Account checkLoginAccount(Account account) {
 		// Mở kết nối
 		connect();
-		Account accountData = null;
+		Account accountData = new Account();
 		// Khai báo biến rs để chứa kết quả
 		ResultSet rs = null;
 		try {
 
 			// Câu lẹnh kiểm tra đăng nhập
-			String sql = "select * from Account where email = ? AND password = ?";
+			String sql = "select * from Account where email = ? and password = ? and level = 3";
 			PreparedStatement pr = connection.prepareStatement(sql);
-
+			Log.in(sql);
 			// Truyền các biến vào câu lệnh để thực thi
 			pr.setString(1, account.getEmail());
 			pr.setString(2, account.getPassword());

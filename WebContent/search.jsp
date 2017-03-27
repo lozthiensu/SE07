@@ -244,6 +244,20 @@
 
 				<div class="row">
 					<div class="col-lg-3">
+						<html:select name="searchForm" property="categoryId"
+							styleClass="mdb-select" styleId="slbCategory"
+							onchange="doAjaxPost()">
+							<option value="" selected>Không</option>
+							<logic:iterate name="searchForm" property="categories" id="item">
+								<bean:define id="id" name="item" property="categoryId" />
+								<html:option value="${id}">
+									<bean:write name="item" property="name" />
+								</html:option>
+							</logic:iterate>
+						</html:select>
+						<label>Danh mục</label>
+					</div>
+					<div class="col-lg-3">
 						<select class="mdb-select" id="waterSource"
 							onchange="doAjaxPost()">
 							<option value="0" selected>Không</option>
@@ -543,57 +557,57 @@
 							createCookie('page', 1, 1);
 							$('.mdb-select').material_select();
 							$('#slbProvince')
-									.on(
-											"change",
-											function() {
-												var provinceId = $(this).val();
-												log(provinceId);
-												var str = "action=getDistrict"
-														+ "&provinceId="
-														+ provinceId;
-												log("POST: " + str);
-												$
-														.ajax({
-															type : "POST",
-															url : "/Mock_SE7/search-thread.do",
-															data : str,
-															success : function(
-																	response) {
-																log("RES: "
-																		+ response);
-																var districts = JSON
-																		.parse(response);
-																if (districts != undefined) {
-																	var n = districts.length;
-																	var stringResults = '<option value="" selected>Không</option>';
-																	for (var i = 0; i < n; i++) {
-																		stringResults += '<option value="'+districts[i].districtId+'">'
-																				+ districts[i].name
-																				+ '</option>';
-																	}
-																	$(
-																			'#slbDistrict')
-																			.html(
-																					stringResults);
-																	$(
-																			'#slbDistrict')
-																			.material_select();
-
-																	$(
-																			'#slbVillage')
-																			.html(
-																					'<option value="" selected>Không</option>');
-																	$(
-																			'#slbVillage')
-																			.material_select();
-																}
-															},
-															error : function(e) {
-																alert('Error: '
-																		+ e);
+							.on(
+									"change",
+									function() {
+										var provinceId = $(this).val();
+										log(provinceId);
+										var str = "action=getDistrict"
+												+ "&provinceId="
+												+ provinceId;
+										log("POST: " + str);
+										$
+												.ajax({
+													type : "POST",
+													url : "/Mock_SE7/search-thread.do",
+													data : str,
+													success : function(
+															response) {
+														log("RES: "
+																+ response);
+														var districts = JSON
+																.parse(response);
+														if (districts != undefined) {
+															var n = districts.length;
+															var stringResults = '<option value="" selected>Không</option>';
+															for (var i = 0; i < n; i++) {
+																stringResults += '<option value="'+districts[i].districtId+'">'
+																		+ districts[i].name
+																		+ '</option>';
 															}
-														});
-											});
+															$(
+																	'#slbDistrict')
+																	.html(
+																			stringResults);
+															$(
+																	'#slbDistrict')
+																	.material_select();
+
+															$(
+																	'#slbVillage')
+																	.html(
+																			'<option value="" selected>Không</option>');
+															$(
+																	'#slbVillage')
+																	.material_select();
+														}
+													},
+													error : function(e) {
+														alert('Error: '
+																+ e);
+													}
+												});
+									});
 							$('#slbDistrict')
 									.on(
 											"change",
@@ -686,6 +700,7 @@
 			provinceId = $('#slbProvince').val();
 			districtId = $('#slbDistrict').val();
 			villageId = $('#slbVillage').val();
+			categoryId = $('#slbCategory').val();
 			name = $("#name").val();
 			page = parseInt(readCookie('page'));
 			lat = readCookie('lat');
@@ -693,7 +708,7 @@
 			var str = "action=search" + "&wifi=" + wifi + "&waterHeater="
 					+ waterHeater + "&conditioner=" + conditioner + "&fridge="
 					+ fridge + "&attic=" + attic + "&camera=" + camera
-					+ "&object=" + object + "&waterSource=" + waterSource
+					+ "&object=" + object + "&waterSource=" + waterSource + "&categoryId=" + categoryId
 					+ "&area=" + area + "&price=" + price + "&far=" + far
 					+ "&lat=" + lat + "&lng=" + lng + "&provinceId="
 					+ provinceId + "&districtId=" + districtId + "&villageId="

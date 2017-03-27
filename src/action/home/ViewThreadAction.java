@@ -29,57 +29,63 @@ public class ViewThreadAction extends Action {
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 
-		// accountListForm tương tác dữ liệu từ form
+		/* Khai bao action form */
 		ViewThreadForm viewThreadForm = (ViewThreadForm) form;
 
-		// BO để tương tác vs csdl
+		/* Khai bao BO */
 		CategoryBO categoryBO = new CategoryBO();
 		ThreadBO threadBO = new ThreadBO();
 		ImageBO imageBO = new ImageBO();
 		RateBO rateBO = new RateBO();
- 
+
+		/* Khai bao thread new, doc thread ra tu SQL */
 		Thread thread = new Thread();
 		thread.setThreadId(viewThreadForm.getThreadId());
 		viewThreadForm.setThread(threadBO.getById(thread));
-		
-		//Log.in("Id bai viet " + viewThreadForm.getThreadId());
-		
-		
 
-		if(viewThreadForm.getThread().getThreadId() == 0){
-			Log.in("Thoat");
+		/* Neu bai viet khong ton tai, return failed */
+		if (viewThreadForm.getThread().getThreadId() == 0) {
 			return mapping.findForward("failed");
 		}
-		//Log.in("Wifi: " + viewThreadForm.getThread().isWifi() + " , Old: " + viewThreadForm.getThread().isOld());
-		
+
+		/* Lay danh sach danh muc */
 		ArrayList<Category> categories = new ArrayList<Category>();
 		categories = categoryBO.getList();
 		viewThreadForm.setCategories(categories);
+
+		/* Lay danh sach hinh anh cua bai viet */
 		viewThreadForm.setImages(imageBO.getListByThread(thread));
-		//Log.in("Image: " + imageBO.getListByThread(thread));
+
+		/* Lay danh sach hinh anh 360 cua bai viet */
 		viewThreadForm.setImages360(imageBO.getList360ByThread(thread));
+
+		/* Lay danh sach bai viet lien quan cua bai viet */
 		viewThreadForm.setRelateThreads(threadBO.getRelateThreadsByThread(thread));
-		
-		//Log.in("Lien quan: " + viewThreadForm.getRelateThreads().toString());
+
+		/* Khai bao session */
 		HttpSession httpSession = request.getSession();
 
+		/* Lay accountId duoc luu trong ssesion */
 		int accountId = 0;
 		try {
 			accountId = (Integer) httpSession.getAttribute("accountId");
 		} catch (Exception e) {
 		}
-		
+
+		/* Lay danh sach danh gia bai viet */
 		ArrayList<Rate> rates = rateBO.getListByThread(thread, accountId);
-		Log.in(rates);
 		viewThreadForm.setRates(rates);
 		viewThreadForm.setRatesCount(rates.size());
-		
-		//Log.in("Wifi: " + viewThreadForm.getThread().isWifi() + " , Old: " + viewThreadForm.getThread().isOld());
-		
-		//Log.in(imageBO.getListByThread(thread));
-		//Log.in("Rate " + viewThreadForm.getRates());
-		//Log.in("Related " + viewThreadForm.getRelateThreads());
-		
+
+		/*
+		 * Neu bai viet chua duoc xac nhan, thi chi cho phep nguoi viet bai xem
+		 * bai
+		 */
+		if (viewThreadForm.getThread().getStatus() != 1 && viewThreadForm.getThread().getAccountId() != accountId) {
+			return mapping.findForward("failed");
+		}
+
+		/* Doc thread thanh cong */
 		return mapping.findForward("viewThread");
 	}
 }

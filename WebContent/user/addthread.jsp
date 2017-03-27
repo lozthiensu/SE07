@@ -137,20 +137,21 @@
 		aria-label="Toggle navigation">
 		<i class="fa fa-bars" style="color: #2C97BE" aria-hidden="true"></i>
 	</button>
-	<a class="navbar-brand" href="#"> <strong><img
+	<a class="navbar-brand" href="../"> <strong><img
 			src="../img/logo.png" height="25px;" /></strong>
 	</a>
 	<div class="collapse navbar-collapse" id="navbarNav1">
 		<ul class="navbar-nav mr-auto">
 		</ul>
 		<ul class="navbar-nav ml-auto">
-			<img src="../img/avatar.jpg" alt="Hình đại diện"
+			<img id="imgAva" src="../img/avatar.jpg" alt="Hình đại diện"
 				class="rounded-circle" style="width: 40px; height: 40px">
 			<li class="nav-item dropdown btn-group"><a
 				class="nav-link dropdown-toggle" id="dropdownMenu1"
-				data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admin</a>
-				<div class="dropdown-menu dropdown dropdown-menu-right" aria-labelledby="dropdownMenu1">
-					<a class="dropdown-item">Đăng xuất</a>
+				data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+				<div class="dropdown-menu dropdown dropdown-menu-right"
+					aria-labelledby="dropdownMenu1">
+					<a class="dropdown-item" onclick="logout();">Đăng xuất</a>
 				</div></li>
 		</ul>
 	</div>
@@ -193,20 +194,27 @@
 						<html:hidden styleClass="form-control" property="accountId"></html:hidden>
 						<html:hidden styleClass="form-control" property="latitude"></html:hidden>
 						<html:hidden styleClass="form-control" property="longitude"></html:hidden>
-
 						<bean:define id="kindOf" name="threadForm" property="kindOf"></bean:define>
-						<fieldset class="form-group">
-							<input type="checkbox" id="kindOf" name="kindOf"
-								<%out.print(kindOf);
+						<div style="display: table; margin: 0 auto;">
+							<fieldset class="form-group">
+								<input type="radio" id="kindOf" name="kindOf"
+									<%out.print(kindOf);
 				if ("true".equals(kindOf.toString())) {
 					out.print(" checked=\"checked\" ");
-				}%> />
-							<label for="kindOf">Cho thuê phòng</label>
-						</fieldset>
+				}%>
+									value="true" /> <label for="kindOf">Cho thuê phòng</label> <input
+									type="radio" id="kindOf2" name="kindOf"
+									<%out.print(kindOf);
+				if ("false".equals(kindOf.toString())) {
+					out.print(" checked=\"checked\" ");
+				}%>
+									value="false" /> <label for="kindOf2">Đi tìm phòng</label>
+							</fieldset>
+						</div>
 
 						<div style="width: calc(100%); display: inline-block;">
 							<html:select name="threadForm" property="categoryId"
-								styleClass="mdb-select">
+								styleClass="mdb-select" styleId="slbCategory">
 								<logic:iterate name="threadForm" property="categories" id="item">
 									<bean:define id="id" name="item" property="categoryId" />
 									<html:option value="${id}">
@@ -253,18 +261,13 @@
 							<label for="form3">Làng - Xã</label>
 						</div>
 						<div class="md-form">
-							<html:text property="name" styleClass="form-control"></html:text>
+							<html:text property="name" styleClass="form-control" value="Baif vieets thws as asdjknas anasd asnasdk a"></html:text>
 							<label for="form3">Tên</label>
 						</div>
-						<%-- 
-						<div class="md-form">
-							<html:text property="address" styleClass="form-control"></html:text>
-							<label for="form3">Địa chỉ</label>
-						</div> --%>
 
 						<label for="form3">Nội dung </label>
 						<div class="md-form">
-							<html:textarea styleId="content" property="content"
+							<html:textarea styleId="content" property="content" value="Noi dung baif vieets thws as asdjknas anasd asnasdk a"
 								styleClass="form-control"></html:textarea>
 						</div>
 
@@ -306,8 +309,8 @@
 								<%out.print(wifi);
 				if ("true".equals(wifi.toString())) {
 					out.print(" checked=\"checked\" ");
-				}%>
-								value="false" /> <label for="wifi">Wifi</label>
+				}%> />
+							<label for="wifi">Wifi</label>
 						</fieldset>
 						<fieldset class="form-group">
 							<input type="checkbox" id="waterHeater" name="waterHeater"
@@ -420,6 +423,21 @@
 								id="place-name" class="title"></span> <br> <span
 								id="place-address"></span>
 						</div>
+						<bean:define id="sendNotification" name="threadForm"
+							property="sendNotification"></bean:define>
+							<br><br>
+						<fieldset class="form-group">
+							<input type="checkbox" name="sendNotification"
+								id="sendNotification"
+								<%out.print(wifi);
+				if ("true".equals(wifi.toString())) {
+					out.print(" checked=\"checked\" ");
+				}%>
+								onchange="doAjaxPost()" /> <label for="sendNotification">Gửi
+								thông báo đến bài viết phù hợp nhu cầu</label>
+						</fieldset>
+						
+						<div id="relateThread"></div>
 						<script>
 							var map = null;
 							// This example requires the Places library. Include the libraries=places
@@ -578,6 +596,18 @@
 		$(document)
 				.ready(
 						function() {
+							$('input[type=radio][name=kindOf]').change(
+									function() {
+										if (this.value == 'true') {
+											log("Cho tue");
+										} else if (this.value == 'false') {
+											log("Di tim");
+										}
+									});
+							$("#imgAva").attr("src",
+									"../" + readCookie("avatar"));
+							$("#dropdownMenu1").html(readCookie("email"));
+							//Đọc lại giá trị page hiện tại từ Form Class
 							$('input[type="text"]').keypress(function(event) {
 								if (event.keyCode == '13') {
 									event.preventDefault();
@@ -683,9 +713,9 @@
 						});
 		function submitAddForm() {
 			villageId = $('[name="villageId"]').val();
-			
-			name = $('[name="name"]').val(); 
-			content = tinymce.get('content').getContent(); 
+
+			name = $('[name="name"]').val();
+			content = tinymce.get('content').getContent();
 			price = $.isNumeric($('[name="price"]').val());
 			electricFee = $.isNumeric($('[name="electricFee"]').val());
 			waterFee = $.isNumeric($('[name="waterFee"]').val());
@@ -693,35 +723,35 @@
 			area = $.isNumeric($('[name="area"]').val());
 			numOfToilets = $.isNumeric($('[name="numOfToilets"]').val());
 			numOfPeople = $.isNumeric($('[name="numOfPeople"]').val());
-			
-			if(villageId == 0 || villageId == null){
+
+			if (villageId == 0 || villageId == null) {
 				showAlert("Bạn chưa chọn xã");
 				return false;
-			}else if(name == null || name.length < 10){
+			} else if (name == null || name.length < 10) {
 				showAlert("Tiêu đề quá ngắn");
 				return false;
-			}else if(content == null || content.length < 10){
+			} else if (content == null || content.length < 10) {
 				showAlert("Nội dung quá ngắn");
 				return false;
-			}else if(price == false){
+			} else if (price == false) {
 				showAlert("Giá không hợp lệ");
 				return false;
-			}else if(electricFee == false){
+			} else if (electricFee == false) {
 				showAlert("Tiền điện không hợp lệ");
 				return false;
-			}else if(waterFee == false){
+			} else if (waterFee == false) {
 				showAlert("Tiền nước không hợp lệ");
 				return false;
-			}else if(otherFee == false){
+			} else if (otherFee == false) {
 				showAlert("Phụ phí không hợp lệ");
 				return false;
-			}else if(area == false){
+			} else if (area == false) {
 				showAlert("Diện tích không hợp lệ");
 				return false;
-			}else if(numOfToilets == false){
+			} else if (numOfToilets == false) {
 				showAlert("Số toilets không hợp lệ");
 				return false;
-			}else if(numOfPeople == false){
+			} else if (numOfPeople == false) {
 				showAlert("Số người không hợp lệ");
 				return false;
 			}
@@ -732,6 +762,138 @@
 		function showAlert(text) {
 			sweetAlert("Lỗi", text, "error");
 		}
+		function logout() {
+			$.ajax({
+				type : "POST",
+				url : "/Mock_SE7/home-account-action.do",
+				data : "action=logout",
+				success : function(res) {
+					log("Logout");
+				},
+				error : function(e) {
+					alert('Error: ' + e);
+				}
+			});
+			eraseCookie("email");
+			eraseCookie("password");
+			var curentUrl = window.location.href;
+			index = curentUrl.lastIndexOf("/");
+			url = curentUrl.substring(0, index);
+			index = url.lastIndexOf("/");
+			url = url.substring(0, index);
+			window.location.href = url;
+		};
+
+		function log(a) {
+			console.log(a);
+		};
+
+		function createCookie(name, value, days) {
+			var expires = "";
+			if (days) {
+				var date = new Date();
+				date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+				expires = "; expires=" + date.toUTCString();
+			}
+			document.cookie = name + "=" + value + expires + "; path=/";
+		};
+
+		function readCookie(name) {
+			var nameEQ = name + "=";
+			var ca = document.cookie.split(';');
+			for (var i = 0; i < ca.length; i++) {
+				var c = ca[i];
+				while (c.charAt(0) == ' ')
+					c = c.substring(1, c.length);
+				if (c.indexOf(nameEQ) == 0)
+					return c.substring(nameEQ.length, c.length);
+			}
+			return null;
+		};
+
+		function eraseCookie(name) {
+			createCookie(name, "", -1);
+		};
+		function doAjaxPost() {
+			sendNotification = $('#sendNotification').is(':checked');
+			if(sendNotification == false){
+				return false;
+			}
+			// get the form values
+			wifi = $('#wifi').is(':checked');
+			waterHeater = $('#waterHeater').is(':checked');
+			conditioner = $('#conditioner').is(':checked');
+			fridge = $('#fridge').is(':checked');
+			attic = $('#attic').is(':checked');
+			camera = $('#camera').is(':checked');
+			object = $('#object').val();
+			waterSource = $('[name="waterSource"]').val(); 
+			area = $('#area').val();
+			far = $('#far').val();
+			provinceId = $('#slbProvince').val();
+			districtId = $('#slbDistrict').val();
+			villageId = $('#slbVillage').val();
+			categoryId = $('#slbCategory').val();
+			name = $('[name="name"]').val();
+			page = 1;
+			lat = $('[name="latitude"]').val();
+			lng = $('[name="longitude"]').val();
+			kindOf = $('#kindOf').is(':checked');
+			log(kindOf);
+			if (kindOf == true) {
+				kindOf = "false";
+			}else{
+				kindOf = "true";
+			}
+			var str = "action=search" + "&wifi=" + wifi + "&waterHeater="
+					+ waterHeater + "&conditioner=" + conditioner + "&fridge="
+					+ fridge + "&attic=" + attic + "&camera=" + camera
+					+ "&object=" + object + "&waterSource=" + waterSource
+					+ "&categoryId=" + categoryId + "&far=" + 6 + "&lat=" + lat
+					+ "&lng=" + lng + "&provinceId=" + provinceId
+					+ "&districtId=" + districtId + "&kindOf=" + kindOf
+					+ "&villageId=" + villageId + "&name=" + "&page=" + page;
+			log("Post " + str);
+			$
+					.ajax({
+						type : "POST",
+						url : "/Mock_SE7/search-thread.do",
+						data : str,
+						success : function(response) {
+							log(response);
+							//++page;
+							createCookie('page', page, 1);
+							//log("Res " + response);
+							var threads = JSON.parse(response);
+							if (threads != undefined) {
+								var n = threads.length;
+								var stringResults = '<span>Bài viết gợi ý phù hợp mục tiêu cho bạn</span>';
+								for (var i = 0; i < n; i++) {
+									stringResults += '<div class="row"><div class="col-md-10"> '
+											+ threads[i].name
+											+ ' </div>'
+											+ '<div class="col-md-2"><button onclick="viewItem('
+											+ threads[i].threadId
+											+ ')" type="button" class="btn btn-action" data-toggle="tooltip" data-placement="top" title="View item"> <i class="fa fa-eye blue-text icon-btn-action"></i> </button></div></div>';
+								}
+							}
+							$('#relateThread').html(stringResults);
+							//pagination
+						},
+						error : function(e) {
+							alert('Error: ' + e);
+						}
+					});
+		};
+		//Hàm xóa item
+		function viewItem(id) {
+			var curentUrl = window.location.href;
+			index = curentUrl.lastIndexOf("/");
+			url = curentUrl.substring(0, index);
+			index = url.lastIndexOf("/");
+			url = url.substring(0, index);
+			window.open(url + "/view-thread-action.do?threadId=" + id);
+		};
 	</script>
 </body>
 

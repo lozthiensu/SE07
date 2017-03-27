@@ -54,6 +54,7 @@ public class SearchThreadAction extends Action {
 			ThreadBO threadBO = new ThreadBO();
 
 			thread.setWifi(searchThreadForm.isWifi());
+			thread.setCategoryId(searchThreadForm.getCategoryId());
 			thread.setWaterHeater(searchThreadForm.isWaterHeater());
 			thread.setConditioner(searchThreadForm.isConditioner());
 			thread.setFridge(searchThreadForm.isFridge());
@@ -70,6 +71,8 @@ public class SearchThreadAction extends Action {
 			thread.setDistrict(new District(searchThreadForm.getDistrictId(), 0, ""));
 			thread.setVillage(new Village(searchThreadForm.getVillageId(), 0, ""));
 			thread.setName(searchThreadForm.getName());
+			thread.setKindOf(searchThreadForm.isKindOf());
+			Log.in(searchThreadForm.isKindOf() + " KindOf");
 
 			//Log.in(thread);
 			//Log.in(thread.toString());

@@ -62,6 +62,7 @@ public class ThreadForm extends ActionForm {
 	boolean old;
 	int provinceId;
 	int districtId;
+	boolean sendNotification;
 	String categoryName;
 	ArrayList<Category> categories;
 	ArrayList<Province> provinces;
@@ -145,6 +146,14 @@ public class ThreadForm extends ActionForm {
 
 	public void setWaterSourceString(String waterSourceString) {
 		this.waterSourceString = waterSourceString;
+	}
+
+	public boolean isSendNotification() {
+		return sendNotification;
+	}
+
+	public void setSendNotification(boolean sendNotification) {
+		this.sendNotification = sendNotification;
 	}
 
 	public void setImagesString(String imagesString) {

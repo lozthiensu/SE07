@@ -45,14 +45,11 @@ public class AccountAction extends Action {
 		account.setEmail(accountHomeForm.getEmail());
 		account.setPassword(accountHomeForm.getPassword());
 		String action = accountHomeForm.getAction();
-		Log.in(action + " action");
 		if (action.equals("register")) {
 			if (accountBO.addAccount(account) == true) {
 				out.print("success");
-				Log.in("thanh cong");
 			} else {
 				out.print("failed");
-				Log.in("thanh bai");
 			}
 		} else if (action.equals("getNotification")) {
 			HttpSession httpSession = request.getSession();
@@ -65,7 +62,6 @@ public class AccountAction extends Action {
 			} catch (Exception e) {
 			}
 
-			Log.in(email + " " + password + " session");
 			Gson gson = new Gson();
 			ArrayList<Notification> notifications = new ArrayList<Notification>();
 			if (loginBO.checkLogin(new Login(email, password)) == true) {
@@ -91,7 +87,6 @@ public class AccountAction extends Action {
 			Gson gson = new Gson();
 			ArrayList<Notification> notifications = new ArrayList<Notification>();
 			if (loginBO.checkLogin(new Login(email, password)) == true) {
-				Log.in("Login thanh cong" + notificationId);
 				if (notificationBO.read(notificationId, accountId) == true) {
 					out.print("success");
 				} else {
@@ -103,7 +98,6 @@ public class AccountAction extends Action {
 		} else if (action.equals("login")) {
 			Account accountData = accountBO.checkLoginAccount(account);
 			if (accountData.getAccountId() > 0) {
-				Log.in(accountData.toString());
 				Gson gson = new Gson();
 				String json = gson.toJson(accountData);
 				HttpSession httpSession = request.getSession();
@@ -111,9 +105,10 @@ public class AccountAction extends Action {
 				httpSession.setAttribute("password", accountData.getPassword());
 				httpSession.setAttribute("accountId", accountData.getAccountId());
 				accountData.setPassword("");
+				Log.in(json);
 				out.print(json);
 			} else {
-				Gson gson = null;
+				Gson gson = new Gson();
 				String json = gson.toJson(accountData);
 				out.print(json);
 			}

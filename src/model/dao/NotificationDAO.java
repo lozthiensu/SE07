@@ -70,11 +70,9 @@ public class NotificationDAO {
 						"", rs.getBoolean("status"));
 				notification.setAvatar(rs.getString("avatar"));
 				PrettyTime p = new PrettyTime(new Locale("vi"));
-				//Log.in(notification.toString());
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 				try {
 					Date date = sdf.parse(notification.getCreated());
-					System.out.println(p.format(date));
 					notification.setTimeCount(p.format(date));
 				} catch (ParseException e) {
 					// TODO Auto-generated catch block
@@ -82,7 +80,6 @@ public class NotificationDAO {
 				}
 				temp.add(notification);
 			}
-			//Log.in(temp.toString());
 			// Đóng kết nối
 			pr.close();
 			connection.close();
@@ -142,8 +139,16 @@ public class NotificationDAO {
 			PreparedStatement pr = connection.prepareStatement(sql);
 			// Log.in("query " + sql);
 			// Truyền tham số
+			
+			int rateId = notification.getRateId(); 
+			Log.in(rateId + " rateId");
 			pr.setInt(1, notification.getThreadId());
-			pr.setInt(2, notification.getRateId());
+			if(rateId == 0 ){
+				pr.setNull(2, java.sql.Types.INTEGER);
+				Log.in(rateId + " null ne");
+			}else{
+				pr.setInt(2, notification.getRateId());
+			}
 			pr.setInt(3, notification.getAccountId());
 			pr.setInt(4, notification.getAccountIdPush());
 			pr.setString(5, notification.getContent());

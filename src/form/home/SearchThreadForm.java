@@ -22,6 +22,7 @@ public class SearchThreadForm extends ActionForm {
 	boolean fridge;
 	boolean attic;
 	boolean camera;
+	boolean kindOf;
 	int waterSource;
 	String direction;
 	int numOfToilets;
@@ -91,6 +92,14 @@ public class SearchThreadForm extends ActionForm {
 
 	public void setPost(String post) {
 		this.post = post;
+	}
+
+	public boolean isKindOf() {
+		return kindOf;
+	}
+
+	public void setKindOf(boolean kindOf) {
+		this.kindOf = kindOf;
 	}
 
 	public int getThreadId() {

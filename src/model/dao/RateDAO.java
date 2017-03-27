@@ -35,7 +35,6 @@ public class RateDAO {
 		try {
 			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 			connection = DriverManager.getConnection(url, userName, password);
-			// System.out.println("Ket noi thanh cong");
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println("Ket noi loi");
@@ -78,7 +77,6 @@ public class RateDAO {
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 				try {
 					Date date = sdf.parse(rate.getCreated());
-					System.out.println(p.format(date));
 					rate.setCreated(p.format(date));
 				} catch (ParseException e) {
 					// TODO Auto-generated catch block
@@ -161,7 +159,6 @@ public class RateDAO {
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 				try {
 					Date date = sdf.parse(rate.getCreated());
-					System.out.println(p.format(date));
 					rate.setCreated(p.format(date));
 				} catch (ParseException e) {
 					// TODO Auto-generated catch block
@@ -217,7 +214,6 @@ public class RateDAO {
 				pr.setInt(2, rate.getAccountId());
 				ResultSet rs = pr.executeQuery();
 				if (rs.next()) {
-					System.out.println("success");
 					int rateId = rs.getInt("rateId");
 					pr.close();
 					return rateId;
@@ -226,7 +222,6 @@ public class RateDAO {
 				connection.close();
 				return 0;
 			} else {
-				System.out.println("stuck somewhere");
 				pr.close();
 				connection.close();
 				return 0;
@@ -257,10 +252,8 @@ public class RateDAO {
 			pr.close();
 			connection.close();
 			if (count > 0) {
-				System.out.println("success");
 				return true;
 			} else {
-				System.out.println("stuck somewhere");
 				return false;
 			}
 
@@ -291,10 +284,8 @@ public class RateDAO {
 			pr.close();
 			connection.close();
 			if (count > 0) {
-				System.out.println("success");
 				return true;
 			} else {
-				System.out.println("stuck somewhere");
 				return false;
 			}
 

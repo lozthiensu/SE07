@@ -17,6 +17,7 @@ public class SearchForm extends ActionForm {
 	int provinceId;
 	int districtId;
 	int villageId;
+	int categoryId;
 
 	public SearchForm() {
 		super();
@@ -37,6 +38,14 @@ public class SearchForm extends ActionForm {
 
 	public int getDistrictId() {
 		return districtId;
+	}
+
+	public int getCategoryId() {
+		return categoryId;
+	}
+
+	public void setCategoryId(int categoryId) {
+		this.categoryId = categoryId;
 	}
 
 	public void setDistrictId(int districtId) {

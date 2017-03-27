@@ -31,6 +31,10 @@ public class ThreadBO {
 		return threadDAO.searchBy(thread, page);
 	}
 
+	public ArrayList<Thread> searchByAdd(ThreadForm thread) {
+		return threadDAO.searchByAdd(thread);
+	}
+
 	public Thread getById(Thread thread) {
 		return threadDAO.getById(thread);
 	}
@@ -40,10 +44,11 @@ public class ThreadBO {
 		return threadDAO.getRelateThreadsByThread(thread);
 	}
 
-	public boolean delete(Thread thread) { 
+	public boolean delete(Thread thread) {
 		return threadDAO.delete(thread);
 	}
-	public boolean edit(ThreadForm thread) { 
+
+	public boolean edit(ThreadForm thread) {
 		return threadDAO.edit(thread);
 	}
 

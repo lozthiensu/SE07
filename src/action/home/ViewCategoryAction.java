@@ -39,7 +39,6 @@ public class ViewCategoryAction extends Action {
 		Category category = categoryBO.getById(categoryForm);
 		
 		if(category.getCategoryId() == 0){
-			Log.in("Thoat");
 			return mapping.findForward("failed");
 		}
 
@@ -49,9 +48,6 @@ public class ViewCategoryAction extends Action {
 		// Lay bai viet thuoc category va categories tu db
 		threads = threadBO.getListByCategory(categoryForm, page);
 		categories = categoryBO.getList();
-		Log.in("category: " + category.toString());
-		Log.in("categories: " + categories.toString());
-		Log.in("threads: " + threads.toString());
 
 		// Dua du lieu len form
 		viewCategoryForm.setThreads(threads);

@@ -27,10 +27,8 @@ public class ShowHomeAction extends Action {
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 
-		// accountListForm tương tác dữ liệu từ form
 		HomeViewForm homeViewForm = (HomeViewForm) form;
 
-		//BO để tương tác vs csdl
 		CategoryBO categoryBO = new CategoryBO();
 		ThreadBO threadBO = new ThreadBO();
 		ArrayList<Category> categories = new ArrayList<Category>();
@@ -38,31 +36,15 @@ public class ShowHomeAction extends Action {
 		categories = categoryBO.getList();
 		for (Category category : categories) {
 			ArrayList<Thread> threads = threadBO.getListByCategory(category, 1);
-			if(threads.size() > 0)
+			if (threads.size() > 0)
 				categoryWithThreads.add(new CategoryWithThread(category.getCategoryId(), category.getName(), threads));
 		}
 		homeViewForm.setCategories(categories);
-		
+
 		homeViewForm.setCategoryWithThreads(categoryWithThreads);
-		
+
 		homeViewForm.setViewHighest(threadBO.getListMostView());
-/*
-		// Lấy số trang cần xem
-		int page = accountListForm.getPage();
 
-		// Lấy danh sách account từ csdl và lưu vào accounts
-		ArrayList<Account> accounts = accountBO.getListAccount(page);
-
-		// Gán accounts lên form
-		accountListForm.setAccounts(accounts);
-
-		// Gán số trang hiện tại lên form
-		accountListForm.setPage(Pagination.page);
-
-		// Gán tổng số trang lên form
-		accountListForm.setTotalPage(Pagination.totalPage);*/
-
-		// Trả v�? trang listAccounts
 		return mapping.findForward("home");
 	}
 }

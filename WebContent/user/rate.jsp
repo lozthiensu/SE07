@@ -33,14 +33,14 @@
 		<ul class="navbar-nav mr-auto">
 		</ul>
 		<ul class="navbar-nav ml-auto">
-			<img src="../img/avatar.jpg" alt="Hình đại diện"
+			<img id="imgAva" src="../img/avatar.jpg" alt="Hình đại diện"
 				class="rounded-circle" style="width: 40px; height: 40px">
 			<li class="nav-item dropdown btn-group"><a
 				class="nav-link dropdown-toggle" id="dropdownMenu1"
-				data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admin</a>
+				data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
 				<div class="dropdown-menu dropdown dropdown-menu-right"
 					aria-labelledby="dropdownMenu1">
-					<a class="dropdown-item">Đăng xuất</a>
+					<a class="dropdown-item" onclick="logout();">Đăng xuất</a>
 				</div></li>
 		</ul>
 	</div>
@@ -50,8 +50,7 @@
 		<div class="col-lg-2 hidden-lg-down side-menu-left">
 			<div class="row dash-board">
 				<a href="./thread-manager-action.do">
-					<button type="button"
-						class="btn btn-elegant button-side-menu-left">
+					<button type="button" class="btn btn-elegant button-side-menu-left">
 						<i class="fa fa-globe icon-in-button" style="color: #2C97BE"
 							aria-hidden="true"></i>Bài viết
 					</button>
@@ -59,7 +58,8 @@
 			</div>
 			<div class="row">
 				<a href="./rate-manager-action.do">
-					<button type="button" class="btn btn-elegant button-side-menu-left button-dash-board">
+					<button type="button"
+						class="btn btn-elegant button-side-menu-left button-dash-board">
 						<i class="fa fa-group icon-in-button" aria-hidden="true"></i>Bình
 						luận
 					</button>
@@ -89,8 +89,7 @@
 					</div>
 					<logic:iterate name="rateListForm" property="rates" id="item">
 						<hr>
-						<div
-							class="">
+						<div class="">
 							<div class="col-mot">
 								<bean:write name="item" property="rateId" />
 							</div>
@@ -175,6 +174,9 @@
 		$(document)
 				.ready(
 						function() {
+							$("#imgAva").attr("src", "../" + readCookie("avatar"));
+							$("#dropdownMenu1").html(readCookie("email"));
+							//Đọc lại giá trị page hiện tại từ Form Class
 							//Đọc lại giá trị page hiện tại từ Form Class
 							var pageStatic = parseInt('<bean:write name="rateListForm" property="page"/>');
 							//Thêm class active vô id <li> của trang hiện tại
@@ -197,7 +199,59 @@
 				url = url.substring(0, index);
 				window.open(url + "/view-thread-action.do?threadId="+threadId + "#rate-"+rateId); 
 		};
+
+		function logout() {
+			$.ajax({
+				type : "POST",
+				url : "/Mock_SE7/home-account-action.do",
+				data : "action=logout",
+				success : function(res) {
+					log("Logout");
+				},
+				error : function(e) {
+					alert('Error: ' + e);
+				}
+			});
+			eraseCookie("email");
+			eraseCookie("password");
+			var curentUrl = window.location.href;
+			index = curentUrl.lastIndexOf("/");
+			url = curentUrl.substring(0, index);
+			index = url.lastIndexOf("/");
+			url = url.substring(0, index);
+			window.location.href = url;
+		};
 		
+		function log(a) {
+			console.log(a);
+		};
+		
+		function createCookie(name, value, days) {
+			var expires = "";
+			if (days) {
+				var date = new Date();
+				date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+				expires = "; expires=" + date.toUTCString();
+			}
+			document.cookie = name + "=" + value + expires + "; path=/";
+		};
+
+		function readCookie(name) {
+			var nameEQ = name + "=";
+			var ca = document.cookie.split(';');
+			for (var i = 0; i < ca.length; i++) {
+				var c = ca[i];
+				while (c.charAt(0) == ' ')
+					c = c.substring(1, c.length);
+				if (c.indexOf(nameEQ) == 0)
+					return c.substring(nameEQ.length, c.length);
+			}
+			return null;
+		};
+
+		function eraseCookie(name) {
+			createCookie(name, "", -1);
+		};
 	</script>
 </body>
 

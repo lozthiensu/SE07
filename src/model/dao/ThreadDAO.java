@@ -80,6 +80,10 @@ public class ThreadDAO {
 					} else if (threadTemp.getPrice() > 1000) {
 						threadTemp.setPriceString((threadTemp.getPrice() / 1000) + " ngàn ");
 					}
+					threadTemp.setKindOf(rs.getBoolean("kindOf"));
+					if(threadTemp.isKindOf() == false){
+						threadTemp.setName("[TÌM] " + threadTemp.getName());
+					}
 					temp.add(threadTemp);
 				}
 
@@ -132,6 +136,10 @@ public class ThreadDAO {
 								numberFormat.format(((double) (threadTemp.getPrice() / (1.0 * 1000000)))) + " triệu ");
 					} else if (threadTemp.getPrice() > 1000) {
 						threadTemp.setPriceString((threadTemp.getPrice() / 1000) + " ngàn ");
+					}
+					threadTemp.setKindOf(rs.getBoolean("kindOf"));
+					if(threadTemp.isKindOf() == false){
+						threadTemp.setName("[TÌM] " + threadTemp.getName());
 					}
 					temp.add(threadTemp);
 				}
@@ -196,7 +204,6 @@ public class ThreadDAO {
 			String sql = "select Thread.*, Account.email, Account.phone, Account.avatar, Province.provinceId, District.districtId, Village.name as villageName, District.name as districtName, Province.name as provinceName, temp.avgScore, temp2.rateNum from Thread inner join (select Thread.threadId, avg(Cast(Rate.score as Float)) as avgScore, avg(Rate.score) as avgScoreInt from Thread left join Rate on Thread.threadId = Rate.threadId group by Thread.threadId) temp on Thread.threadId = temp.threadId inner join Village on Thread.villageId = Village.villageId inner join District on Village.districtId = District.districtId inner join Province on Province.provinceId = District.provinceId left join (select Rate.threadId, COUNT(Rate.rateId) as rateNum from Rate where Rate.threadId = ? group by Rate.threadId) temp2 on Thread.threadId = temp2.threadId inner join Account on Thread.accountId = Account.accountId where Thread.threadId = ?";
 			PreparedStatement pr = connection.prepareStatement(sql);
 
-			Log.in("SQL " + sql );
 			// Truyền tham số
 			pr.setInt(1, thread.getThreadId());
 			pr.setInt(2, thread.getThreadId());
@@ -241,7 +248,10 @@ public class ThreadDAO {
 				threadData.setEmail(rs.getString("email"));
 				threadData.setPhone(rs.getString("phone"));
 				threadData.setAvatar(rs.getString("avatar"));
-				
+				threadData.setKindOf(rs.getBoolean("kindOf"));
+				if(threadData.isKindOf() == false){
+					threadData.setName("[TÌM] " + threadData.getName());
+				}
 				String waterSourceString = "Không xác định";
 				if(threadData.getWaterSource() == 1)
 					waterSourceString = "Giếng đào";
@@ -365,6 +375,10 @@ public class ThreadDAO {
 				// Log.in("Tong so trang: " + totalPage);
 				threadTemp.setAvgScore(Float.parseFloat(valueStr));
 				threadTemp.setAvgScoreInt((int) threadTemp.getAvgScore());
+				threadTemp.setKindOf(rs.getBoolean("kindOf"));
+				if(threadTemp.isKindOf() == false){
+					threadTemp.setName("[TÌM] " + threadTemp.getName());
+				}
 				temp.add(threadTemp);
 			}
 
@@ -435,6 +449,10 @@ public class ThreadDAO {
 				// Log.in(df.format(rs.getFloat("avgScore")) + " " + valueStr);
 				threadTemp.setAvgScore(Float.parseFloat(valueStr));
 				threadTemp.setAvgScoreInt((int) threadTemp.getAvgScore());
+				threadTemp.setKindOf(rs.getBoolean("kindOf"));
+				if(threadTemp.isKindOf() == false){
+					threadTemp.setName("[TÌM] " + threadTemp.getName());
+				}
 				temp.add(threadTemp);
 			}
 
@@ -507,6 +525,22 @@ public class ThreadDAO {
 			count++;
 			filter += " camera = 1 ";
 		}
+		if (thread.isKindOf() == true) {
+			if (count == 0)
+				filter += " WHERE ";
+			else
+				filter += " AND  ";
+			count++;
+			filter += " kindOf = 1 ";
+		}
+		if (thread.isKindOf() == false) {
+			if (count == 0)
+				filter += " WHERE ";
+			else
+				filter += " AND  ";
+			count++;
+			filter += " kindOf = 0 ";
+		}
 		if (thread.getWaterSource() > 0) {
 			if (count == 0)
 				filter += " WHERE ";
@@ -514,6 +548,14 @@ public class ThreadDAO {
 				filter += " AND  ";
 			count++;
 			filter += " waterSource =  " + thread.getWaterSource();
+		}
+		if (thread.getCategoryId() > 0) {
+			if (count == 0)
+				filter += " WHERE ";
+			else
+				filter += " AND  ";
+			count++;
+			filter += " categoryId =  " + thread.getCategoryId();
 		}
 		if (thread.getObject() > 0) {
 			if (count == 0)
@@ -704,6 +746,255 @@ public class ThreadDAO {
 				threadTemp.setAvgScoreInt((int) threadTemp.getAvgScore());
 				threadTemp.setTotalPage(totalPage);
 				threadTemp.setPage(page);
+				threadTemp.setKindOf(rs.getBoolean("kindOf"));
+				if(threadTemp.isKindOf() == false){
+					threadTemp.setName("[TÌM] " + threadTemp.getName());
+				}
+				temp.add(threadTemp);
+			}
+
+			// Đóng kết nối
+			pr.close();
+			connection.close();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return temp;
+	}
+
+	public ArrayList<Thread> searchByAdd(ThreadForm thread) {
+		Log.in(thread.toString() + " Dem di them");
+
+		/* Mở kết nối */
+		connect();
+
+		int offset = 0, total = 0, totalPage = 0;
+
+		/* Lưu kết quả truy vấn */
+		ResultSet rs = null;
+
+		/* Tao ra cau dieu kien where */
+		String filter = "";
+		int count = 0;
+		if (thread.isWifi() == true) {
+			if (count == 0)
+				filter += " WHERE ";
+			count++;
+			filter += "wifi = 1";
+		}
+		if (thread.isWaterHeater() == true) {
+			if (count == 0)
+				filter += " WHERE ";
+			else
+				filter += " AND  ";
+			count++;
+			filter += " waterHeater = 1";
+		}
+		if (thread.isConditioner() == true) {
+			if (count == 0)
+				filter += " WHERE ";
+			else
+				filter += " AND  ";
+			count++;
+			filter += " conditioner = 1 ";
+		}
+		if (thread.isFridge() == true) {
+			if (count == 0)
+				filter += " WHERE ";
+			else
+				filter += " AND  ";
+			count++;
+			filter += " fridge = 1 ";
+		}
+		if (thread.isAttic() == true) {
+			if (count == 0)
+				filter += " WHERE ";
+			else
+				filter += " AND  ";
+			count++;
+			filter += " attic = 1 ";
+		}
+		if (thread.isCamera() == true) {
+			if (count == 0)
+				filter += " WHERE ";
+			else
+				filter += " AND  ";
+			count++;
+			filter += " camera = 1 ";
+		}
+		if (thread.isKindOf() == true) {
+			if (count == 0)
+				filter += " WHERE ";
+			else
+				filter += " AND  ";
+			count++;
+			filter += " kindOf = 1 ";
+		}
+		if (thread.isKindOf() == false) {
+			if (count == 0)
+				filter += " WHERE ";
+			else
+				filter += " AND  ";
+			count++;
+			filter += " kindOf = 0 ";
+		}
+		if (thread.getWaterSource() > 0) {
+			if (count == 0)
+				filter += " WHERE ";
+			else
+				filter += " AND  ";
+			count++;
+			filter += " waterSource =  " + thread.getWaterSource();
+		}
+		if (thread.getCategoryId() > 0) {
+			if (count == 0)
+				filter += " WHERE ";
+			else
+				filter += " AND  ";
+			count++;
+			filter += " categoryId =  " + thread.getCategoryId();
+		}
+		if (thread.getObject() > 0) {
+			if (count == 0)
+				filter += " WHERE ";
+			else
+				filter += " AND  ";
+			count++;
+			filter += " object = " + thread.getObject();
+		}
+		if (thread.getArea() > 0) {
+			if (count == 0)
+				filter += " WHERE ";
+			else
+				filter += " AND  ";
+			count++;
+			if (thread.getArea() == 1) {
+				filter += " area < 15";
+			} else if (thread.getArea() == 2) {
+				filter += " area between 15 and 25 ";
+			} else if (thread.getArea() == 3) {
+				filter += " area between 25 and 35 ";
+			} else if (thread.getArea() == 4) {
+				filter += " area between 35 and 50 ";
+			} else if (thread.getArea() == 5) {
+				filter += " area > 50 ";
+			}
+		}
+		if (thread.getPrice() > 0) {
+			if (count == 0)
+				filter += " WHERE ";
+			else
+				filter += " AND  ";
+			count++;
+			if (thread.getPrice() == 1) {
+				filter += " price < 500000";
+			} else if (thread.getPrice() == 2) {
+				filter += " price between 500000 and 1000000 ";
+			} else if (thread.getPrice() == 3) {
+				filter += " price between 1000000 and 1500000 ";
+			} else if (thread.getPrice() == 4) {
+				filter += " price between 1500000 and 2500000 ";
+			} else if (thread.getPrice() == 4) {
+				filter += " price between 2500000 and 5000000 ";
+			} else if (thread.getPrice() == 5) {
+				filter += " price > 5000000 ";
+			}
+		}
+		if (thread.getFar() > 0) {
+			int meter = 0;
+			if (count == 0)
+				filter += " WHERE ";
+			else
+				filter += " AND  ";
+			if (thread.getFar() == 1) {
+				meter = 500;
+			} else if (thread.getFar() == 2) {
+				meter = 1500;
+			} else if (thread.getFar() == 3) {
+				meter = 3000;
+			} else if (thread.getFar() == 4) {
+				meter = 6000;
+			} else if (thread.getFar() == 5) {
+				meter = 10000;
+			} else if (thread.getFar() == 6) {
+				meter = 20000;
+			}
+
+			double epxilong = 0.000008998719243599958 * meter;
+			double lat = thread.getLatitude();
+			double lng = thread.getLongitude();
+			double latUp, latDown, lngUp, lngDown;
+			latUp = lat + epxilong;
+			lngUp = lng + epxilong;
+			latDown = lat - epxilong;
+			lngDown = lng - epxilong;
+			// Log.in("Met: " + meter + ", Ex: " + epxilong + "Lat: " + lat + ",
+			// Lng: " + lng);
+			filter += " Thread.latitude between " + latDown + " and " + latUp + " and Thread.longitude between "
+					+ lngDown + " and " + lngUp + "";
+			count++;
+		}
+		if (thread.getVillageId() > 0) {
+			if (count == 0)
+				filter += " WHERE ";
+			else
+				filter += " AND  ";
+			count++;
+			filter += " Village.villageId = " + thread.getVillageId();
+		}
+		filter += " and status = 1 ";
+
+		/* END COUNT */
+
+		/* Phan trang ket qua tim kiem duoc */
+
+		filter += " order by threadId offset " + 0 + " rows fetch next " + Pagination.itemPerPageView
+				+ " row only";
+		// Lưu thông tin account
+		ArrayList<Thread> temp = new ArrayList<Thread>();
+		try {
+
+			// Câu lệnh truy vấn
+			String sql = "select Thread.*, temp.avgScore from Thread inner join Village on Village.villageId = Thread.villageId inner join District on District.districtId = Village.districtId inner join Province on Province.provinceId = District.provinceId inner join (select Thread.threadId, avg(Cast(Rate.score as Float)) as avgScore, avg(Rate.score) as avgScoreInt from Thread left join Rate on Thread.threadId = Rate.threadId group by Thread.threadId) temp on Thread.threadId = temp.threadId  "
+					+ filter;
+			// Log.in(sql);
+			Log.in("SQL: " + sql);
+			PreparedStatement pr = connection.prepareStatement(sql);
+
+			// Thực hiện
+			rs = pr.executeQuery();
+			// Lấy kết quả đưa vào accountData
+			DecimalFormat numberFormat = new DecimalFormat("#.##");
+			while (rs.next()) {
+				Thread threadTemp = new Thread(rs.getInt("threadId"), rs.getInt("categoryId"), rs.getInt("accountId"),
+						rs.getString("name"), rs.getString("address"), rs.getDouble("latitude"),
+						rs.getDouble("longitude"), rs.getString("content"), rs.getLong("price"),
+						rs.getInt("electricFee"), rs.getInt("waterFee"), rs.getInt("otherFee"), rs.getInt("area"),
+						rs.getBoolean("wifi"), rs.getBoolean("waterHeater"), rs.getBoolean("conditioner"),
+						rs.getBoolean("fridge"), rs.getBoolean("attic"), rs.getBoolean("camera"),
+						rs.getInt("waterSource"), rs.getString("direction"), rs.getInt("numOfToilets"),
+						rs.getInt("numOfPeople"), rs.getInt("object"), rs.getInt("villageId"), rs.getString("created"),
+						rs.getInt("viewed"), rs.getInt("status"), rs.getString("imageThumb"));
+				if (threadTemp.getPrice() >= 1000000) {
+					threadTemp.setPriceString(
+							numberFormat.format(((double) (threadTemp.getPrice() / (1.0 * 1000000)))) + " triệu ");
+				} else if (threadTemp.getPrice() > 1000) {
+					threadTemp.setPriceString((threadTemp.getPrice() / 1000) + " ngàn ");
+				}
+				DecimalFormat df = new DecimalFormat("#.#");
+				String valueStr = df.format(rs.getFloat("avgScore"));
+				valueStr = valueStr.replace(',', '.');
+
+				// Log.in(df.format(rs.getFloat("avgScore")) + " " + valueStr);
+				threadTemp.setAvgScore(Float.parseFloat(valueStr));
+				threadTemp.setAvgScoreInt((int) threadTemp.getAvgScore());
+				threadTemp.setTotalPage(totalPage);
+				threadTemp.setPage(1);
+				threadTemp.setKindOf(rs.getBoolean("kindOf"));
+				if(threadTemp.isKindOf() == false){
+					threadTemp.setName("[TÌM] " + threadTemp.getName());
+				}
 				temp.add(threadTemp);
 			}
 
@@ -861,6 +1152,10 @@ public class ThreadDAO {
 				threadTemp.setAvgScore(Float.parseFloat(valueStr));
 				threadTemp.setAvgScoreInt((int) threadTemp.getAvgScore());
 				threadTemp.setCategoryName(rs.getString("categoryName"));
+				threadTemp.setKindOf(rs.getBoolean("kindOf"));
+				if(threadTemp.isKindOf() == false){
+					threadTemp.setName("[TÌM] " + threadTemp.getName());
+				}
 				temp.add(threadTemp);
 				// Log.in("Account co: " + threadTemp.toString());
 			}

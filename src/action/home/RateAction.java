@@ -53,7 +53,6 @@ public class RateAction extends Action {
 		Thread thread = new Thread();
 		thread.setThreadId(rateHomeForm.getThreadId());
 		thread = threadBO.getById(thread);
-		Log.in("action: " + action);
 		if (action.equals("addNew")) {
 			HttpSession httpSession = request.getSession();
 			String email = (String) httpSession.getAttribute("email");
@@ -64,37 +63,31 @@ public class RateAction extends Action {
 				accountId = (Integer) httpSession.getAttribute("accountId");
 			} catch (Exception e) {
 			}
-			
+
 			Log.in(email + " " + password + " session");
 			if (loginBO.checkLogin(new Login(email, password)) == true) {
-				Log.in("Bat dau add rate");
 				int rateId = rateBO.addRate(rate);
-				if ( rateId > 0) {
-					Log.in(rateId);
-					if(accountId != thread.getAccountId()){
+				if (rateId > 0) {
+					if (accountId != thread.getAccountId()) {
 						AccountBO accountBO = new AccountBO();
 						Account account = new Account();
 						account.setAccountId(accountId);
 						account = accountBO.getAccountById(account);
 						String content = "<b>" + account.getName() + "</b> đã đánh giá về bài viết của bạn";
-						
-						Log.in(rateId + " Push");
-						Notification notification = new Notification(0, rate.getThreadId(), rateId, thread.getAccountId(), content, "", "", false);
+						Notification notification = new Notification(0, rate.getThreadId(), rateId,
+								thread.getAccountId(), content, "", "", false);
 						notification.setAccountIdPush(accountId);
 						notificationBO.add(notification);
 					}
 					String json = "success";
 					out.print(json);
-					Log.in("Add rate thanh cong");
 				} else {
 					String json = "failed";
 					out.print(json);
-					Log.in("Add rate that bai");
 				}
 			} else {
 				String json = gson.toJson(rates);
 				out.print(json);
-				Log.in("Dang nhap that bai");
 			}
 		} else if (action.equals("delete")) {
 			HttpSession httpSession = request.getSession();
@@ -102,7 +95,6 @@ public class RateAction extends Action {
 			String password = (String) httpSession.getAttribute("password");
 			int accountId = (Integer) httpSession.getAttribute("accountId");
 			int rateId = rateHomeForm.getRateId();
-			Log.in(email + " " + password + " " + rateId + " " + accountId);
 			if (loginBO.checkLogin(new Login(email, password)) == true) {
 				if (rateBO.delete(rateId, accountId) == true) {
 					String json = "success";
@@ -122,8 +114,6 @@ public class RateAction extends Action {
 			int accountId = (Integer) httpSession.getAttribute("accountId");
 			int rateId = rateHomeForm.getRateId();
 			String content = rateHomeForm.getContent();
-			Log.in(content);
-			Log.in(email + " " + password + " " + rateId + " " + accountId);
 			if (loginBO.checkLogin(new Login(email, password)) == true) {
 				if (rateBO.update(rateId, accountId, content) == true) {
 					String json = "success";

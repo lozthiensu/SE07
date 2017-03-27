@@ -264,10 +264,11 @@
 					success : function(res) {
 						var objAccount = JSON.parse(res);
 						log(objAccount);
-						if (objAccount.accountId >= 0) {
+						if (objAccount.accountId > 0) {
 							if (typeof getRates == 'function') {
 								getRates();
 							}
+							eraseCookie("avatar");
 							//showSuccess("Đăng nhập thành công");
 							createCookie("email", objAccount.email, 1);
 							createCookie("password", objAccount.password, 1);

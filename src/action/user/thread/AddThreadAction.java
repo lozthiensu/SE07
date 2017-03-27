@@ -17,6 +17,7 @@ import form.user.thread.ThreadForm;
 import model.bean.Account;
 import model.bean.District;
 import model.bean.Image;
+import model.bean.Notification;
 import model.bean.Province;
 import model.bean.Thread;
 import model.bean.Village;
@@ -24,6 +25,7 @@ import model.bo.AccountBO;
 import model.bo.CategoryBO;
 import model.bo.DistrictBO;
 import model.bo.ImageBO;
+import model.bo.NotificationBO;
 import model.bo.ProvinceBO;
 import model.bo.ThreadBO;
 import model.bo.VillageBO;
@@ -62,6 +64,7 @@ public class AddThreadAction extends Action {
 		DistrictBO districtBO = new DistrictBO();
 		VillageBO villageBO = new VillageBO();
 		ImageBO imageBO = new ImageBO();
+		NotificationBO notificationBO = new NotificationBO();
 
 		ThreadForm threadForm = (ThreadForm) form;
 		Thread thread = new Thread();
@@ -83,8 +86,17 @@ public class AddThreadAction extends Action {
 		if ("submit".equals(action)) {
 			int threadId = threadBO.add(threadForm);
 			if (threadId > 0) {
-				Log.in("Them thanh cong: " + threadId + " - " + threadForm.toString());
-
+				ArrayList<Thread> threads = new ArrayList<Thread>();
+				if(threadForm.isSendNotification() == true){
+					threads = threadBO.searchByAdd(threadForm);
+					for (Thread thread2 : threads) {
+						String content = "<b>" + account.getName() + "</b> đã đánh đăng bài phù hợp với bài viết của bạn";
+						Notification notification = new Notification(0, threadId, 0,
+								thread2.getAccountId(), content, "", "", false);
+						notification.setAccountIdPush(account.getAccountId());
+						notificationBO.add(notification);
+					}
+				}
 				ArrayList<Image> images = new ArrayList<Image>();
 				String imagesString = threadForm.getImagesString();
 				String[] imagesArr = imagesString.split(",");
@@ -92,11 +104,8 @@ public class AddThreadAction extends Action {
 					images.add(new Image(0, threadId, string, threadForm.getName(), false));
 				}
 				imageBO.insert(images);
-
 				return mapping.findForward("success");
 			}
-
-			Log.in("Sua that bai");
 			return mapping.findForward("failed");
 		} else {
 			return mapping.findForward("failed");
