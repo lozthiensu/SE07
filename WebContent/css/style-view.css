@@ -5,6 +5,7 @@ body {
 
 .container-white {
 	/* background: #fff; */
+	
 }
 
 /* Custom carousel */
@@ -495,16 +496,16 @@ footer.page-footer {
 	border-radius: 50%;
 	width: 200px;
 	height: 200px;
-} 
-
-.thread-content-1 { 
-    margin-top: -500px;
 }
 
-.thread-name {  
-  font: normal 36px/normal "Warnes", Helvetica, sans-serif;
-  color: rgba(255,255,255,1);
- /*  text-decoration: normal; 
+.thread-content-1 {
+	margin-top: -500px;
+}
+
+.thread-name {
+	font: normal 36px/normal "Warnes", Helvetica, sans-serif;
+	color: rgba(255, 255, 255, 1);
+	/*  text-decoration: normal; 
   -o-text-overflow: clip;
   text-overflow: clip; 
   text-shadow: 0 0 10px rgba(255,127,0,1) , 0 0 10px rgba(255,255,255,1) , 0 0 10px rgba(255,255,255,1) , 0 0 40px #000000 , 0 0 70px #020202 , 0 0 80px #0c0a0c , 0 0 100px #050405 ;
@@ -513,17 +514,25 @@ footer.page-footer {
   -o-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
   transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1); */
 }
-.rate-button-func{
-	padding: 10px; 
-	float: right; 
+
+.rate-button-func {
+	padding: 10px;
+	float: right;
 }
-.rate-button-func:hover{
+
+.rate-button-func:hover {
 	background: #ccc;
 }
-.item-noti{
+
+.item-noti {
 	color: #000 !important;
-    margin: -10px -10px;
+	margin: -10px -10px;
+	border-bottom: 1px solid #ccc;
+	padding: 5px 0;
+	border-top: 1px solid #ccc;
+	margin-top: -13px;
 }
-.item-unread{
-    background-image: linear-gradient(rgba(29, 33, 41, .04), rgba(29, 33, 41, .04));
+
+.item-unread {
+	background: #edf2fa;
 }

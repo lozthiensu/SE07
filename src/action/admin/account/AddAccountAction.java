@@ -14,6 +14,7 @@ import common.StringProcess;
 import form.admin.account.AccountForm;
 import model.bean.Account;
 import model.bo.AccountBO;
+import model.bo.CategoryBO;
 import statics.Log;
 
 public class AddAccountAction extends Action {
@@ -27,6 +28,9 @@ public class AddAccountAction extends Action {
 
 		// accountBO để tương tác vs csdl
 		AccountBO accountBO = new AccountBO();
+		CategoryBO categoryBO = new CategoryBO();
+		
+		accountForm.setCategories(categoryBO.getList());
 
 		// Lưu lại hành động từ form
 		String action = action = accountForm.getAction();

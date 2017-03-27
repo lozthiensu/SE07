@@ -420,8 +420,8 @@
 			url : "/Mock_SE7/home-account-action.do",
 			data : "action=read" + "&notificationId=" + notificationId,
 			success : function(res) {
-				log(res + " res");
 				if (res == "success") {
+					getNotification();
 					var curentUrl = window.location.href;
 					var index = curentUrl.lastIndexOf("/");
 					var url = curentUrl.substring(0, index);

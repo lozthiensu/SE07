@@ -870,7 +870,7 @@
 							}
 							log("Dan in ra: " + i);
 							stringResults +=''+
-						'<div id="div-content-rate-'+obj[i].rateId+'" class="row">'+
+						'<div id="rate-'+obj[i].rateId+'" class="row">'+
 							'<div class="col-sm-2 col-12">'+
 							'<img src='+obj[i].accountImage+' style="height: 100px;">'+
 							'</div>'+
@@ -940,7 +940,7 @@
 		    var divHtml = $('#content-rate-' + rateId ).html().trim();
 		    log(';' + divHtml + 'a');
 		    if(divHtml != null && divHtml.length > 1){
-			    var editableText = $('<div class="md-form" id="div-content-rate-'+rateId+'" ><textarea id="content-rate-'+rateId+'"  type="text" class="md-textarea" length="200" maxlength="200"></textarea><label for="form8">Nội dung</label><div class="text-center"><button class="btn btn-primary" onclick="return submitEdit('+rateId+');" >Sửa</button><button class="btn btn-primary" onclick="return cancelEdit('+rateId+');" >Hủy</button></div></div>');
+			    var editableText = $('<div class="md-form" id="rate-'+rateId+'" ><textarea id="content-rate-'+rateId+'"  type="text" class="md-textarea" length="200" maxlength="200"></textarea><label for="form8">Nội dung</label><div class="text-center"><button class="btn btn-primary" onclick="return submitEdit('+rateId+');" >Sửa</button><button class="btn btn-primary" onclick="return cancelEdit('+rateId+');" >Hủy</button></div></div>');
 			    $('#content-rate-' + rateId ).replaceWith(editableText);
 			    $('#content-rate-' + rateId ).val(divHtml);
 			    $('#content-rate-' + rateId ).focus();
@@ -972,7 +972,7 @@
 		    var html = $('#content-rate-' + rateId ).val();
 		    log(html + "ádasd");
 		    var viewableText = $('<p class="comment-text" id="content-rate-'+rateId+'" style="word-wrap: break-word; word-break: break-all;"></p>');
-		    $('#div-content-rate-' + rateId ).replaceWith(viewableText);
+		    $('#rate-' + rateId ).replaceWith(viewableText);
 		    $('#content-rate-' + rateId ).html(html);
 		}
 

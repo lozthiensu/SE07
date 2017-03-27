@@ -1,9 +1,13 @@
 package action.admin;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import model.bean.Account;
 import model.bean.Login;
+import model.bo.AccountBO;
 import model.bo.LoginBO;
 
 import org.apache.struts.action.Action;
@@ -18,23 +22,33 @@ public class LoginAction extends Action {
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 
-		// loginForm để chứ dữ liệu ở form giao diện
-		LoginForm loginForm = (LoginForm) form;
+		LoginForm loginFormMod = (LoginForm) form;
 
-		// loginBO để thao tác với csdl
-		LoginBO loginBO = new LoginBO();
+		AccountBO accountBO = new AccountBO();
 
-		// Tạo ra đối tượng loginAccount với email và password từ form
-		Login loginAccount = new Login(loginForm.getEmail(), loginForm.getPassword());
+		response.setContentType("text/text;charset=utf-8");
+		response.setHeader("cache-control", "no-cache");
 
-		if (loginBO.checkLogin(loginAccount)) {
-			// Nếu đăng nhập với đối tượng loginAccount thành công thì trả v�?
-			// success
+		/* START CHECK LOGIN */
+		Account account = new Account();
+		HttpSession httpSession = request.getSession();
+		try {
+			account.setEmail(loginFormMod.getEmail());
+			account.setPassword(loginFormMod.getPassword());
+		} catch (Exception e) {
+			return mapping.findForward("failed");
+		}
+		Account accountData = accountBO.checkLoginAccountAdmin(account);
+		if (accountData.getAccountId() > 0) {
+			httpSession.setAttribute("emailAdmin", accountData.getEmail());
+			httpSession.setAttribute("passwordAdmin", accountData.getPassword());
+			response.addCookie(new Cookie("emailAdmin", accountData.getEmail()));
+			response.addCookie(new Cookie("avatarAdmin", accountData.getAvatar()));
+
+			accountData.setPassword("");
 			return mapping.findForward("success");
 		} else {
-			// Nếu đăng nhập với đối tượng loginAccount thành công thì trả v�?
-			// failed và thông báo lỗi lên form
-			loginForm.setNotification("�?ăng nhập thất bại");
+			loginFormMod.setNotification("Đăng nhập thất bại");
 			return mapping.findForward("failed");
 		}
 	}

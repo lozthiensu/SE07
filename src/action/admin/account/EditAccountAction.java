@@ -14,6 +14,7 @@ import common.StringProcess;
 import form.admin.account.AccountForm;
 import model.bean.Account;
 import model.bo.AccountBO;
+import model.bo.CategoryBO;
 import statics.Log;
 
 public class EditAccountAction extends Action {
@@ -28,13 +29,15 @@ public class EditAccountAction extends Action {
 
 		// Tương tác với csdl
 		AccountBO accountBO = new AccountBO();
+		CategoryBO categoryBO = new CategoryBO();
+		
+		accountForm.setCategories(categoryBO.getList());
 
 		// Tạo ra đối tượng account với dữ liệu từ form
 		Account account = new Account(accountForm.getAccountId(), accountForm.getLevel(), accountForm.getCategoryId(),
 				accountForm.getName(), accountForm.getEmail(), accountForm.getPassword(), accountForm.getPhone(),
 				accountForm.getStatus());
 
-		Log.in(account.getPassword() + "pass");
 		// Lưu lại hành động từ form
 		String action = action = accountForm.getAction();
 

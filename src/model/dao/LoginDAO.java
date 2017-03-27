@@ -1,6 +1,5 @@
 package model.dao;
 
-import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,59 +12,40 @@ import statics.Log;
 
 public class LoginDAO {
 
-	// Khai báo các biến để kết nối vs csdl, lưu tại class InfoSQLServer
-	String url = SQLServer.url;
-	String userName = SQLServer.userName;
-	String password = SQLServer.password;
-	Connection connection;
-
-	void connect() {
-		try {
-			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-			connection = DriverManager.getConnection(url, userName, password);
-			//System.out.println("Ket noi thanh cong");
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("Ket noi loi");
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-			System.out.println("JDBC loi");
-		}
-	}
-
-	// Kiểm tra đăng nhập với đối tượng loginAccount
+	// Check login loginAccount
 	public boolean checkLogin(Login loginAccount) {
 
-		// Mở kết nối
-		connect();
-
-		// Khai báo biến rs để chứa kết quả
+		SQLServer.connect();
 		ResultSet rs = null;
+		PreparedStatement pr = null;
+		boolean login = false;
 		try {
 
-			// Câu lẹnh kiểm tra đăng nhập
 			String sql = "select name from Account where email = ? AND password = ?";
-			PreparedStatement pr = connection.prepareStatement(sql);
-
-			// Truyền các biến vào câu lệnh để thực thi
+			pr = SQLServer.connection.prepareStatement(sql);
 			pr.setString(1, loginAccount.getEmail());
 			pr.setString(2, loginAccount.getPassword());
 			rs = pr.executeQuery();
 
-			if (rs.next()) {
-				// Nếu kết quả trả về khác null, đăng nhập thành công, return
-				// true
-				return true;
+			if (rs.next()) {// true
+				login = true;
 			}
 
-			// Đóng kết nối
-			pr.close();
-			connection.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally { // Close connect
+			try {
+				rs.close();
+			} catch (Exception e2) {
+			}
+			try {
+				pr.close();
+			} catch (Exception e2) {
+			}
+			SQLServer.disconnect();
 		}
-		// Đăng nhập thất bại, return false
-		return false;
+
+		return login;
 
 	}
 

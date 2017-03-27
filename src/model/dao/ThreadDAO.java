@@ -1,6 +1,5 @@
 package model.dao;
 
-import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -23,42 +22,16 @@ import statics.Pagination;
 
 public class ThreadDAO {
 
-	// Khai báo các biến để kết nối vs csdl, lưu tại class InfoSQLServer
-	String url = SQLServer.url;
-	String userName = SQLServer.userName;
-	String password = SQLServer.password;
-	Connection connection;
-
-	void connect() {
-		try {
-			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-			connection = DriverManager.getConnection(url, userName, password);
-			//System.out.println("Ket noi thanh cong");
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("Ket noi loi");
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-			System.out.println("JDBC loi");
-		}
-	}
-
-	// Lấy danh sách danh mục
 	public ArrayList<model.bean.Thread> getList() {
-		// Mở kết nối
-		connect();
+		// Open connect
+		SQLServer.connect();
 
-		// Biến lưu kết quả từ truy vấn
 		ResultSet rs = null;
-
-		// Lưu danh sách account từ csdl
 		ArrayList<model.bean.Thread> temp = new ArrayList<Thread>();
-
+		PreparedStatement pr = null;
 		try {
-
-			// Câu lệnh đếm có bao nhiêu dòng trong csdl
 			String sql = "select Thread.* from Thread order by threadId desc";
-			PreparedStatement pr = connection.prepareStatement(sql);
+			pr = SQLServer.connection.prepareStatement(sql);
 			rs = pr.executeQuery();
 
 			try {
@@ -81,7 +54,7 @@ public class ThreadDAO {
 						threadTemp.setPriceString((threadTemp.getPrice() / 1000) + " ngàn ");
 					}
 					threadTemp.setKindOf(rs.getBoolean("kindOf"));
-					if(threadTemp.isKindOf() == false){
+					if (threadTemp.isKindOf() == false) {
 						threadTemp.setName("[TÌM] " + threadTemp.getName());
 					}
 					temp.add(threadTemp);
@@ -90,32 +63,35 @@ public class ThreadDAO {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-			// Đóng kết nối
-			pr.close();
-			connection.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally { // Close connect
+			try {
+				rs.close();
+			} catch (Exception e2) {
+			}
+			try {
+				pr.close();
+			} catch (Exception e2) {
+			}
+			SQLServer.disconnect();
 		}
-		// Trả về kết quả
+
+		// Return
 		return temp;
 	}
 
-	// Lấy danh sách danh mục
 	public ArrayList<model.bean.Thread> getListMostView() {
-		// Mở kết nối
-		connect();
+		// Open connect
+		SQLServer.connect();
 
-		// Biến lưu kết quả từ truy vấn
 		ResultSet rs = null;
-
-		// Lưu danh sách account từ csdl
 		ArrayList<model.bean.Thread> temp = new ArrayList<Thread>();
-
+		PreparedStatement pr = null;
 		try {
 
-			// Câu lệnh đếm có bao nhiêu dòng trong csdl
 			String sql = "SELECT top 4 * FROM Thread order by viewed desc";
-			PreparedStatement pr = connection.prepareStatement(sql);
+			pr = SQLServer.connection.prepareStatement(sql);
 			rs = pr.executeQuery();
 
 			try {
@@ -138,7 +114,7 @@ public class ThreadDAO {
 						threadTemp.setPriceString((threadTemp.getPrice() / 1000) + " ngàn ");
 					}
 					threadTemp.setKindOf(rs.getBoolean("kindOf"));
-					if(threadTemp.isKindOf() == false){
+					if (threadTemp.isKindOf() == false) {
 						threadTemp.setName("[TÌM] " + threadTemp.getName());
 					}
 					temp.add(threadTemp);
@@ -147,71 +123,67 @@ public class ThreadDAO {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-			// Đóng kết nối
-			pr.close();
-			connection.close();
+
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally { // Close connect
+			try {
+				rs.close();
+			} catch (Exception e2) {
+			}
+			try {
+				pr.close();
+			} catch (Exception e2) {
+			}
+			SQLServer.disconnect();
 		}
-		// Trả về kết quả
-		// Log.in(temp.toString());
+
+		// Return
 		return temp;
 	}
 
-	// Xóa
+	// Delete
 	public boolean delete(Thread thread) {
-		Log.in("Da vao dao xoa " + thread.toString());
-		// Mở kết nối
-		connect();
+		// Open connect
+		SQLServer.connect();
+		PreparedStatement pr = null;
+		int count = 0;
 		try {
 
-			// Câu lệnh xóa
 			String sql = "delete from Thread where threadId = ?";
-			PreparedStatement pr = connection.prepareStatement(sql);
+			pr = SQLServer.connection.prepareStatement(sql);
 
-			// Truyền accounId vào
 			pr.setInt(1, thread.getThreadId());
 
-			// Thực hiện query update
-			if (pr.executeUpdate() > 0) {
-				// Đóng kết nối
-				pr.close();
-				connection.close();
-				return true;
-			}
+			count = pr.executeUpdate();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally { // Close connect
+			try {
+				pr.close();
+			} catch (Exception e) {
+			}
+			SQLServer.disconnect();
 		}
-		return false;
+		return count > 0 ? true : false;
 	}
-
-	
 
 	public Thread getById(Thread thread) {
 
-		// Mở kết nối
-		connect();
+		// Open connect
+		SQLServer.connect();
 
-		// Lưu kết quả truy vấn
 		ResultSet rs = null;
-
-		// Lưu thông tin account
 		Thread threadData = new Thread();
+		PreparedStatement pr = null;
 		try {
 
-			// Câu lệnh truy vấn
 			String sql = "select Thread.*, Account.email, Account.phone, Account.avatar, Province.provinceId, District.districtId, Village.name as villageName, District.name as districtName, Province.name as provinceName, temp.avgScore, temp2.rateNum from Thread inner join (select Thread.threadId, avg(Cast(Rate.score as Float)) as avgScore, avg(Rate.score) as avgScoreInt from Thread left join Rate on Thread.threadId = Rate.threadId group by Thread.threadId) temp on Thread.threadId = temp.threadId inner join Village on Thread.villageId = Village.villageId inner join District on Village.districtId = District.districtId inner join Province on Province.provinceId = District.provinceId left join (select Rate.threadId, COUNT(Rate.rateId) as rateNum from Rate where Rate.threadId = ? group by Rate.threadId) temp2 on Thread.threadId = temp2.threadId inner join Account on Thread.accountId = Account.accountId where Thread.threadId = ?";
-			PreparedStatement pr = connection.prepareStatement(sql);
-
-			// Truyền tham số
+			pr = SQLServer.connection.prepareStatement(sql);
 			pr.setInt(1, thread.getThreadId());
 			pr.setInt(2, thread.getThreadId());
-
-			// Thực hiện
 			rs = pr.executeQuery();
-
-			// Lấy kết quả đưa vào accountData
 			if (rs.next()) {
 				threadData = new Thread(rs.getInt("threadId"), rs.getInt("categoryId"), rs.getInt("accountId"),
 						rs.getString("name"), rs.getString("address"), rs.getDouble("latitude"),
@@ -233,9 +205,6 @@ public class ThreadDAO {
 				DecimalFormat df = new DecimalFormat("#.#");
 				String valueStr = df.format(rs.getFloat("avgScore"));
 				valueStr = valueStr.replace(',', '.');
-
-				//// Log.in(df.format(rs.getFloat("avgScore")) + " " +
-				//// valueStr);
 				threadData.setAvgScore(Float.parseFloat(valueStr));
 				threadData.setAvgScoreInt((int) threadData.getAvgScore());
 				threadData.setVillage(new Village(0, 0, rs.getString("villageName")));
@@ -249,104 +218,86 @@ public class ThreadDAO {
 				threadData.setPhone(rs.getString("phone"));
 				threadData.setAvatar(rs.getString("avatar"));
 				threadData.setKindOf(rs.getBoolean("kindOf"));
-				if(threadData.isKindOf() == false){
-					threadData.setName("[TÌM] " + threadData.getName());
-				}
+				/*
+				 * if (threadData.isKindOf() == false) {
+				 * threadData.setName("[TÌM] " + threadData.getName()); }
+				 */
 				String waterSourceString = "Không xác định";
-				if(threadData.getWaterSource() == 1)
+				if (threadData.getWaterSource() == 1)
 					waterSourceString = "Giếng đào";
-				else if(threadData.getWaterSource() == 1)
+				else if (threadData.getWaterSource() == 1)
 					waterSourceString = "Giếng đóng-khoan";
-				else if(threadData.getWaterSource() == 1)
+				else if (threadData.getWaterSource() == 1)
 					waterSourceString = "Nước máy";
-				else if(threadData.getWaterSource() == 1)
+				else if (threadData.getWaterSource() == 1)
 					waterSourceString = "Không xác định";
-				
+
 				threadData.setWaterSourceString(waterSourceString);
 				try {
 					if (Check.old(rs.getString("created"))) {
-						// Log.in("Set true dao");
 						threadData.setOld(true);
 					} else {
-						// Log.in("Set false dao");
 						threadData.setOld(false);
 					}
 				} catch (ParseException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				// Log.in( "Thread " + threadData.isOld());
-				// Câu lệnh truy vấn
+
 				sql = "update Thread set viewed = (viewed + 1) where threadId = ?";
-				pr = connection.prepareStatement(sql);
-
-				// Truyền tham số
+				pr = SQLServer.connection.prepareStatement(sql);
 				pr.setInt(1, thread.getThreadId());
-
-				// Thực hiện
 				pr.executeUpdate();
 
 			}
 
-			// Đóng kết nối
-			pr.close();
-			connection.close();
-
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally { // Close connect
+			try {
+				rs.close();
+			} catch (Exception e2) {
+			}
+			try {
+				pr.close();
+			} catch (Exception e2) {
+			}
+			SQLServer.disconnect();
 		}
 		return threadData;
 	}
 
 	public ArrayList<Thread> getListByCategory(Category category, int page) {
 
-		// Mở kết nối
-		connect();
+		// Open connect
+		SQLServer.connect();
 
-		// Biến lưu vị trí offset bắt đầu select, toognr số dòng trong csdl
 		int offset = 0, total = 0, totalPage = 0;
-
-		// Lưu kết quả truy vấn
 		ResultSet rs = null;
-
-		// Lưu thông tin account
 		ArrayList<Thread> temp = new ArrayList<Thread>();
+		PreparedStatement pr = null;
 		try {
-
-			// Câu lệnh đếm có bao nhiêu dòng trong csdl
 			String sqlCount = "select count(threadId) as total from Thread where categoryId = ? and status = 1 ";
-			PreparedStatement pr = connection.prepareStatement(sqlCount);
+			pr = SQLServer.connection.prepareStatement(sqlCount);
 			pr.setInt(1, category.getCategoryId());
 			rs = pr.executeQuery();
 			try {
 				if (rs.next()) {
-					// Lưu lại tổng số dòng
 					total = rs.getInt("total");
-					// Vị trí select = số trang * với số dòng trong 1 trang muốn
-					// lấy
 					offset = (page - 1) > 0 ? ((page - 1) * Pagination.itemPerPageView) : 0;
-
-					// Nếu vị trí vượt quá số donngf, thì lấy trang cuối cùng
 					if (offset >= total) {
 						offset = offset - (Pagination.itemPerPageView) > 0 ? offset - (Pagination.itemPerPageView) : 0;
 					}
-
-					// Tính toán tổng số trang
 					totalPage = (int) Math.ceil(1.0 * total / Pagination.itemPerPageView);
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 
-			// Câu lệnh truy vấn
 			String sql = "select Thread.*, temp.avgScore from Thread inner join (select Thread.threadId, avg(Cast(Rate.score as Float)) as avgScore, avg(Rate.score) as avgScoreInt from Thread left join Rate on Thread.threadId = Rate.threadId group by Thread.threadId) temp on Thread.threadId = temp.threadId where categoryId = ? and status = 1 order by Thread.threadId desc"
 					+ " offset " + offset + " rows fetch next " + Pagination.itemPerPageView + " row only";
-			pr = connection.prepareStatement(sql);
-			// Log.in("query " + sql);
-			// Truyền tham số
+			pr = SQLServer.connection.prepareStatement(sql);
 			pr.setInt(1, category.getCategoryId());
 
-			// Thực hiện
 			rs = pr.executeQuery();
 
 			DecimalFormat numberFormat = new DecimalFormat("#.##");
@@ -370,45 +321,44 @@ public class ThreadDAO {
 				String valueStr = df.format(rs.getFloat("avgScore"));
 				valueStr = valueStr.replace(',', '.');
 
-				// Log.in(df.format(rs.getFloat("avgScore")) + " " + valueStr);
 				threadTemp.setTotal(totalPage);
-				// Log.in("Tong so trang: " + totalPage);
 				threadTemp.setAvgScore(Float.parseFloat(valueStr));
 				threadTemp.setAvgScoreInt((int) threadTemp.getAvgScore());
 				threadTemp.setKindOf(rs.getBoolean("kindOf"));
-				if(threadTemp.isKindOf() == false){
+				if (threadTemp.isKindOf() == false) {
 					threadTemp.setName("[TÌM] " + threadTemp.getName());
 				}
 				temp.add(threadTemp);
 			}
 
-			// Đóng kết nối
-			pr.close();
-			connection.close();
-
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally { // Close connect
+			try {
+				rs.close();
+			} catch (Exception e2) {
+			}
+			try {
+				pr.close();
+			} catch (Exception e2) {
+			}
+			SQLServer.disconnect();
 		}
 		return temp;
 	}
 
 	public ArrayList<Thread> getRelateThreadsByThread(Thread thread) {
 
-		// Mở kết nối
-		connect();
+		// Open connect
+		SQLServer.connect();
 
-		// Lưu kết quả truy vấn
 		ResultSet rs = null;
-
-		// Lưu thông tin account
 		ArrayList<Thread> temp = new ArrayList<Thread>();
+		PreparedStatement pr = null;
 		try {
 			int categoryId = 0;
-			// Câu lệnh truy vấn
 			String sql = "select categoryId from Thread where threadId = ? and status = 1";
-			PreparedStatement pr = connection.prepareStatement(sql);
-
-			// Truyền các biến vào câu lệnh để thực thi
+			pr = SQLServer.connection.prepareStatement(sql);
 			pr.setInt(1, thread.getThreadId());
 			rs = pr.executeQuery();
 
@@ -419,9 +369,8 @@ public class ThreadDAO {
 			DecimalFormat numberFormat = new DecimalFormat("#.##");
 			sql = "select Thread.* , temp.avgScore from Thread inner join (select Thread.threadId, avg(Cast(Rate.score as Float)) as avgScore, avg(Rate.score) as avgScoreInt from Thread left join Rate on Thread.threadId = Rate.threadId group by Thread.threadId) temp on Thread.threadId = temp.threadId where categoryId = ? and status = 1 order by threadId OFFSET 0 ROWS FETCH NEXT 6 ROWS ONLY";
 
-			pr = connection.prepareStatement(sql);
+			pr = SQLServer.connection.prepareStatement(sql);
 
-			// Truyền các biến vào câu lệnh để thực thi
 			pr.setInt(1, categoryId);
 			rs = pr.executeQuery();
 
@@ -446,37 +395,39 @@ public class ThreadDAO {
 				String valueStr = df.format(rs.getFloat("avgScore"));
 				valueStr = valueStr.replace(',', '.');
 
-				// Log.in(df.format(rs.getFloat("avgScore")) + " " + valueStr);
 				threadTemp.setAvgScore(Float.parseFloat(valueStr));
 				threadTemp.setAvgScoreInt((int) threadTemp.getAvgScore());
 				threadTemp.setKindOf(rs.getBoolean("kindOf"));
-				if(threadTemp.isKindOf() == false){
+				if (threadTemp.isKindOf() == false) {
 					threadTemp.setName("[TÌM] " + threadTemp.getName());
 				}
 				temp.add(threadTemp);
 			}
 
-			// Đóng kết nối
-			pr.close();
-			connection.close();
-
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally { // Close connect
+			try {
+				rs.close();
+			} catch (Exception e2) {
+			}
+			try {
+				pr.close();
+			} catch (Exception e2) {
+			}
+			SQLServer.disconnect();
 		}
 		return temp;
 	}
 
 	public ArrayList<Thread> searchBy(Thread thread, int page) {
 
-		/* Mở kết nối */
-		connect();
+		/* Open connect */
+		SQLServer.connect();
 
 		int offset = 0, total = 0, totalPage = 0;
 
-		/* Lưu kết quả truy vấn */
 		ResultSet rs = null;
-
-		/* Tao ra cau dieu kien where */
 		String filter = "";
 		int count = 0;
 		if (thread.isWifi() == true) {
@@ -672,54 +623,37 @@ public class ThreadDAO {
 					+ thread.getName() + "%' or Thread.name like '%" + nameAscii + "' ";
 		}
 		filter += " and status = 1 ";
+		PreparedStatement pr = null;
+
 		/* START COUNT */
 		try {
-			// Dem co bao nhieu dong ket qua dung voi dieu kien tim kiem
 			String sqlCount = "select count(Thread.threadId) as total from  Thread inner join Village on Village.villageId = Thread.villageId inner join District on District.districtId = Village.districtId inner join Province on Province.provinceId = District.provinceId"
 					+ filter;
-			// Log.in(sqlCount);
-			// return null;
-			PreparedStatement pr = connection.prepareStatement(sqlCount);
+			pr = SQLServer.connection.prepareStatement(sqlCount);
 			rs = pr.executeQuery();
 			if (rs.next()) {
-				// Lưu lại tổng số dòng
 				total = rs.getInt("total");
-				// Vị trí select = số trang * với số dòng trong 1 trang muốn
-				// lấy
 				offset = (page - 1) > 0 ? ((page - 1) * Pagination.itemPerPageView) : 0;
-
-				// Nếu vị trí vượt quá số donngf, thì lấy trang cuối cùng
 				if (offset >= total) {
 					offset = offset - (Pagination.itemPerPageView) > 0 ? offset - (Pagination.itemPerPageView) : 0;
 				}
-
-				// Tính toán tổng số trang
 				totalPage = (int) Math.ceil(1.0 * total / Pagination.itemPerPageView);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 		/* END COUNT */
 
 		/* Phan trang ket qua tim kiem duoc */
-
 		filter += " order by threadId offset " + offset + " rows fetch next " + Pagination.itemPerPageView
 				+ " row only";
-		// Lưu thông tin account
 		ArrayList<Thread> temp = new ArrayList<Thread>();
 		try {
-
-			// Câu lệnh truy vấn
 			String sql = "select Thread.*, temp.avgScore from Thread inner join Village on Village.villageId = Thread.villageId inner join District on District.districtId = Village.districtId inner join Province on Province.provinceId = District.provinceId inner join (select Thread.threadId, avg(Cast(Rate.score as Float)) as avgScore, avg(Rate.score) as avgScoreInt from Thread left join Rate on Thread.threadId = Rate.threadId group by Thread.threadId) temp on Thread.threadId = temp.threadId  "
 					+ filter;
-			// Log.in(sql);
 			Log.in("SQL: " + sql);
-			PreparedStatement pr = connection.prepareStatement(sql);
-
-			// Thực hiện
+			pr = SQLServer.connection.prepareStatement(sql);
 			rs = pr.executeQuery();
-			// Lấy kết quả đưa vào accountData
 			DecimalFormat numberFormat = new DecimalFormat("#.##");
 			while (rs.next()) {
 				Thread threadTemp = new Thread(rs.getInt("threadId"), rs.getInt("categoryId"), rs.getInt("accountId"),
@@ -740,25 +674,28 @@ public class ThreadDAO {
 				DecimalFormat df = new DecimalFormat("#.#");
 				String valueStr = df.format(rs.getFloat("avgScore"));
 				valueStr = valueStr.replace(',', '.');
-
-				// Log.in(df.format(rs.getFloat("avgScore")) + " " + valueStr);
 				threadTemp.setAvgScore(Float.parseFloat(valueStr));
 				threadTemp.setAvgScoreInt((int) threadTemp.getAvgScore());
 				threadTemp.setTotalPage(totalPage);
 				threadTemp.setPage(page);
 				threadTemp.setKindOf(rs.getBoolean("kindOf"));
-				if(threadTemp.isKindOf() == false){
+				if (threadTemp.isKindOf() == false) {
 					threadTemp.setName("[TÌM] " + threadTemp.getName());
 				}
 				temp.add(threadTemp);
 			}
-
-			// Đóng kết nối
-			pr.close();
-			connection.close();
-
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally { // Close connect
+			try {
+				rs.close();
+			} catch (Exception e2) {
+			}
+			try {
+				pr.close();
+			} catch (Exception e2) {
+			}
+			SQLServer.disconnect();
 		}
 		return temp;
 	}
@@ -766,15 +703,13 @@ public class ThreadDAO {
 	public ArrayList<Thread> searchByAdd(ThreadForm thread) {
 		Log.in(thread.toString() + " Dem di them");
 
-		/* Mở kết nối */
-		connect();
+		/* Open connect */
+		SQLServer.connect();
 
 		int offset = 0, total = 0, totalPage = 0;
 
-		/* Lưu kết quả truy vấn */
 		ResultSet rs = null;
 
-		/* Tao ra cau dieu kien where */
 		String filter = "";
 		int count = 0;
 		if (thread.isWifi() == true) {
@@ -929,8 +864,6 @@ public class ThreadDAO {
 			lngUp = lng + epxilong;
 			latDown = lat - epxilong;
 			lngDown = lng - epxilong;
-			// Log.in("Met: " + meter + ", Ex: " + epxilong + "Lat: " + lat + ",
-			// Lng: " + lng);
 			filter += " Thread.latitude between " + latDown + " and " + latUp + " and Thread.longitude between "
 					+ lngDown + " and " + lngUp + "";
 			count++;
@@ -949,18 +882,14 @@ public class ThreadDAO {
 
 		/* Phan trang ket qua tim kiem duoc */
 
-		filter += " order by threadId offset " + 0 + " rows fetch next " + Pagination.itemPerPageView
-				+ " row only";
-		// Lưu thông tin account
+		filter += " order by threadId offset " + 0 + " rows fetch next " + Pagination.itemPerPageView + " row only";
 		ArrayList<Thread> temp = new ArrayList<Thread>();
+		PreparedStatement pr = null;
 		try {
 
-			// Câu lệnh truy vấn
 			String sql = "select Thread.*, temp.avgScore from Thread inner join Village on Village.villageId = Thread.villageId inner join District on District.districtId = Village.districtId inner join Province on Province.provinceId = District.provinceId inner join (select Thread.threadId, avg(Cast(Rate.score as Float)) as avgScore, avg(Rate.score) as avgScoreInt from Thread left join Rate on Thread.threadId = Rate.threadId group by Thread.threadId) temp on Thread.threadId = temp.threadId  "
 					+ filter;
-			// Log.in(sql);
-			Log.in("SQL: " + sql);
-			PreparedStatement pr = connection.prepareStatement(sql);
+			pr = SQLServer.connection.prepareStatement(sql);
 
 			// Thực hiện
 			rs = pr.executeQuery();
@@ -992,34 +921,38 @@ public class ThreadDAO {
 				threadTemp.setTotalPage(totalPage);
 				threadTemp.setPage(1);
 				threadTemp.setKindOf(rs.getBoolean("kindOf"));
-				if(threadTemp.isKindOf() == false){
+				if (threadTemp.isKindOf() == false) {
 					threadTemp.setName("[TÌM] " + threadTemp.getName());
 				}
 				temp.add(threadTemp);
 			}
 
-			// Đóng kết nối
-			pr.close();
-			connection.close();
-
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally { // Close connect
+			try {
+				rs.close();
+			} catch (Exception e2) {
+			}
+			try {
+				pr.close();
+			} catch (Exception e2) {
+			}
+			SQLServer.disconnect();
 		}
 		return temp;
 	}
 
 	public boolean edit(ThreadForm thread) {
 
-		// Mở kết nối
-		connect();
+		// Open connect
+		SQLServer.connect();
+		PreparedStatement pr = null;
+		int count = 0;
 		try {
 
-			// Câu lệnh select
 			String sql = "update Thread set categoryId=?, name=?, address=?, latitude=?, longitude=?, content=?, price=?, electricFee=?, waterFee=?, otherFee=?, area=?, wifi=?, waterHeater=?, conditioner=?, fridge=?, attic=?, camera=?, waterSource=?, direction=?, numOfToilets=?, numOfPeople=?, object=?, villageId=?, kindOf=?, imageThumb=? where threadId=?";
-			
-			PreparedStatement pr = connection.prepareStatement(sql);
-
-			// Truyền các tham số
+			pr = SQLServer.connection.prepareStatement(sql);
 			pr.setInt(1, thread.getCategoryId());
 			pr.setString(2, thread.getName());
 			pr.setString(3, thread.getAddress());
@@ -1043,86 +976,60 @@ public class ThreadDAO {
 			pr.setInt(21, thread.getNumOfPeople());
 			pr.setInt(22, thread.getObject());
 			pr.setInt(23, thread.getVillageId());
-			Log.in("Lang " +  thread.getVillageId());
+			Log.in("Lang " + thread.getVillageId());
 			pr.setBoolean(24, thread.isKindOf());
 			pr.setString(25, thread.getImageThumb());
 			pr.setInt(26, thread.getThreadId());
 
-			// Thực hiện
-			int count = -1;
 			try {
 				count = pr.executeUpdate();
-				Log.in("Dau vao " + thread.toString());
 			} catch (Exception e) {
-				Log.in(e.getMessage());
-			}
-			// Đóng kết nối
-			pr.close();
-			connection.close();
-			if (count > 0) {
-				System.out.println("success");
-				return true;
-			} else {
-				System.out.println("stuck somewhere");
-				return false;
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally { // Close connect
+			try {
+				pr.close();
+			} catch (Exception e) {
+			}
+			SQLServer.disconnect();
 		}
-		return false;
+		return count > 0 ? true : false;
 
 	}
 
 	public ArrayList<Thread> getListByAccount(Account account, int page) {
 
-		// Mở kết nối
-		connect();
+		// Open connect
+		SQLServer.connect();
 
-		// Biến lưu vị trí offset bắt đầu select, toognr số dòng trong csdl
 		int offset = 0, total = 0, totalPage = 0;
 
-		// Lưu kết quả truy vấn
 		ResultSet rs = null;
-
-		// Lưu thông tin account
 		ArrayList<Thread> temp = new ArrayList<Thread>();
+		PreparedStatement pr = null;
 		try {
-
-			// Câu lệnh đếm có bao nhiêu dòng trong csdl
 			String sqlCount = "select count(threadId) as total from Thread where accountId = ?";
-			PreparedStatement pr = connection.prepareStatement(sqlCount);
+			pr = SQLServer.connection.prepareStatement(sqlCount);
 			pr.setInt(1, account.getAccountId());
 			rs = pr.executeQuery();
 			try {
 				if (rs.next()) {
-					// Lưu lại tổng số dòng
 					total = rs.getInt("total");
-					// Vị trí select = số trang * với số dòng trong 1 trang muốn
-					// lấy
 					offset = (page - 1) > 0 ? ((page - 1) * Pagination.itemPerPageView) : 0;
-
-					// Nếu vị trí vượt quá số donngf, thì lấy trang cuối cùng
 					if (offset >= total) {
 						offset = offset - (Pagination.itemPerPageView) > 0 ? offset - (Pagination.itemPerPageView) : 0;
 					}
-
-					// Tính toán tổng số trang
 					totalPage = (int) Math.ceil(1.0 * total / Pagination.itemPerPageView);
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-
-			// Câu lệnh truy vấn
 			String sql = "select Thread.*, Category.name as categoryName, temp.avgScore from Thread inner join (select Thread.threadId, avg(Cast(Rate.score as Float)) as avgScore, avg(Rate.score) as avgScoreInt from Thread left join Rate on Thread.threadId = Rate.threadId group by Thread.threadId) temp on Thread.threadId = temp.threadId inner join Category on Category.categoryId = Thread.categoryId where accountId = ?  order by Thread.threadId desc "
 					+ " offset " + offset + " rows fetch next " + Pagination.itemPerPageView + " row only";
-			pr = connection.prepareStatement(sql);
-			//Log.in("query " + sql);
-			// Truyền tham số
+			pr = SQLServer.connection.prepareStatement(sql);
 			pr.setInt(1, account.getAccountId());
-
-			// Thực hiện
 			rs = pr.executeQuery();
 
 			DecimalFormat numberFormat = new DecimalFormat("#.##");
@@ -1146,40 +1053,44 @@ public class ThreadDAO {
 				String valueStr = df.format(rs.getFloat("avgScore"));
 				valueStr = valueStr.replace(',', '.');
 
-				// Log.in(df.format(rs.getFloat("avgScore")) + " " + valueStr);
 				threadTemp.setTotal(totalPage);
-				// Log.in("Tong so trang: " + totalPage);
 				threadTemp.setAvgScore(Float.parseFloat(valueStr));
 				threadTemp.setAvgScoreInt((int) threadTemp.getAvgScore());
 				threadTemp.setCategoryName(rs.getString("categoryName"));
 				threadTemp.setKindOf(rs.getBoolean("kindOf"));
-				if(threadTemp.isKindOf() == false){
+				if (threadTemp.isKindOf() == false) {
 					threadTemp.setName("[TÌM] " + threadTemp.getName());
 				}
 				temp.add(threadTemp);
-				// Log.in("Account co: " + threadTemp.toString());
 			}
-			// Log.in("Account co: " + temp.toString());
-			// Đóng kết nối
-			pr.close();
-			connection.close();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally { // Close connect
+			try {
+				rs.close();
+			} catch (Exception e2) {
+			}
+			try {
+				pr.close();
+			} catch (Exception e2) {
+			}
+			SQLServer.disconnect();
 		}
 		return temp;
 	}
 
-	public int add(ThreadForm thread) { 
-		// Mở kết nối
-		connect();
+	public int add(ThreadForm thread) {
+		// Open connect
+		SQLServer.connect();
+		PreparedStatement pr = null;
+		int count = 0;
+		int threadId = 0;
 		try {
 
-			// Câu lệnh select
 			String sql = "insert into Thread(categoryId, accountId, name, address, latitude, longitude, content, price, electricFee, waterFee, otherFee, area, wifi, waterHeater, conditioner, fridge, attic, camera, waterSource, direction, numOfToilets, numOfPeople, object, villageId, created, viewed, status, imageThumb, kindOf ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-			PreparedStatement pr = connection.prepareStatement(sql);
+			pr = SQLServer.connection.prepareStatement(sql);
 
-			// Truyền các tham số
 			pr.setInt(1, thread.getCategoryId());
 			pr.setInt(2, thread.getAccountId());
 			pr.setString(3, thread.getName());
@@ -1207,35 +1118,143 @@ public class ThreadDAO {
 			pr.setDate(25, java.sql.Date.valueOf(java.time.LocalDate.now()));
 			pr.setInt(26, 0);
 			pr.setInt(27, 0);
-			pr.setString(28, thread.getImageThumb().length() > 5 ?  thread.getImageThumb() : "image/default.jpg");
+			pr.setString(28, thread.getImageThumb().length() > 5 ? thread.getImageThumb() : "image/default.jpg");
 			pr.setBoolean(29, thread.isKindOf());
-			
-			// Thực hiện
-			int count = pr.executeUpdate();
-			if(count > 0){ 
-				pr = connection.prepareStatement("select top 1 threadId from Thread where accountId = ? order by threadId desc");
+
+			count = pr.executeUpdate();
+			if (count > 0) {
+				pr = SQLServer.connection.prepareStatement(
+						"select top 1 threadId from Thread where accountId = ? order by threadId desc");
 				pr.setInt(1, thread.getAccountId());
 
 				ResultSet rs = null;
 				rs = pr.executeQuery();
-				int threadId = 0;
 				if (rs.next()) {
 					threadId = rs.getInt("threadId");
 				}
-				// Đóng kết nối
-				pr.close();
-				connection.close();
-				return threadId;
-				
-			}else{
-				pr.close();
-				connection.close();
-				return 0;
+				try {
+					rs.close();
+				} catch (Exception e2) {
+				}
+
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally { // Close connect
+			try {
+				pr.close();
+			} catch (Exception e2) {
+			}
+			SQLServer.disconnect();
 		}
-		return 0;
+		return threadId;
+	}
+
+	public ArrayList<Thread> getListByAccountMod(Account account, int page) {
+
+		// Open connect
+		SQLServer.connect();
+
+		int offset = 0, total = 0, totalPage = 0;
+
+		ResultSet rs = null;
+		ArrayList<Thread> temp = new ArrayList<Thread>();
+		PreparedStatement pr = null;
+		try {
+			String sqlCount = "select count(threadId) as total from Thread where categoryId = ?";
+			pr = SQLServer.connection.prepareStatement(sqlCount);
+			pr.setInt(1, account.getCategoryId());
+			rs = pr.executeQuery();
+			try {
+				if (rs.next()) {
+					total = rs.getInt("total");
+					offset = (page - 1) > 0 ? ((page - 1) * Pagination.itemPerPageView) : 0;
+					if (offset >= total) {
+						offset = offset - (Pagination.itemPerPageView) > 0 ? offset - (Pagination.itemPerPageView) : 0;
+					}
+					totalPage = (int) Math.ceil(1.0 * total / Pagination.itemPerPageView);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			String sql = "select Thread.*, Category.name as categoryName, temp.avgScore from Thread inner join (select Thread.threadId, avg(Cast(Rate.score as Float)) as avgScore, avg(Rate.score) as avgScoreInt from Thread left join Rate on Thread.threadId = Rate.threadId group by Thread.threadId) temp on Thread.threadId = temp.threadId inner join Category on Category.categoryId = Thread.categoryId where Thread.categoryId = ?  order by Thread.threadId desc "
+					+ " offset " + offset + " rows fetch next " + Pagination.itemPerPageView + " row only";
+			pr = SQLServer.connection.prepareStatement(sql);
+			pr.setInt(1, account.getCategoryId());
+			rs = pr.executeQuery();
+
+			DecimalFormat numberFormat = new DecimalFormat("#.##");
+			while (rs.next()) {
+				Thread threadTemp = new Thread(rs.getInt("threadId"), rs.getInt("categoryId"), rs.getInt("accountId"),
+						rs.getString("name"), rs.getString("address"), rs.getDouble("latitude"),
+						rs.getDouble("longitude"), rs.getString("content"), rs.getLong("price"),
+						rs.getInt("electricFee"), rs.getInt("waterFee"), rs.getInt("otherFee"), rs.getInt("area"),
+						rs.getBoolean("wifi"), rs.getBoolean("waterHeater"), rs.getBoolean("conditioner"),
+						rs.getBoolean("fridge"), rs.getBoolean("attic"), rs.getBoolean("camera"),
+						rs.getInt("waterSource"), rs.getString("direction"), rs.getInt("numOfToilets"),
+						rs.getInt("numOfPeople"), rs.getInt("object"), rs.getInt("villageId"), rs.getString("created"),
+						rs.getInt("viewed"), rs.getInt("status"), rs.getString("imageThumb"));
+				if (threadTemp.getPrice() >= 1000000) {
+					threadTemp.setPriceString(
+							numberFormat.format(((double) (threadTemp.getPrice() / (1.0 * 1000000)))) + " triệu ");
+				} else if (threadTemp.getPrice() > 1000) {
+					threadTemp.setPriceString((threadTemp.getPrice() / 1000) + " ngàn ");
+				}
+				DecimalFormat df = new DecimalFormat("#.#");
+				String valueStr = df.format(rs.getFloat("avgScore"));
+				valueStr = valueStr.replace(',', '.');
+
+				threadTemp.setTotal(totalPage);
+				threadTemp.setAvgScore(Float.parseFloat(valueStr));
+				threadTemp.setAvgScoreInt((int) threadTemp.getAvgScore());
+				threadTemp.setCategoryName(rs.getString("categoryName"));
+				threadTemp.setKindOf(rs.getBoolean("kindOf"));
+				if (threadTemp.isKindOf() == false) {
+					threadTemp.setName("[TÌM] " + threadTemp.getName());
+				}
+				temp.add(threadTemp);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally { // Close connect
+			try {
+				rs.close();
+			} catch (Exception e2) {
+			}
+			try {
+				pr.close();
+			} catch (Exception e2) {
+			}
+			SQLServer.disconnect();
+		}
+		return temp;
+	}
+
+	public boolean verify(Thread thread) {
+		// Open connect
+		SQLServer.connect();
+		PreparedStatement pr = null;
+		int count = 0;
+		try {
+
+			String sql = "update Thread set status = 1 where threadId = ?";
+			pr = SQLServer.connection.prepareStatement(sql);
+
+			pr.setInt(1, thread.getThreadId());
+
+			count = pr.executeUpdate();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally { // Close connect
+			try {
+				pr.close();
+			} catch (Exception e) {
+			}
+			SQLServer.disconnect();
+		}
+		return count > 0 ? true : false;
 	}
 }

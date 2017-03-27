@@ -55,4 +55,12 @@ public class ThreadBO {
 	public int add(ThreadForm threadForm) {
 		return threadDAO.add(threadForm);
 	}
+
+	public ArrayList<Thread> getListByAccountMod(Account accountData, int page) {
+		return threadDAO.getListByAccountMod(accountData, page);
+	}
+
+	public boolean verify(Thread thread) {
+		return threadDAO.verify(thread);
+	}
 }

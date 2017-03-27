@@ -36,20 +36,20 @@ public class AccountDAO {
 			try {
 				if (rs.next()) {
 					total = rs.getInt("total");
-					offset = (page - 1) > 0 ? ((page - 1) * Pagination.itemPerPage) : 0;
+					offset = (page - 1) > 0 ? ((page - 1) * Pagination.itemPerPageView) : 0;
 					if (offset >= total) {
-						offset -= (Pagination.itemPerPage);
+						offset -= (Pagination.itemPerPageView);
 					}
 					Pagination.page = page;
-					Pagination.totalPage = (int) Math.ceil(1.0 * total / Pagination.itemPerPage);
+					Pagination.totalPage = (int) Math.ceil(1.0 * total / Pagination.itemPerPageView);
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 
 			// Select data
-			String sql = "select * from Account order by accountId" + " offset " + offset + " rows fetch next "
-					+ Pagination.itemPerPage + " row only";
+			String sql = "select * from Account order by accountId desc" + " offset " + offset + " rows fetch next "
+					+ Pagination.itemPerPageView + " row only";
 			pr = SQLServer.connection.prepareStatement(sql);
 			rs = pr.executeQuery();
 
@@ -198,7 +198,7 @@ public class AccountDAO {
 				String sql = "update Account set level = ?, categoryId = ?, name = ?, email = ?, password = ?, phone = ?, status = ? where accountId = ?";
 				pr = SQLServer.connection.prepareStatement(sql);
 				pr.setInt(1, account.getLevel());
-				pr.setNull(2, java.sql.Types.INTEGER);
+				pr.setInt(2, account.getCategoryId());
 				pr.setString(3, account.getName());
 				pr.setString(4, account.getEmail());
 				pr.setString(5, account.getPassword());
@@ -215,7 +215,7 @@ public class AccountDAO {
 				String sql = "update Account set level = ?, categoryId = ?, name = ?, email = ?, phone = ?, status = ? where accountId = ?";
 				pr = SQLServer.connection.prepareStatement(sql);
 				pr.setInt(1, account.getLevel());
-				pr.setNull(2, java.sql.Types.INTEGER);
+				pr.setInt(2, account.getCategoryId());
 				pr.setString(3, account.getName());
 				pr.setString(4, account.getEmail());
 				pr.setString(5, account.getPhone());
@@ -283,7 +283,7 @@ public class AccountDAO {
 		try {
 
 			// Select
-			String sql = "select accountId from Account where email = ? AND password = ?";
+			String sql = "select accountId from Account where email = ? AND password = ? and status = 1";
 			pr = SQLServer.connection.prepareStatement(sql);
 			pr.setString(1, account.getEmail());
 			pr.setString(2, account.getPassword());
@@ -319,7 +319,200 @@ public class AccountDAO {
 		try {
 
 			// Select
-			String sql = "select * from Account where email = ? and password = ? and level = 3";
+			String sql = "select * from Account where email = ? and password = ? and level = 3 and status = 1";
+			pr = SQLServer.connection.prepareStatement(sql);
+			pr.setString(1, account.getEmail());
+			pr.setString(2, account.getPassword());
+			rs = pr.executeQuery();
+
+			if (rs.next()) {
+				accountData = new Account(rs.getInt("accountId"), rs.getInt("level"), rs.getInt("categoryId"),
+						rs.getString("name"), rs.getString("email"), rs.getString("password"), rs.getString("phone"),
+						rs.getInt("status"));
+				accountData.setAvatar(rs.getString("avatar"));
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally { // Close connect
+			try {
+				rs.close();
+			} catch (Exception e2) {
+			}
+			try {
+				pr.close();
+			} catch (Exception e2) {
+			}
+			SQLServer.disconnect();
+		}
+		return accountData;
+	}
+
+	public Account checkLoginAccountMod(Account account) {
+		// Open connect
+		SQLServer.connect();
+		Account accountData = new Account();
+		ResultSet rs = null;
+		PreparedStatement pr = null;
+		try {
+
+			// Select
+			String sql = "select * from Account where email = ? and password = ? and level = 2 and status = 1";
+			pr = SQLServer.connection.prepareStatement(sql);
+			pr.setString(1, account.getEmail());
+			pr.setString(2, account.getPassword());
+			rs = pr.executeQuery();
+
+			if (rs.next()) {
+				accountData = new Account(rs.getInt("accountId"), rs.getInt("level"), rs.getInt("categoryId"),
+						rs.getString("name"), rs.getString("email"), rs.getString("password"), rs.getString("phone"),
+						rs.getInt("status"));
+				accountData.setAvatar(rs.getString("avatar"));
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally { // Close connect
+			try {
+				rs.close();
+			} catch (Exception e2) {
+			}
+			try {
+				pr.close();
+			} catch (Exception e2) {
+			}
+			SQLServer.disconnect();
+		}
+		return accountData;
+	}
+
+	public ArrayList<Account> getListAccountUser(int page) {
+
+		// Open connect
+		SQLServer.connect();
+
+		// Initialize
+		int offset = 0, total;
+		ResultSet rs = null;
+		PreparedStatement pr = null;
+		ArrayList<Account> temp = new ArrayList<Account>();
+
+		try {
+			// Count total page
+			String sqlCount = "select count(accountId) as total from Account where level = 3";
+			pr = SQLServer.connection.prepareStatement(sqlCount);
+			rs = pr.executeQuery();
+			try {
+				if (rs.next()) {
+					total = rs.getInt("total");
+					offset = (page - 1) > 0 ? ((page - 1) * Pagination.itemPerPageView) : 0;
+					if (offset >= total) {
+						offset -= (Pagination.itemPerPageView);
+					}
+					Pagination.page = page;
+					Pagination.totalPage = (int) Math.ceil(1.0 * total / Pagination.itemPerPageView);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+
+			// Select data
+			String sql = "select * from Account where level = 3 order by accountId desc " + " offset " + offset
+					+ " rows fetch next " + Pagination.itemPerPageView + " row only";
+			pr = SQLServer.connection.prepareStatement(sql);
+			rs = pr.executeQuery();
+
+			try {
+				while (rs.next()) {
+					temp.add(new Account(rs.getInt("accountId"), rs.getInt("level"), 1, rs.getString("name"),
+							rs.getString("email"), rs.getString("password"), rs.getString("phone"),
+							rs.getInt("status")));
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+
+		} finally { // Close connect
+			try {
+				rs.close();
+			} catch (Exception e2) {
+			}
+			try {
+				pr.close();
+			} catch (Exception e2) {
+			}
+			SQLServer.disconnect();
+		}
+
+		// Return
+		return temp;
+	}
+
+	public boolean lock(Account account) {
+		// Open connect
+		SQLServer.connect();
+		PreparedStatement pr = null;
+		int count = 0;
+		try {
+
+			String sql = "update Account set status = 0 where accountId = ?";
+			pr = SQLServer.connection.prepareStatement(sql);
+
+			pr.setInt(1, account.getAccountId());
+
+			count = pr.executeUpdate();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally { // Close connect
+			try {
+				pr.close();
+			} catch (Exception e) {
+			}
+			SQLServer.disconnect();
+		}
+		return count > 0 ? true : false;
+	}
+
+	public boolean unLock(Account account) {
+		// Open connect
+		SQLServer.connect();
+		PreparedStatement pr = null;
+		int count = 0;
+		try {
+
+			String sql = "update Account set status = 1 where accountId = ?";
+			pr = SQLServer.connection.prepareStatement(sql);
+
+			pr.setInt(1, account.getAccountId());
+
+			count = pr.executeUpdate();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally { // Close connect
+			try {
+				pr.close();
+			} catch (Exception e) {
+			}
+			SQLServer.disconnect();
+		}
+		return count > 0 ? true : false;
+	}
+
+	public Account checkLoginAccountAdmin(Account account) {
+		// Open connect
+		SQLServer.connect();
+		Account accountData = new Account();
+		ResultSet rs = null;
+		PreparedStatement pr = null;
+		try {
+
+			// Select
+			String sql = "select * from Account where email = ? and password = ? and level = 1 and status = 1";
 			pr = SQLServer.connection.prepareStatement(sql);
 			pr.setString(1, account.getEmail());
 			pr.setString(2, account.getPassword());

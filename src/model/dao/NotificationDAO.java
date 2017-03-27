@@ -1,6 +1,5 @@
 package model.dao;
 
-import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,49 +18,22 @@ import model.bean.Notification;
 import model.bean.Thread;
 import statics.SQLServer;
 import statics.Log;
-import statics.Pagination;
 
 public class NotificationDAO {
 
-	// Khai báo các biến để kết nối vs csdl, lưu tại class InfoSQLServer
-	String url = SQLServer.url;
-	String userName = SQLServer.userName;
-	String password = SQLServer.password;
-	Connection connection;
-
-	void connect() {
-		try {
-			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-			connection = DriverManager.getConnection(url, userName, password);
-			// System.out.println("Ket noi thanh cong");
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("Ket noi loi");
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-			System.out.println("JDBC loi");
-		}
-	}
-
 	public ArrayList<Notification> getListByAccount(int accountId) {
 
-		// Mở kết nối
-		connect();
+		// Open connect
+		SQLServer.connect();
 
-		// Lưu kết quả truy vấn
 		ResultSet rs = null;
-
-		// Lưu thông tin account
 		ArrayList<Notification> temp = new ArrayList<Notification>();
+		PreparedStatement pr = null;
 		try {
-			// Câu lệnh truy vấn
-			String sql = "select Notification.*, Account.avatar from Notification inner join Account on Notification.accountIdPush = Account.accountId where Notification.accountId = ? order by notificationId desc";
-			PreparedStatement pr = connection.prepareStatement(sql);
-			// Log.in("query " + sql);
-			// Truyền tham số
-			pr.setInt(1, accountId);
 
-			// Thực hiện
+			String sql = "select Notification.*, Account.avatar from Notification inner join Account on Notification.accountIdPush = Account.accountId where Notification.accountId = ? order by notificationId desc";
+			pr = SQLServer.connection.prepareStatement(sql);
+			pr.setInt(1, accountId);
 			rs = pr.executeQuery();
 
 			while (rs.next()) {
@@ -75,99 +47,89 @@ public class NotificationDAO {
 					Date date = sdf.parse(notification.getCreated());
 					notification.setTimeCount(p.format(date));
 				} catch (ParseException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				temp.add(notification);
 			}
-			// Đóng kết nối
-			pr.close();
-			connection.close();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally { // Close connect
+			try {
+				rs.close();
+			} catch (Exception e2) {
+			}
+			try {
+				pr.close();
+			} catch (Exception e2) {
+			}
+			SQLServer.disconnect();
 		}
+
 		return temp;
 	}
 
 	public boolean read(int notificationId, int accountId) {
 
-		// Mở kết nối
-		connect();
+		// Open connect
+		SQLServer.connect();
 
-		// Lưu kết quả truy vấn
-
-		// Lưu thông tin account
 		ArrayList<Notification> temp = new ArrayList<Notification>();
+		PreparedStatement pr = null;
+		int count = 0;
 		try {
-			// Câu lệnh truy vấn
 			String sql = "update Notification set status = 1 where notificationId = ? AND accountId =?";
-			PreparedStatement pr = connection.prepareStatement(sql);
-			// Log.in("query " + sql);
-			// Truyền tham số
+			pr = SQLServer.connection.prepareStatement(sql);
 			pr.setInt(1, notificationId);
 			pr.setInt(2, accountId);
-
-			// Thực hiện
-			int count = pr.executeUpdate();
-
-			// Đóng kết nối
-			pr.close();
-			connection.close();
-
-			if (count > 0)
-				return true;
-			return false;
-
+			count = pr.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally { // Close connect
+			try {
+				pr.close();
+			} catch (Exception e2) {
+			}
+			SQLServer.disconnect();
 		}
-		return false;
+
+		return count > 0 ? true : false;
 	}
 
 	public boolean add(Notification notification) {
 
-		// Mở kết nối
-		connect();
-
-		// Lưu kết quả truy vấn
-
-		// Lưu thông tin account
+		// Open connect
+		SQLServer.connect();
+		PreparedStatement pr = null;
+		int count = 0;
 		try {
-			// Câu lệnh truy vấn
 			String sql = "insert into Notification(threadId, rateId, accountId, accountIdPush, content, created) values(?, ?, ?, ?, ?, GETDATE())";
-			PreparedStatement pr = connection.prepareStatement(sql);
-			// Log.in("query " + sql);
-			// Truyền tham số
-			
-			int rateId = notification.getRateId(); 
-			Log.in(rateId + " rateId");
+			pr = SQLServer.connection.prepareStatement(sql);
+
+			int rateId = notification.getRateId();
 			pr.setInt(1, notification.getThreadId());
-			if(rateId == 0 ){
+			if (rateId == 0) {
 				pr.setNull(2, java.sql.Types.INTEGER);
-				Log.in(rateId + " null ne");
-			}else{
+			} else {
 				pr.setInt(2, notification.getRateId());
 			}
 			pr.setInt(3, notification.getAccountId());
 			pr.setInt(4, notification.getAccountIdPush());
 			pr.setString(5, notification.getContent());
 
-			// Thực hiện
-			int count = pr.executeUpdate();
-
-			// Đóng kết nối
-			pr.close();
-			connection.close();
-
-			if (count > 0)
-				return true;
-			return false;
+			count = pr.executeUpdate();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally { // Close connect
+			try {
+				pr.close();
+			} catch (Exception e2) {
+			}
+			SQLServer.disconnect();
 		}
-		return false;
+
+		return count > 0 ? true : false;
 
 	}
 

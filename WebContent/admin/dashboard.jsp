@@ -14,7 +14,7 @@
 <link href="../css/font-awesome.min.css" rel="stylesheet">
 <link href="../css/bootstrap.min.css" rel="stylesheet">
 <link href="../css/compiled.min.css" rel="stylesheet">
-<link href="../css/mdb.min.css" rel="stylesheet">
+<link href="../css/mdb.css" rel="stylesheet">
 <link href="../css/style.css" rel="stylesheet">
 <link href="../css/sweetalert.css" rel="stylesheet">
 </head>
@@ -26,20 +26,21 @@
 		aria-label="Toggle navigation">
 		<i class="fa fa-bars" style="color: #2C97BE" aria-hidden="true"></i>
 	</button>
-	<a class="navbar-brand" href="#"> <strong><img
+	<a class="navbar-brand" href="../"> <strong><img
 			src="../img/logo.png" height="25px;" /></strong>
 	</a>
 	<div class="collapse navbar-collapse" id="navbarNav1">
 		<ul class="navbar-nav mr-auto">
 		</ul>
 		<ul class="navbar-nav ml-auto">
-			<img src="../img/avatar.jpg" alt="Hình đại diện" class="rounded-circle"
-				style="width: 40px; height: 40px">
+			<img id="imgAva" src="../img/avatar.jpg" alt="Hình đại diện"
+				class="rounded-circle" style="width: 40px; height: 40px">
 			<li class="nav-item dropdown btn-group"><a
 				class="nav-link dropdown-toggle" id="dropdownMenu1"
-				data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admin</a>
-				<div class="dropdown-menu dropdown" aria-labelledby="dropdownMenu1">
-					<a class="dropdown-item">Đăng xuất</a>
+				data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+				<div class="dropdown-menu dropdown dropdown-menu-right"
+					aria-labelledby="dropdownMenu1">
+					<a class="dropdown-item" onclick="logout();">Đăng xuất</a>
 				</div></li>
 		</ul>
 	</div>
@@ -48,127 +49,164 @@
 	<div class="row main-board">
 		<div class="col-lg-2 hidden-lg-down side-menu-left">
 			<div class="row dash-board">
-				<button type="button"
-					class="btn btn-elegant button-side-menu-left button-dash-board">
-					<i class="fa fa-globe icon-in-button" style="color: #2C97BE"
-						aria-hidden="true"></i>Dashboard
-				</button>
+				<a href="./dashboard-action.do">
+					<button type="button"
+						class="btn btn-elegant button-side-menu-left button-dash-board">
+						<i class="fa fa-globe icon-in-button" style="color: #2C97BE"
+							aria-hidden="true"></i>Thống kê
+					</button>
+				</a>
 			</div>
-			<div class="row">
-				<button type="button" class="btn btn-elegant button-side-menu-left">
-					<i class="fa fa-group icon-in-button" aria-hidden="true"></i>Hệ
-					thống
-				</button>
-				<button type="button" class="btn btn-elegant button-side-menu-left">
-					<i class="fa fa-heart icon-in-button" aria-hidden="true"></i>Điều
-					hành
-				</button>
-				<button type="button" class="btn btn-elegant button-side-menu-left">
-					<i class="fa fa-home icon-in-button" aria-hidden="true"></i>Người
-					dùng
-				</button>
-				<button type="button" class="btn btn-elegant button-side-menu-left">
-					<i class="fa fa-image icon-in-button" aria-hidden="true"></i>Bài
-					viết
-				</button>
-				<button type="button" class="btn btn-elegant button-side-menu-left">
-					<i class="fa fa-info-circle icon-in-button" aria-hidden="true"></i>Thể
-					loại
-				</button>
-				<button type="button" class="btn btn-elegant button-side-menu-left">
-					<i class="fa fa-language icon-in-button" aria-hidden="true"></i>Tỉnh
-				</button>
+			<div class="row dash-board">
+				<a href="./account-manager-action.do">
+					<button type="button" class="btn btn-elegant button-side-menu-left">
+						<i class="fa fa-group icon-in-button" aria-hidden="true"></i>Tài
+						khoản
+					</button>
+				</a>
+			</div>
+			<div class="row dash-board">
+				<a href="./dashboard-action.do">
+					<button type="button"
+						class="btn btn-elegant button-side-menu-left">
+						<i class="fa fa-globe icon-in-button" style="color: #2C97BE"
+							aria-hidden="true"></i>Danh mục
+					</button>
+				</a>
 			</div>
 		</div>
-		<div class="col-lg-10 col-md-12 col-12">
-			<div class="main-content hoverable">
-				<div class="clearfix"></div>
-				<div class="row" style="width: 100%; height: 60px;">
-					<div class="col-lg-8">
-						<h2 class="title-in-admin">Danh sách tài khoản</h2>
-					</div>
-					<div class="col-lg-4 text-right">
-						<html:link styleClass="btn btn-success" action="/admin/add-account-action">
-							<i class="fa fa-language icon-in-button" aria-hidden="true"></i> Thêm mới</html:link>
-					</div>
-				</div>
-				<div class="table-custom">
-					<div>
-						<div class="col-mot">Id</div>
-						<div class="col-ba">Tên</div>
-						<div class="col-ba">Email</div>
-						<div class="col-hai">Điện thoại</div>
-						<div class="col-ba">Thao tác</div>
-					</div>
-					<logic:iterate name="accountListForm" property="accounts" id="item">
-						<hr>
-						<div>
-							<div class="col-mot">
-								<bean:write name="item" property="accountId" />
-							</div>
-							<div class="col-ba">
-								<bean:write name="item" property="name" />
-							</div>
-							<div class="col-ba">
-								<bean:write name="item" property="email" />
-							</div>
-							<div class="col-hai">
-								<bean:write name="item" property="phone" />
-							</div>
-							<div class="col-ba">
-								<button onclick="editItem(<bean:write name="item" property="accountId" />)" type="button" class="btn btn-action"
-									data-toggle="tooltip" data-placement="top" title="Remove item">
-									<i class="fa fa-pencil teal-text icon-btn-action"></i>
-								</button>
-								<button
-									onclick="deleteItem(<bean:write name="item" property="accountId" />)"
-									type="button" class="btn btn-action" data-toggle="tooltip"
-									data-placement="top" title="Remove item">
-									<i class="fa fa-times red-text icon-btn-action"></i>
-								</button>
-							</div>
-						</div>
-					</logic:iterate>
-				</div>
-				<nav class="pagination-center">
-				<ul class="pagination pagination-md pg-amber">
-					<li
-						onclick='viewPage(1);'
-						class="page-item"><a class="page-link" saria-label="Previous">
-							<span aria-hidden="true">&laquo;</span>
-							<span aria-hidden="true">&laquo;</span>
-					</a></li>
-					<li
-						onclick='viewPage(<%out.println((Pagination.page - 1) > 1 ? (Pagination.page - 1) : 1);%>);'
-						class="page-item"><a class="page-link" saria-label="Previous">
-							<span aria-hidden="true">&laquo;</span>
-					</a></li>
-					<%
-						for (int i = 1; i <= Pagination.totalPage; i++) {
-							if (i != Pagination.page)
-								out.println("<li onclick='viewPage(" + i
-										+ ");' class=\"page-item\"><a class=\"page-link\" href=\"#\">" + i + "</a></li>");
-							else
-								out.println("<li onclick='viewPage(" + i
-										+ ");' class=\"page-item active\"><a class=\"page-link\" href=\"#\">" + i + "</a></li>");
-						}
-					%>
-					<li
-						onclick='viewPage(<%out.println((Pagination.page + 1) < Pagination.totalPage ? (Pagination.page + 1) : Pagination.totalPage);%>);'
-						class="page-item"><a class="page-link" aria-label="Next">
-							<span aria-hidden="true">&raquo;</span>
-					</a></li>
-					<li onclick='viewPage(<%out.println(Pagination.totalPage);%>);'
-						class="page-item"><a class="page-link" aria-label="Next">
-							<span aria-hidden="true">&raquo;</span><span aria-hidden="true">&raquo;</span>
-					</a></li>
-				</ul>
-				</nav>
+		<div class="col-lg-10 scroll-box">
+			<bean:define id="dashBoard" name="dashBoardForm" property="dashBoard"></bean:define>
+			<div class="main-content hoverable" style="overflow-y: scroll;">
+				<div class="row" style="width: calc(100%); margin-left: 0px;">
+					<!--First column-->
+					<div class="col-md-4 mb-1">
+						<!--Card-->
+						<div class="card card-cascade cascading-admin-card">
 
-				<html:form action="/admin/account-action" method="get">
-					<html:hidden styleId="pageId" name="accountListForm"
-						property="page" styleClass="form-control"></html:hidden>
-				</html:form>
+							<!--Card Data-->
+							<div class="admin-up">
+								<i class="fa  fa-user-circle-o blue darken-3"></i>
+								<div class="data">
+									<p>Tài khoản</p>
+									<h3>
+										<bean:write name="dashBoard" property="numOfAccount" />
+									</h3>
+								</div>
+							</div>
+							<!--/.Card Data-->
+
+							<!--Card content-->
+							<div class="card-block">
+								<div class="progress">
+									<div class="progress-bar bg-success" role="progressbar"
+										style="width: <bean:write name="dashBoard" property="perAccount"/>%"
+										aria-valuenow="<bean:write name="dashBoard" property="perAccount"/>"
+										aria-valuemin="0" aria-valuemax="100"></div>
+								</div>
+								<!--Text-->
+								<p class="card-text">
+									<bean:write name="dashBoard" property="numOfAccountActive" />
+									được duyệt (
+									<bean:write name="dashBoard" property="perAccount" />
+									%)
+								</p>
+							</div>
+							<!--/.Card content-->
+
+						</div>
+						<!--/.Card-->
+					</div>
+					<!--/First column-->
+
+					<!--Second column-->
+					<div class="col-md-4 mb-1">
+						<!--Card-->
+						<div class="card card-cascade cascading-admin-card">
+
+							<!--Card Data-->
+							<div class="admin-up">
+								<i class="fa  fa-newspaper-o deep-purple darken-4"></i>
+								<div class="data">
+									<p>Bài viết</p>
+									<bean:write name="dashBoard" property="numOfThread" />
+								</div>
+							</div>
+							<!--/.Card Data-->
+
+							<!--Card content-->
+							<div class="card-block">
+								<div class="progress">
+									<div class="progress-bar bg-danger" role="progressbar"
+										style="width: <bean:write name="dashBoard" property="perThread"/>%"
+										aria-valuenow="<bean:write name="dashBoard" property="perThread"/>"
+										aria-valuemin="0" aria-valuemax="100"></div>
+								</div>
+								<!--Text-->
+								<p class="card-text">
+									<bean:write name="dashBoard" property="numOfThreadActive" />
+									được duyệt (
+									<bean:write name="dashBoard" property="perThread" />
+									%)
+								</p>
+							</div>
+							<!--/.Card content-->
+
+						</div>
+						<!--/.Card-->
+					</div>
+					<!--/Second column-->
+
+					<!--Third column-->
+					<div class="col-md-4 mb-1">
+						<!--Card-->
+						<div class="card card-cascade cascading-admin-card">
+
+							<!--Card Data-->
+							<div class="admin-up">
+								<i class="fa fa-comments-o indigo"></i>
+								<div class="data">
+									<p>Đánh giá</p>
+									<h3>
+										<bean:write name="dashBoard" property="numOfRate" />
+									</h3>
+								</div>
+							</div>
+							<!--/.Card Data-->
+
+							<!--Card content-->
+							<div class="card-block">
+								<div class="progress">
+									<div class="progress-bar bg-success" role="progressbar"
+										style="width: <bean:write name="dashBoard" property="perRate" />%"
+										aria-valuenow="<bean:write name="dashBoard" property="perRate" />"
+										aria-valuemin="0" aria-valuemax="100"></div>
+								</div>
+								<!--Text-->
+								<p class="card-text">
+									<bean:write name="dashBoard" property="numOfRateMax" />
+									điểm 5 sao (
+									<bean:write name="dashBoard" property="perRate" />
+									%)
+								</p>
+							</div>
+							<!--/.Card content-->
+
+						</div>
+						<!--/.Card-->
+					</div>
+					<!--/Third column-->
+
+				</div>
+				<div class="row" style="width: calc(100%); margin-left: 0px;">
+					<div class="view right primary-color"
+						style="margin-left: 20px !important;">
+						<canvas id="sales" height="329" width="1200"
+							style="width: 1200px; height: 329px;"></canvas>
+						<div class="text-center">Biểu đồ thống kê bài viết</div>
+
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -183,14 +221,12 @@
 		//Trỏ đến styleId( tương đương với id) của property page
 		var pageId = $("#pageId");
 		//Khi load trang xong
-		$(document)
-				.ready(
-						function() {
-							//Đọc lại giá trị page hiện tại từ Form Class
-							var pageStatic = parseInt('<bean:write name="accountListForm" property="page"/>');
-							//Thêm class active vô id <li> của trang hiện tại
-							$(".page-item").eq(pageStatic + 1).addClass("active");
-						});
+		$(document).ready(function() {
+			$("#imgAva").attr("src", "../" + readCookie("avatarAdmin"));
+			$("#dropdownMenu1").html(readCookie("emailAdmin"));
+			//Đọc lại giá trị page hiện tại từ Form Class
+			//Thêm class active vô id <li> của trang hiện tại
+		});
 		//Khi muốn xem kết quả tìm kiếm của trang nào đó
 		function viewPage(page) {
 			//Gán giá trị page truyền vào cho property page của Form Class
@@ -199,30 +235,144 @@
 			document.forms[0].submit();
 		};
 		//hàm sửa item
-		function editItem(id){
+		function verifyItem(id) {
 			var curentUrl = window.location.href;
 			var index = curentUrl.lastIndexOf("/");
 			var url = curentUrl.substring(0, index);
-			window.location.href = url + "/edit-account-action.do?accountId="+id; 
+			window.location.href = url + "/verify-thread-action.do?threadId="
+					+ id;
 		};
 		//Hàm xóa item
-		function deleteItem(id) {swal({
-			  title: "Bạn có chắc?",
-			  text: "Dữ liệu bị xóa sẽ mất vĩnh viễn!",
-			  type: "warning",
-			  showCancelButton: true,
-			  confirmButtonColor: "#DD6B55",
-			  confirmButtonText: "Đồng ý!",
-			  closeOnConfirm: false
-			},
-			function(){
+		function deleteItem(id) {
+			swal({
+				title : "Bạn có chắc?",
+				text : "Dữ liệu bị xóa sẽ mất vĩnh viễn!",
+				type : "warning",
+				showCancelButton : true,
+				confirmButtonColor : "#DD6B55",
+				confirmButtonText : "Đồng ý!",
+				closeOnConfirm : false
+			}, function() {
 				var curentUrl = window.location.href;
 				var index = curentUrl.lastIndexOf("/");
 				var url = curentUrl.substring(0, index);
-				window.location.href = url + "/delete-account-action.do?accountId="+id; 
+				window.location.href = url
+						+ "/delete-thread-action.do?threadId=" + id;
 			});
 		};
-		
+		//Hàm xóa item
+		function viewItem(id) {
+			var curentUrl = window.location.href;
+			index = curentUrl.lastIndexOf("/");
+			url = curentUrl.substring(0, index);
+			index = url.lastIndexOf("/");
+			url = url.substring(0, index);
+			window.open(url + "/view-thread-action.do?threadId=" + id);
+		};
+		function logout() {
+			$.ajax({
+				type : "POST",
+				url : "/Mock_SE7/home-account-action.do",
+				data : "action=logout",
+				success : function(res) {
+					log("Logout");
+				},
+				error : function(e) {
+					alert('Error: ' + e);
+				}
+			});
+			eraseCookie("email");
+			eraseCookie("password");
+			var curentUrl = window.location.href;
+			index = curentUrl.lastIndexOf("/");
+			url = curentUrl.substring(0, index);
+			index = url.lastIndexOf("/");
+			url = url.substring(0, index);
+			window.location.href = url;
+		};
+
+		function log(a) {
+			console.log(a);
+		};
+
+		function createCookie(name, value, days) {
+			var expires = "";
+			if (days) {
+				var date = new Date();
+				date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+				expires = "; expires=" + date.toUTCString();
+			}
+			document.cookie = name + "=" + value + expires + "; path=/";
+		};
+
+		function readCookie(name) {
+			var nameEQ = name + "=";
+			var ca = document.cookie.split(';');
+			for (var i = 0; i < ca.length; i++) {
+				var c = ca[i];
+				while (c.charAt(0) == ' ')
+					c = c.substring(1, c.length);
+				if (c.indexOf(nameEQ) == 0)
+					return c.substring(nameEQ.length, c.length);
+			}
+			return null;
+		};
+
+		function eraseCookie(name) {
+			createCookie(name, "", -1);
+		};
+		$(function() {
+			jsonThread = '<bean:write name="dashBoard" property="jsonThread" />';
+			objThread = JSON.parse(jsonThread.replace(/&quot;/g,'"'));
+			jsonRate = '<bean:write name="dashBoard" property="jsonRate" />';
+			objRate = JSON.parse(jsonRate.replace(/&quot;/g,'"'));
+			labelThread = [];
+			dataThread = [];
+			for(i = 0; i < objThread.length; i++){
+				labelThread.push(objThread[i].label);
+				dataThread.push(objThread[i].data);
+			}
+			labelRate = [];
+			dataRate = [];
+			for(i = 0; i < objRate.length; i++){
+				labelRate.push(objRate[i].label);
+				dataRate.push(objRate[i].data);
+			}
+			log(labelThread + " " + dataThread + " " + labelRate + " " + dataRate);
+            var data = {
+                labels: labelThread,
+                datasets: [{
+                    label: "My First dataset",
+                    fillColor: "rgba(220,220,220,0.2)",
+                    strokeColor: "rgba(220,220,220,1)",
+                    pointColor: "rgba(220,220,220,1)",
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(0,0,0,.15)",
+                    data: dataThread,
+                    backgroundColor: "#4CAF50"
+                }]
+            };
+
+
+      
+
+            var option = {
+                responsive: true,
+                // set font color
+                scaleFontColor: "#fff",
+                // font family
+                defaultFontFamily: "'Roboto', sans-serif",
+                // background grid lines color
+                scaleGridLineColor: "rgba(255,255,255,.1)",
+                // hide vertical lines
+                scaleShowVerticalLines: false,
+            };
+
+            // Get the context of the canvas element we want to select
+            var ctx = document.getElementById("sales").getContext('2d');
+            var myLineChart = new Chart(ctx).Line(data, option); //'Line' defines type of the chart.
+        });
 	</script>
 </body>
 

@@ -25,20 +25,21 @@
 		aria-label="Toggle navigation">
 		<i class="fa fa-bars" style="color: #2C97BE" aria-hidden="true"></i>
 	</button>
-	<a class="navbar-brand" href="#"> <strong><img
+	<a class="navbar-brand" href="../"> <strong><img
 			src="../img/logo.png" height="25px;" /></strong>
 	</a>
 	<div class="collapse navbar-collapse" id="navbarNav1">
 		<ul class="navbar-nav mr-auto">
 		</ul>
 		<ul class="navbar-nav ml-auto">
-			<img src="../img/avatar.jpg" alt="Hình đại diện"
+			<img id="imgAva" src="../img/avatar.jpg" alt="Hình đại diện"
 				class="rounded-circle" style="width: 40px; height: 40px">
 			<li class="nav-item dropdown btn-group"><a
 				class="nav-link dropdown-toggle" id="dropdownMenu1"
-				data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admin</a>
-				<div class="dropdown-menu dropdown" aria-labelledby="dropdownMenu1">
-					<a class="dropdown-item">Đăng xuất</a>
+				data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+				<div class="dropdown-menu dropdown dropdown-menu-right"
+					aria-labelledby="dropdownMenu1">
+					<a class="dropdown-item" onclick="logout();">Đăng xuất</a>
 				</div></li>
 		</ul>
 	</div>
@@ -47,36 +48,30 @@
 	<div class="row main-board">
 		<div class="col-lg-2 hidden-lg-down side-menu-left">
 			<div class="row dash-board">
-				<button type="button"
-					class="btn btn-elegant button-side-menu-left button-dash-board">
-					<i class="fa fa-globe icon-in-button" style="color: #2C97BE"
-						aria-hidden="true"></i>Dashboard
-				</button>
+				<a href="./dashboard-action.do">
+					<button type="button"
+						class="btn btn-elegant button-side-menu-left">
+						<i class="fa fa-globe icon-in-button" style="color: #2C97BE"
+							aria-hidden="true"></i>Thống kê
+					</button>
+				</a>
 			</div>
-			<div class="row">
-				<button type="button" class="btn btn-elegant button-side-menu-left">
-					<i class="fa fa-group icon-in-button" aria-hidden="true"></i>Hệ
-					thống
-				</button>
-				<button type="button" class="btn btn-elegant button-side-menu-left">
-					<i class="fa fa-heart icon-in-button" aria-hidden="true"></i>Điều
-					hành
-				</button>
-				<button type="button" class="btn btn-elegant button-side-menu-left">
-					<i class="fa fa-home icon-in-button" aria-hidden="true"></i>Người
-					dùng
-				</button>
-				<button type="button" class="btn btn-elegant button-side-menu-left">
-					<i class="fa fa-image icon-in-button" aria-hidden="true"></i>Bài
-					viết
-				</button>
-				<button type="button" class="btn btn-elegant button-side-menu-left">
-					<i class="fa fa-info-circle icon-in-button" aria-hidden="true"></i>Thể
-					loại
-				</button>
-				<button type="button" class="btn btn-elegant button-side-menu-left">
-					<i class="fa fa-language icon-in-button" aria-hidden="true"></i>Tỉnh
-				</button>
+			<div class="row dash-board">
+				<a href="./account-manager-action.do">
+					<button type="button" class="btn btn-elegant button-side-menu-left button-dash-board">
+						<i class="fa fa-group icon-in-button" aria-hidden="true"></i>Tài
+						khoản
+					</button>
+				</a>
+			</div>
+			<div class="row dash-board">
+				<a href="./dashboard-action.do">
+					<button type="button"
+						class="btn btn-elegant button-side-menu-left">
+						<i class="fa fa-globe icon-in-button" style="color: #2C97BE"
+							aria-hidden="true"></i>Danh mục
+					</button>
+				</a>
 			</div>
 		</div>
 		<div class="col-lg-10 col-md-12 col-12">
@@ -101,11 +96,32 @@
 							<i class="fa fa-user prefix" style="font-size: 2rem;"></i>
 						</div>
 						<div style="width: calc(100% - 52px); display: inline-block;">
-							<html:select property="level" styleClass="mdb-select">
+							<html:select property="level" styleClass="mdb-select"
+								styleId="level">
 								<html:option value="1">Quản trị viên</html:option>
 								<html:option value="2">Điều hành viên</html:option>
 								<html:option value="3">Người dùng</html:option>
 							</html:select>
+						</div>
+
+						<div style="width: calc(100%); display: inline-block;"
+							id="categoryId">
+							<div style="width: 48px; display: inline-block;">
+								<i class="fa fa-user prefix" style="font-size: 2rem;"></i>
+							</div>
+							<div style="width: calc(100% - 52px); display: inline-block;">
+								<html:select name="accountForm" property="categoryId"
+									styleClass="mdb-select">
+									<option value="" selected>Không</option>
+									<logic:iterate name="accountForm" property="categories"
+										id="item">
+										<bean:define id="id" name="item" property="categoryId" />
+										<html:option value="${id}">
+											<bean:write name="item" property="name" />
+										</html:option>
+									</logic:iterate>
+								</html:select>
+							</div>
 						</div>
 						<div class="md-form">
 							<i class="fa fa-user prefix"></i>
@@ -159,6 +175,20 @@
 		var idAction = $("#idAction");
 		$(document).ready(function() {
 			$('.mdb-select').material_select();
+			$('#level').on("change", function() {
+				level = $(this).val();
+				if (level == 2) {
+					$("#categoryId").show();
+				} else {
+					$("#categoryId").hide();
+				}
+			});
+			level = $('#level').val();
+			if (level == 2) {
+				$("#categoryId").show();
+			} else {
+				$("#categoryId").hide();
+			}
 		});
 		function submitEditForm() {
 			var level, name, email, password, rePassword, phone;

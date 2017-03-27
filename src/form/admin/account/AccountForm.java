@@ -1,11 +1,14 @@
 package form.admin.account;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
+
+import model.bean.Category;
 
 public class AccountForm extends ActionForm {
 
@@ -19,6 +22,8 @@ public class AccountForm extends ActionForm {
 	String phone;
 	int status;
 	String action;
+
+	ArrayList<Category> categories;
 
 	public AccountForm() {
 		super();
@@ -115,6 +120,14 @@ public class AccountForm extends ActionForm {
 
 	public void setAction(String action) {
 		this.action = action;
+	}
+
+	public ArrayList<Category> getCategories() {
+		return categories;
+	}
+
+	public void setCategories(ArrayList<Category> categories) {
+		this.categories = categories;
 	}
 
 	@Override

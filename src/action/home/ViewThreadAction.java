@@ -81,7 +81,15 @@ public class ViewThreadAction extends Action {
 		 * Neu bai viet chua duoc xac nhan, thi chi cho phep nguoi viet bai xem
 		 * bai
 		 */
-		if (viewThreadForm.getThread().getStatus() != 1 && viewThreadForm.getThread().getAccountId() != accountId) {
+		String emailMod = "";
+		try {
+			emailMod = httpSession.getAttribute("emailMod").toString();
+		} catch (Exception e) {
+		}
+		if (emailMod.length() > 1) {
+			return mapping.findForward("viewThread");
+		} else if (viewThreadForm.getThread().getStatus() != 1
+				&& viewThreadForm.getThread().getAccountId() != accountId) {
 			return mapping.findForward("failed");
 		}
 

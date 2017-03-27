@@ -1,6 +1,6 @@
 package model.dao;
 
-import java.sql.Connection;
+import statics.SQLServer;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,179 +15,155 @@ import statics.Pagination;
 
 public class CategoryDAO {
 
-	// Khai báo các biến để kết nối vs csdl, lưu tại class InfoSQLServer
-	String url = SQLServer.url;
-	String userName = SQLServer.userName;
-	String password = SQLServer.password;
-	Connection connection;
-
-	void connect() {
-		try {
-			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-			connection = DriverManager.getConnection(url, userName, password);
-			//System.out.println("Ket noi thanh cong");
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("Ket noi loi");
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-			System.out.println("JDBC loi");
-		}
-	}
-
-	// Lấy danh sách danh mục
+	// Get list
 	public ArrayList<Category> getList() {
-		// Mở kết nối
-		connect();
+		// Open connect
+		SQLServer.connect();
 
-		// Biến lưu kết quả từ truy vấn
 		ResultSet rs = null;
-
-		// Lưu danh sách account từ csdl
 		ArrayList<Category> temp = new ArrayList<Category>();
-
+		PreparedStatement pr = null;
 		try {
 
-			// Câu lệnh đếm có bao nhiêu dòng trong csdl
 			String sql = "select * from Category";
-			PreparedStatement pr = connection.prepareStatement(sql);
+			pr = SQLServer.connection.prepareStatement(sql);
 			rs = pr.executeQuery();
-			int dem = 0;
 			try {
 				while (rs.next()) {
-					dem++;
-					// Thêm vào arraylist temp
 					temp.add(new Category(rs.getInt("categoryId"), rs.getString("name")));
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 
-			//Log.in("Co " + dem + " danh muc");
-			// Đóng kết nối
 			pr.close();
-			connection.close();
+			SQLServer.connection.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally { // Close connect
+			try {
+				rs.close();
+			} catch (Exception e2) {
+			}
+			try {
+				pr.close();
+			} catch (Exception e2) {
+			}
+			SQLServer.disconnect();
 		}
-		// Trả về kết quả
+
+		// Return
 		return temp;
 	}
 
 	// Xóa
 	public void delete(Category category) {
 
-		// Mở kết nối
-		connect();
+		// Open connnect
+		SQLServer.connect();
+		PreparedStatement pr = null;
 		try {
 
-			// Câu lệnh xóa
 			String sql = "delete from Category where categoryId = ?";
-			PreparedStatement pr = connection.prepareStatement(sql);
+			pr = SQLServer.connection.prepareStatement(sql);
 
-			// Truyền accounId vào
 			pr.setInt(1, category.getCategoryId());
 
-			// Thực hiện query update
 			pr.executeUpdate();
-
-			// Đóng kết nối
-			pr.close();
-			connection.close();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally { // Close connect
+			try {
+				pr.close();
+			} catch (Exception e2) {
+			}
+			SQLServer.disconnect();
 		}
 	}
 
 	public void add(Category category) {
 
-		// Mở kết nối
-		connect();
+		// Open connect
+		SQLServer.connect();
+		PreparedStatement pr = null;
 		try {
 
-			// Câu lệnh select
 			String sql = "insert into Category(name)" + " VALUES(?)";
-			PreparedStatement pr = connection.prepareStatement(sql);
-
-			// Truyền các tham số
+			pr = SQLServer.connection.prepareStatement(sql);
 			pr.setString(1, category.getName());
-
-			// Thực hiện
 			pr.executeUpdate();
-
-			// Đóng kết nối
-			pr.close();
-			connection.close();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally { // Close connect
+			try {
+				pr.close();
+			} catch (Exception e2) {
+			}
+			SQLServer.disconnect();
 		}
 	}
 
 	public Category getById(Category category) {
 
-		// Mở kết nối
-		connect();
+		// Open connect
+		SQLServer.connect();
 
-		// Lưu kết quả truy vấn
 		ResultSet rs = null;
-
-		// Lưu thông tin account
 		Category categoryData = new Category();
+		PreparedStatement pr = null;
 
 		try {
 
-			// Câu lệnh truy vấn
 			String sql = "select * from  Category where categoryId = ?";
-			PreparedStatement pr = connection.prepareStatement(sql);
+			pr = SQLServer.connection.prepareStatement(sql);
 
-			// Truyền tham số
 			pr.setInt(1, category.getCategoryId());
-
-			// Thực hiện
 			rs = pr.executeQuery();
-
-			// Lấy kết quả đưa vào accountData
 			if (rs.next()) {
 				categoryData.setCategoryId(rs.getInt(1));
 				categoryData.setName(rs.getString(2));
 				return categoryData;
 			}
 
-			// Đóng kết nối
-			pr.close();
-			connection.close();
-
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally { // Close connect
+			try {
+				rs.close();
+			} catch (Exception e2) {
+			}
+			try {
+				pr.close();
+			} catch (Exception e2) {
+			}
+			SQLServer.disconnect();
 		}
 		return categoryData;
 	}
 
 	public void edit(Category category) {
 
-		// Mở kết nối
-		connect();
+		// Open connect
+		SQLServer.connect();
+		PreparedStatement pr = null;
 		try {
 
-			// Câu lệnh update
 			String sql = "update Category set name = ?  where categoryId = ?";
-			PreparedStatement pr = connection.prepareStatement(sql);
-
-			// Truyền tham số
+			pr = SQLServer.connection.prepareStatement(sql);
 			pr.setString(1, category.getName());
 			pr.setInt(2, category.getCategoryId());
-
-			// Thực thi
 			pr.executeUpdate();
-
-			// Đóng kết nối
-			pr.close();
-			connection.close();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally { // Close connect
+			try {
+				pr.close();
+			} catch (Exception e2) {
+			}
+			SQLServer.disconnect();
 		}
 	}
 

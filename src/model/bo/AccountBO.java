@@ -40,9 +40,29 @@ public class AccountBO {
 	public int checkLogin(Account account) {
 		return accountDAO.checkLogin(account);
 	}
-	
+
 	public Account checkLoginAccount(Account account) {
 		return accountDAO.checkLoginAccount(account);
+	}
+
+	public Account checkLoginAccountMod(Account account) {
+		return accountDAO.checkLoginAccountMod(account);
+	}
+
+	public Account checkLoginAccountAdmin(Account account) {
+		return accountDAO.checkLoginAccountAdmin(account);
+	}
+
+	public ArrayList<Account> getListAccountUser(int page) {
+		return accountDAO.getListAccountUser(page);
+	}
+
+	public boolean lock(Account account) {
+		return accountDAO.lock(account);
+	}
+
+	public boolean unLock(Account account) {
+		return accountDAO.unLock(account);
 	}
 
 }
