@@ -49,8 +49,7 @@
 		<div class="col-lg-2 hidden-lg-down side-menu-left">
 			<div class="row dash-board">
 				<a href="./dashboard-action.do">
-					<button type="button"
-						class="btn btn-elegant button-side-menu-left">
+					<button type="button" class="btn btn-elegant button-side-menu-left">
 						<i class="fa fa-globe icon-in-button" style="color: #2C97BE"
 							aria-hidden="true"></i>Thống kê
 					</button>
@@ -58,7 +57,8 @@
 			</div>
 			<div class="row dash-board">
 				<a href="./account-manager-action.do">
-					<button type="button" class="btn btn-elegant button-side-menu-left button-dash-board">
+					<button type="button"
+						class="btn btn-elegant button-side-menu-left button-dash-board">
 						<i class="fa fa-group icon-in-button" aria-hidden="true"></i>Tài
 						khoản
 					</button>
@@ -66,8 +66,7 @@
 			</div>
 			<div class="row dash-board">
 				<a href="./category-manager-action.do">
-					<button type="button"
-						class="btn btn-elegant button-side-menu-left">
+					<button type="button" class="btn btn-elegant button-side-menu-left">
 						<i class="fa fa-globe icon-in-button" style="color: #2C97BE"
 							aria-hidden="true"></i>Danh mục
 					</button>
@@ -95,11 +94,32 @@
 							<i class="fa fa-user prefix" style="font-size: 2rem;"></i>
 						</div>
 						<div style="width: calc(100% - 52px); display: inline-block;">
-							<html:select property="level" styleClass="mdb-select">
+							<html:select property="level" styleClass="mdb-select"
+								styleId="level">
 								<html:option value="1">Quản trị viên</html:option>
 								<html:option value="2">Điều hành viên</html:option>
 								<html:option value="3">Người dùng</html:option>
 							</html:select>
+						</div>
+
+						<div style="width: calc(100%); display: inline-block;"
+							id="categoryId">
+							<div style="width: 48px; display: inline-block;">
+								<i class="fa fa-user prefix" style="font-size: 2rem;"></i>
+							</div>
+							<div style="width: calc(100% - 52px); display: inline-block;">
+								<html:select name="accountForm" property="categoryId"
+									styleClass="mdb-select">
+									<option value="" selected>Không</option>
+									<logic:iterate name="accountForm" property="categories"
+										id="item">
+										<bean:define id="id" name="item" property="categoryId" />
+										<html:option value="${id}">
+											<bean:write name="item" property="name" />
+										</html:option>
+									</logic:iterate>
+								</html:select>
+							</div>
 						</div>
 						<div class="md-form">
 							<i class="fa fa-user prefix"></i>
@@ -151,6 +171,20 @@
 		var idAction = $("#idAction");
 		$(document).ready(function() {
 			$('.mdb-select').material_select();
+			$('#level').on("change", function() {
+				level = $(this).val();
+				if (level == 2) {
+					$("#categoryId").show();
+				} else {
+					$("#categoryId").hide();
+				}
+			});
+			level = $('#level').val();
+			if (level == 2) {
+				$("#categoryId").show();
+			} else {
+				$("#categoryId").hide();
+			}
 		});
 		function submitAddForm() {
 			var level, name, email, password, rePassword, phone;
@@ -163,21 +197,30 @@
 			if (level == undefined) {
 				showAlert("Quyền hạn không được bỏ trống");
 				return false;
-			} else if (email == undefined || email.length <= 6) {
+			} else if (email == undefined || email.length < 6) {
 				showAlert("Email không được bỏ trống hoặc quá ngắn");
 				return false;
-			} else if (password == undefined || password.length <= 6) {
-				showAlert("Mật khẩu không được bỏ trống");
+			} else if (password == undefined || password.length < 6) {
+				showAlert("Mật khẩu không được bỏ trống hoặc quá ngắn");
 				return false;
 			} else if (rePassword != password) {
 				showAlert("Mật khẩu không khớp");
 				return false;
-			}else{
+			} else if (validateEmail(email) == false) {
+				showAlert("Email không hợp lệ");
+				return false;
+			} else {
 				idAction.val("submit");
 				document.forms[0].submit();
 				return true;
 			}
 		}
+
+		function validateEmail(email) {
+			var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+			return re.test(email);
+		}
+
 		function showAlert(text) {
 			sweetAlert("Lỗi", text, "error");
 		}

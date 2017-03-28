@@ -209,12 +209,21 @@
 			} else if (rePassword != password) {
 				showAlert("Mật khẩu không khớp");
 				return false;
+			} else if (validateEmail(email) == false) {
+				showAlert("Email không hợp lệ");
+				return false;
 			} else {
 				idAction.val("submit");
 				document.forms[0].submit();
 				return true;
 			}
 		}
+
+		function validateEmail(email) {
+			var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+			return re.test(email);
+		}
+		
 		function showAlert(text) {
 			sweetAlert("Lỗi", text, "error");
 		}

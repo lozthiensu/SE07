@@ -121,7 +121,7 @@ public class AccountDAO {
 					+ " VALUES(?,?,?,?,?,?,?,?)";
 			pr = SQLServer.connection.prepareStatement(sql);
 			pr.setInt(1, account.getLevel());
-			pr.setNull(2, java.sql.Types.INTEGER);
+			pr.setInt(2, account.getCategoryId());
 			pr.setString(3, account.getName());
 			pr.setString(4, account.getEmail());
 			pr.setString(5, account.getPassword());
