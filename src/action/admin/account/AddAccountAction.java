@@ -70,7 +70,6 @@ public class AddAccountAction extends Action {
 				accountForm.getName(), accountForm.getEmail(), accountForm.getPassword(), accountForm.getPhone(),
 				accountForm.getStatus());
 
-		Log.in(account);
 		if ("submit".equals(action)) {
 
 			accountBO.addAccount(account);
