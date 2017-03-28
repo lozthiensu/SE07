@@ -8,7 +8,7 @@
 <html>
 <head lang="en">
 <meta charset="UTF-8">
-<title></title>
+<title>TimTro.Com - Tìm trọ online nhanh chóng chính xác</title>
 <link href="css/font-awesome.min.css" rel="stylesheet">
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/compiled.min.css" rel="stylesheet">

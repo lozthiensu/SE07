@@ -17,8 +17,10 @@ public class DashBoard {
 	int perRate;
 	ArrayList<Chart> chartThread;
 	ArrayList<Chart> chartRate;
+	ArrayList<Chart> pieThread;
 	String jsonThread;
 	String jsonRate;
+	String jsonPie;
 
 	public DashBoard() {
 		super();
@@ -100,6 +102,14 @@ public class DashBoard {
 		this.perAccount = perAccount;
 	}
 
+	public String getJsonPie() {
+		return jsonPie;
+	}
+
+	public void setJsonPie(String jsonPie) {
+		this.jsonPie = jsonPie;
+	}
+
 	public int getPerThread() {
 		return perThread;
 	}
@@ -154,6 +164,14 @@ public class DashBoard {
 
 	public void setJsonRate(String jsonRate) {
 		this.jsonRate = jsonRate;
+	}
+
+	public ArrayList<Chart> getPieThread() {
+		return pieThread;
+	}
+
+	public void setPieThread(ArrayList<Chart> pieThread) {
+		this.pieThread = pieThread;
 	}
 
 }

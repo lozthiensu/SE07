@@ -8,7 +8,9 @@
 <html>
 <head lang="en">
 <meta charset="UTF-8">
-<title></title>
+<bean:define id="thread" name="compareForm" property="thread"></bean:define>
+<bean:define id="thread2" name="compareForm" property="thread2"></bean:define>
+<title><bean:write name="thread" property="name" /> vs <bean:write name="thread2" property="name" /> - TimTro.Com</title>
 <link href="css/font-awesome.min.css" rel="stylesheet">
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/compiled.min.css" rel="stylesheet">
@@ -50,14 +52,13 @@
 			<ul class="navbar-nav ml-auto">
 				<img src="img/avatar.jpg" alt="Hình đại diện" class="rounded-circle"
 					style="width: 40px; height: 40px; display: none;" id="imgAva">
-				<li class="dropdown" id="notificationBag">
-					<span class="badge red" id="numMessUnread" data-toggle="dropdown" aria-haspopup="true"
-					aria-expanded="false"></span>
+				<li class="dropdown" id="notificationBag"><span
+					class="badge red" id="numMessUnread" data-toggle="dropdown"
+					aria-haspopup="true" aria-expanded="false"></span>
 					<div class="dropdown-menu dropdown dropdown-menu-right"
 						aria-labelledby="numMessUnread">
-							<span id="listNoti"></span>
-					</div>
-				</li>
+						<span id="listNoti"></span>
+					</div></li>
 				<li class="nav-item dropdown btn-group" id="menuAcc"
 					style="display: none;"><a
 					class="nav-link dropdown-toggle btn-right-menu-main"
@@ -65,7 +66,7 @@
 					aria-expanded="false"><span id="welcomeText"></span></a>
 					<div class="dropdown-menu dropdown dropdown-menu-right"
 						aria-labelledby="dropdownMenu1">
-							<a class="dropdown-item" href="./user/login.do">Quản lý</a> <a
+						<a class="dropdown-item" href="./user/login.do">Quản lý</a> <a
 							class="dropdown-item" onclick="logout();">Đăng xuất</a>
 					</div></li>
 				<li class="nav-item" id="btnReg"><a
@@ -117,8 +118,6 @@
 	<br>
 	<br>
 	<!--Navbar-->
-	<bean:define id="thread" name="compareForm" property="thread"></bean:define>
-	<bean:define id="thread2" name="compareForm" property="thread2"></bean:define>
 	<div class="container container-white">
 		<div class="breadcrumb flat" style="width: 100%; margin-top: 10px;">
 			<a style="border: 1px solid #ddd;"><i class="fa fa-home"

@@ -97,7 +97,18 @@ public class DashBoardDAO {
 			}
 			dashBoard.setChartRate(chartRate);
 			/* CHART THREAD */
-
+			
+			/* PIE THREAD */
+			sql = "select temp.num, Category.name from Category inner join (select count(threadId) as num, categoryId from Thread group by categoryId) temp on temp.categoryId = Category.categoryId";
+			pr = SQLServer.connection.prepareStatement(sql);
+			rs = pr.executeQuery();
+			ArrayList<Chart> pieThread = new ArrayList<Chart>();
+			while (rs.next()) {
+				pieThread.add(new Chart(rs.getInt("num"), rs.getString("name")));
+			}
+			dashBoard.setPieThread(pieThread);
+			/* PIE THREAD */
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally { // Close connect

@@ -10,7 +10,7 @@
 <html>
 <head lang="en">
 <meta charset="UTF-8">
-<title></title>
+<title>Quản lý danh mục</title>
 <link href="../css/font-awesome.min.css" rel="stylesheet">
 <link href="../css/bootstrap.min.css" rel="stylesheet">
 <link href="../css/compiled.min.css" rel="stylesheet">
@@ -139,6 +139,8 @@
 		$(document)
 				.ready(
 						function() {
+							$("#imgAva").attr("src", "../" + readCookie("avatarAdmin"));
+							$("#dropdownMenu1").html(readCookie("emailAdmin"));
 							//Đọc lại giá trị page hiện tại từ Form Class
 							var pageStatic = parseInt('<bean:write name="categoryListForm" property="page"/>');
 							//Thêm class active vô id <li> của trang hiện tại
@@ -175,7 +177,60 @@
 				window.location.href = url + "/delete-category-action.do?categoryId="+id; 
 			});
 		};
-		
+
+
+		function log(a) {
+			console.log(a);
+		};
+
+		function createCookie(name, value, days) {
+			var expires = "";
+			if (days) {
+				var date = new Date();
+				date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+				expires = "; expires=" + date.toUTCString();
+			}
+			document.cookie = name + "=" + value + expires + "; path=/";
+		};
+
+		function readCookie(name) {
+			var nameEQ = name + "=";
+			var ca = document.cookie.split(';');
+			for (var i = 0; i < ca.length; i++) {
+				var c = ca[i];
+				while (c.charAt(0) == ' ')
+					c = c.substring(1, c.length);
+				if (c.indexOf(nameEQ) == 0)
+					return c.substring(nameEQ.length, c.length);
+			}
+			return null;
+		};
+
+		function eraseCookie(name) {
+			createCookie(name, "", -1);
+		};
+		function logout() {
+			$.ajax({
+				type : "POST",
+				url : "/Mock_SE7/home-account-action.do",
+				data : "action=logout",
+				success : function(res) {
+					log("Logout");
+				},
+				error : function(e) {
+					alert('Error: ' + e);
+				}
+			});
+			eraseCookie("email");
+			eraseCookie("password");
+			var curentUrl = window.location.href;
+			index = curentUrl.lastIndexOf("/");
+			url = curentUrl.substring(0, index);
+			index = url.lastIndexOf("/");
+			url = url.substring(0, index);
+			window.location.href = url;
+		};
+
 	</script>
 </body>
 

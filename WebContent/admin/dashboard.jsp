@@ -10,7 +10,7 @@
 <html>
 <head lang="en">
 <meta charset="UTF-8">
-<title></title>
+<title>Thống kê</title>
 <link href="../css/font-awesome.min.css" rel="stylesheet">
 <link href="../css/bootstrap.min.css" rel="stylesheet">
 <link href="../css/compiled.min.css" rel="stylesheet">
@@ -67,8 +67,7 @@
 			</div>
 			<div class="row dash-board">
 				<a href="./category-manager-action.do">
-					<button type="button"
-						class="btn btn-elegant button-side-menu-left">
+					<button type="button" class="btn btn-elegant button-side-menu-left">
 						<i class="fa fa-globe icon-in-button" style="color: #2C97BE"
 							aria-hidden="true"></i>Danh mục
 					</button>
@@ -86,7 +85,7 @@
 
 							<!--Card Data-->
 							<div class="admin-up">
-								<i class="fa  fa-user-circle-o blue darken-3"></i>
+								<i class="fa  fa-user-circle-o blue darken-3" style="background-color: #EF5350 !important;"></i>
 								<div class="data">
 									<p>Tài khoản</p>
 									<h3>
@@ -126,7 +125,7 @@
 
 							<!--Card Data-->
 							<div class="admin-up">
-								<i class="fa  fa-newspaper-o deep-purple darken-4"></i>
+								<i class="fa  fa-newspaper-o deep-purple darken-4" style=" background-color: #00BFA5 !important;"></i>
 								<div class="data">
 									<p>Bài viết</p>
 									<bean:write name="dashBoard" property="numOfThread" />
@@ -164,7 +163,7 @@
 
 							<!--Card Data-->
 							<div class="admin-up">
-								<i class="fa fa-comments-o indigo"></i>
+								<i class="fa fa-comments-o indigo" style="background: #FF9100!important"></i>
 								<div class="data">
 									<p>Đánh giá</p>
 									<h3>
@@ -198,182 +197,224 @@
 					<!--/Third column-->
 
 				</div>
-				<div class="row" style="width: calc(100%); margin-left: 0px;">
-					<div class="view right primary-color"
-						style="margin-left: 20px !important;">
-						<canvas id="sales" height="329" width="1200"
-							style="width: 1200px; height: 329px;"></canvas>
-						<div class="text-center">Biểu đồ thống kê bài viết</div>
+				<div class="row">
+					<div class="col-lg-3">
+						<div class="card mb-r" style="margin: 15px;">
+							<div class="card-block">
+								<h4 class="h4-responsive text-center mb-1">Thống kê theo danh mục</h4>
+								<canvas id="seo" height="151" width="303"
+									style="width: 337px; height: 168px;"></canvas>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-9">
+						<div class="card mb-r" style="margin: 15px; width: calc(100% - 30px);">
+							<div class="card-block">
+								<div class="view right hm-white-slight"
+									style="margin-left: 0px !important;">
+									<canvas id="sales" height="329" width="1200"
+										style="width: 1200px; height: 329px;"></canvas>
+									<div class="text-center">Biểu đồ thống kê bài viết</div>
 
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
 
-	<script type="text/javascript" src="../js/jquery-3.1.1.min.js"></script>
-	<script type="text/javascript" src="../js/tether.min.js"></script>
-	<script type="text/javascript" src="../js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="../js/mdb.min.js"></script>
-	<script type="text/javascript" src="../js/sweetalert.min.js"></script>
+		<script type="text/javascript" src="../js/jquery-3.1.1.min.js"></script>
+		<script type="text/javascript" src="../js/tether.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/mdb.min.js"></script>
+		<script type="text/javascript" src="../js/sweetalert.min.js"></script>
 
-	<script type="text/javascript">
-		//Trỏ đến styleId( tương đương với id) của property page
-		var pageId = $("#pageId");
-		//Khi load trang xong
-		$(document).ready(function() {
-			$("#imgAva").attr("src", "../" + readCookie("avatarAdmin"));
-			$("#dropdownMenu1").html(readCookie("emailAdmin"));
-			//Đọc lại giá trị page hiện tại từ Form Class
-			//Thêm class active vô id <li> của trang hiện tại
-		});
-		//Khi muốn xem kết quả tìm kiếm của trang nào đó
-		function viewPage(page) {
-			//Gán giá trị page truyền vào cho property page của Form Class
-			pageId.val(page);
-			//Submit form bằng javascript
-			document.forms[0].submit();
-		};
-		//hàm sửa item
-		function verifyItem(id) {
-			var curentUrl = window.location.href;
-			var index = curentUrl.lastIndexOf("/");
-			var url = curentUrl.substring(0, index);
-			window.location.href = url + "/verify-thread-action.do?threadId="
-					+ id;
-		};
-		//Hàm xóa item
-		function deleteItem(id) {
-			swal({
-				title : "Bạn có chắc?",
-				text : "Dữ liệu bị xóa sẽ mất vĩnh viễn!",
-				type : "warning",
-				showCancelButton : true,
-				confirmButtonColor : "#DD6B55",
-				confirmButtonText : "Đồng ý!",
-				closeOnConfirm : false
-			}, function() {
+		<script type="text/javascript">
+			//Trỏ đến styleId( tương đương với id) của property page
+			var pageId = $("#pageId");
+			//Khi load trang xong
+			$(document).ready(function() {
+				$("#imgAva").attr("src", "../" + readCookie("avatarAdmin"));
+				$("#dropdownMenu1").html(readCookie("emailAdmin"));
+				//Đọc lại giá trị page hiện tại từ Form Class
+				//Thêm class active vô id <li> của trang hiện tại
+			});
+			//Khi muốn xem kết quả tìm kiếm của trang nào đó
+			function viewPage(page) {
+				//Gán giá trị page truyền vào cho property page của Form Class
+				pageId.val(page);
+				//Submit form bằng javascript
+				document.forms[0].submit();
+			};
+			//hàm sửa item
+			function verifyItem(id) {
 				var curentUrl = window.location.href;
 				var index = curentUrl.lastIndexOf("/");
 				var url = curentUrl.substring(0, index);
 				window.location.href = url
-						+ "/delete-thread-action.do?threadId=" + id;
-			});
-		};
-		//Hàm xóa item
-		function viewItem(id) {
-			var curentUrl = window.location.href;
-			index = curentUrl.lastIndexOf("/");
-			url = curentUrl.substring(0, index);
-			index = url.lastIndexOf("/");
-			url = url.substring(0, index);
-			window.open(url + "/view-thread-action.do?threadId=" + id);
-		};
-		function logout() {
-			$.ajax({
-				type : "POST",
-				url : "/Mock_SE7/home-account-action.do",
-				data : "action=logout",
-				success : function(res) {
-					log("Logout");
-				},
-				error : function(e) {
-					alert('Error: ' + e);
+						+ "/verify-thread-action.do?threadId=" + id;
+			};
+			//Hàm xóa item
+			function deleteItem(id) {
+				swal({
+					title : "Bạn có chắc?",
+					text : "Dữ liệu bị xóa sẽ mất vĩnh viễn!",
+					type : "warning",
+					showCancelButton : true,
+					confirmButtonColor : "#DD6B55",
+					confirmButtonText : "Đồng ý!",
+					closeOnConfirm : false
+				}, function() {
+					var curentUrl = window.location.href;
+					var index = curentUrl.lastIndexOf("/");
+					var url = curentUrl.substring(0, index);
+					window.location.href = url
+							+ "/delete-thread-action.do?threadId=" + id;
+				});
+			};
+			//Hàm xóa item
+			function viewItem(id) {
+				var curentUrl = window.location.href;
+				index = curentUrl.lastIndexOf("/");
+				url = curentUrl.substring(0, index);
+				index = url.lastIndexOf("/");
+				url = url.substring(0, index);
+				window.open(url + "/view-thread-action.do?threadId=" + id);
+			};
+			function logout() {
+				$.ajax({
+					type : "POST",
+					url : "/Mock_SE7/home-account-action.do",
+					data : "action=logout",
+					success : function(res) {
+						log("Logout");
+					},
+					error : function(e) {
+						alert('Error: ' + e);
+					}
+				});
+				eraseCookie("email");
+				eraseCookie("password");
+				var curentUrl = window.location.href;
+				index = curentUrl.lastIndexOf("/");
+				url = curentUrl.substring(0, index);
+				index = url.lastIndexOf("/");
+				url = url.substring(0, index);
+				window.location.href = url;
+			};
+
+			function log(a) {
+				console.log(a);
+			};
+
+			function createCookie(name, value, days) {
+				var expires = "";
+				if (days) {
+					var date = new Date();
+					date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+					expires = "; expires=" + date.toUTCString();
 				}
+				document.cookie = name + "=" + value + expires + "; path=/";
+			};
+
+			function readCookie(name) {
+				var nameEQ = name + "=";
+				var ca = document.cookie.split(';');
+				for (var i = 0; i < ca.length; i++) {
+					var c = ca[i];
+					while (c.charAt(0) == ' ')
+						c = c.substring(1, c.length);
+					if (c.indexOf(nameEQ) == 0)
+						return c.substring(nameEQ.length, c.length);
+				}
+				return null;
+			};
+
+			function eraseCookie(name) {
+				createCookie(name, "", -1);
+			};
+			$(function() {
+				jsonThread = '<bean:write name="dashBoard" property="jsonThread" />';
+				objThread = JSON.parse(jsonThread.replace(/&quot;/g, '"'));
+				jsonRate = '<bean:write name="dashBoard" property="jsonRate" />';
+				objRate = JSON.parse(jsonRate.replace(/&quot;/g, '"'));
+				jsonPie = '<bean:write name="dashBoard" property="jsonPie" />';
+				objPie = JSON.parse(jsonPie.replace(/&quot;/g, '"'));
+				labelThread = [];
+				dataThread = [];
+				for (i = 0; i < objThread.length; i++) {
+					labelThread.push(objThread[i].label);
+					dataThread.push(objThread[i].data);
+				}
+				labelRate = [];
+				dataRate = [];
+				for (i = 0; i < objRate.length; i++) {
+					labelRate.push(objRate[i].label);
+					dataRate.push(objRate[i].data);
+				}
+				labelPie = [];
+				var dataPie1 = [];
+				for (i = 0; i < objPie.length; i++) {
+					dataPie1.push({
+						value : objPie[i].data,
+						color : '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6),
+						highlight : '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6),
+						label : objPie[i].label
+					});
+				}
+				var data = {
+					labels : labelThread,
+					datasets : [ {
+						label : "My First dataset",
+						fillColor : "rgba(139, 159, 250,0.8)",
+						strokeColor : "rgba(92,184,92,1)",
+						pointColor : "rgba(220,220,220,1)",
+						pointStrokeColor : "#0f0",
+						pointHighlightFill : "#000",
+						pointHighlightStroke : "rgba(0,0,255,.15)",
+						data : dataThread,
+						backgroundColor : "#fff !important;"
+					} ]
+				};
+
+				var option = {
+					responsive : true,
+					// set font color
+					scaleFontColor : "#000",
+					// font family
+					defaultFontFamily : "'Roboto', sans-serif",
+					// background grid lines color
+					scaleGridLineColor : "rgba(0,0,0,.4)",
+					// hide vertical lines
+					scaleShowVerticalLines : false,
+				};
+
+				var dataPie = [ {
+					value : 300,
+					color : "#4caf50",
+					highlight : "#66bb6a",
+					label : "Google Chrome"
+				}, {
+					value : 50,
+					color : "#03a9f4",
+					highlight : "#29b6f6",
+					label : "Edge"
+				}, {
+					value : 100,
+					color : "#d32f2f",
+					highlight : "#e53935",
+					label : "Firefox"
+				} ]
+				// Get the context of the canvas element we want to select
+				var ctx = document.getElementById("sales").getContext('2d');
+				var myLineChart = new Chart(ctx).Line(data, option); //'Line' defines type of the chart.
+
+				// Get the context of the canvas element we want to select
+				var ctx = document.getElementById("seo").getContext('2d');
+				var myPieChart = new Chart(ctx).Pie(dataPie1, option);
 			});
-			eraseCookie("email");
-			eraseCookie("password");
-			var curentUrl = window.location.href;
-			index = curentUrl.lastIndexOf("/");
-			url = curentUrl.substring(0, index);
-			index = url.lastIndexOf("/");
-			url = url.substring(0, index);
-			window.location.href = url;
-		};
-
-		function log(a) {
-			console.log(a);
-		};
-
-		function createCookie(name, value, days) {
-			var expires = "";
-			if (days) {
-				var date = new Date();
-				date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-				expires = "; expires=" + date.toUTCString();
-			}
-			document.cookie = name + "=" + value + expires + "; path=/";
-		};
-
-		function readCookie(name) {
-			var nameEQ = name + "=";
-			var ca = document.cookie.split(';');
-			for (var i = 0; i < ca.length; i++) {
-				var c = ca[i];
-				while (c.charAt(0) == ' ')
-					c = c.substring(1, c.length);
-				if (c.indexOf(nameEQ) == 0)
-					return c.substring(nameEQ.length, c.length);
-			}
-			return null;
-		};
-
-		function eraseCookie(name) {
-			createCookie(name, "", -1);
-		};
-		$(function() {
-			jsonThread = '<bean:write name="dashBoard" property="jsonThread" />';
-			objThread = JSON.parse(jsonThread.replace(/&quot;/g,'"'));
-			jsonRate = '<bean:write name="dashBoard" property="jsonRate" />';
-			objRate = JSON.parse(jsonRate.replace(/&quot;/g,'"'));
-			labelThread = [];
-			dataThread = [];
-			for(i = 0; i < objThread.length; i++){
-				labelThread.push(objThread[i].label);
-				dataThread.push(objThread[i].data);
-			}
-			labelRate = [];
-			dataRate = [];
-			for(i = 0; i < objRate.length; i++){
-				labelRate.push(objRate[i].label);
-				dataRate.push(objRate[i].data);
-			}
-			log(labelThread + " " + dataThread + " " + labelRate + " " + dataRate);
-            var data = {
-                labels: labelThread,
-                datasets: [{
-                    label: "My First dataset",
-                    fillColor: "rgba(220,220,220,0.2)",
-                    strokeColor: "rgba(220,220,220,1)",
-                    pointColor: "rgba(220,220,220,1)",
-                    pointStrokeColor: "#fff",
-                    pointHighlightFill: "#fff",
-                    pointHighlightStroke: "rgba(0,0,0,.15)",
-                    data: dataThread,
-                    backgroundColor: "#4CAF50"
-                }]
-            };
-
-
-      
-
-            var option = {
-                responsive: true,
-                // set font color
-                scaleFontColor: "#fff",
-                // font family
-                defaultFontFamily: "'Roboto', sans-serif",
-                // background grid lines color
-                scaleGridLineColor: "rgba(255,255,255,.1)",
-                // hide vertical lines
-                scaleShowVerticalLines: false,
-            };
-
-            // Get the context of the canvas element we want to select
-            var ctx = document.getElementById("sales").getContext('2d');
-            var myLineChart = new Chart(ctx).Line(data, option); //'Line' defines type of the chart.
-        });
-	</script>
+		</script>
 </body>
 
 </html>

@@ -10,7 +10,7 @@
 <html>
 <head lang="en">
 <meta charset="UTF-8">
-<title></title>
+<title>Quản lý đánh giá</title>
 <link href="../css/font-awesome.min.css" rel="stylesheet">
 <link href="../css/bootstrap.min.css" rel="stylesheet">
 <link href="../css/compiled.min.css" rel="stylesheet">

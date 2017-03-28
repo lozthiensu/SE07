@@ -11,7 +11,9 @@
 <html>
 <head lang="en">
 <meta charset="UTF-8">
-<title></title>
+<bean:define id="category" name="viewCategoryForm"
+				property="category"></bean:define>
+<title><bean:write name="category" property="name" /> - TimTro.Com</title>
 <link href="css/font-awesome.min.css" rel="stylesheet">
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/compiled.min.css" rel="stylesheet">
@@ -130,8 +132,6 @@
 	<div class="container container-white">
 		<!--Slide new start -->
 		<div class="breadcrumb flat">
-			<bean:define id="category" name="viewCategoryForm"
-				property="category"></bean:define>
 			<a style="border: 1px solid #ddd;"><i class="fa fa-home"
 				aria-hidden="true" style="font-size: 35px;"></i></a> <a class="active">
 				<bean:write name="category" property="name" />

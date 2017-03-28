@@ -8,7 +8,7 @@
 <html>
 <head lang="en">
 <meta charset="UTF-8">
-<title></title>
+<title>Sửa bài viết</title>
 <link href="../css/font-awesome.min.css" rel="stylesheet">
 <link href="../css/bootstrap.min.css" rel="stylesheet">
 <link href="../css/compiled.min.css" rel="stylesheet">
@@ -195,7 +195,7 @@
 						<html:hidden styleClass="form-control" property="latitude"></html:hidden>
 						<html:hidden styleClass="form-control" property="longitude"></html:hidden>
 						<bean:define id="kindOf" name="threadForm" property="kindOf"></bean:define>
-						<div style="    display: table; margin: 0 auto;">
+						<div style="display: table; margin: 0 auto;">
 							<fieldset class="form-group">
 								<input type="radio" id="kindOf" name="kindOf"
 									<%out.print(kindOf);
@@ -594,11 +594,44 @@
 		$(document)
 				.ready(
 						function() {
+							$.validator
+									.addMethod(
+											"[name='price']",
+											function(value, element) {
+												return parseInt(value) > 0 ;
+											},
+											"Please enter a valid email address.");
+							// Validate signup form
+						    $("[name='threadForm']").validate({
+						        rules: {
+						        	price: "required email",
+						        },
+						    });
+							$("[name='name']").attr('maxlength', '500');
+							$("[name='address']").attr('maxlength', '500');
+							$("[name='content']").attr('maxlength', '4000');
+							$("[name='direction']").attr('maxlength', '100');
+
+							$("[name='price']").attr('type', 'number');
+							$("[name='price']").attr('min', '0');
+							$("[name='price']").attr('max', '99999999999');
+
+							/* $("[name='price']").on("change", function() {
+								if (parseInt($("[name='price']").val()) < 0) {
+									
+								}
+							}); */
 							$("#imgAva").attr("src",
 									"../" + readCookie("avatar"));
 							$("#dropdownMenu1").html(readCookie("email"));
 							//Đọc lại giá trị page hiện tại từ Form Class
 							$('input[type="text"]').keypress(function(event) {
+								if (event.keyCode == '13') {
+									event.preventDefault();
+								}
+							});
+							//Đọc lại giá trị page hiện tại từ Form Class
+							$('input[type="number"]').keypress(function(event) {
 								if (event.keyCode == '13') {
 									event.preventDefault();
 								}
@@ -707,12 +740,19 @@
 			name = $('[name="name"]').val();
 			content = tinymce.get('content').getContent();
 			price = $.isNumeric($('[name="price"]').val());
+			priceVal = parseInt($('[name="price"]').val());
 			electricFee = $.isNumeric($('[name="electricFee"]').val());
+			electricFeeVal = parseInt($('[name="electricFee"]').val());
 			waterFee = $.isNumeric($('[name="waterFee"]').val());
+			waterFeeVal = parseInt($('[name="waterFee"]').val());
 			otherFee = $.isNumeric($('[name="otherFee"]').val());
+			otherFeeVal = parseInt($('[name="otherFee"]').val());
 			area = $.isNumeric($('[name="area"]').val());
+			areaVal = parseInt($('[name="area"]').val());
 			numOfToilets = $.isNumeric($('[name="numOfToilets"]').val());
+			numOfToiletsVal = parseInt($('[name="numOfToilets"]').val());
 			numOfPeople = $.isNumeric($('[name="numOfPeople"]').val());
+			numOfPeopleVal = parseInt($('[name="numOfPeople"]').val());
 
 			if (villageId == 0 || villageId == null) {
 				showAlert("Bạn chưa chọn xã");
@@ -744,10 +784,33 @@
 			} else if (numOfPeople == false) {
 				showAlert("Số người không hợp lệ");
 				return false;
+			} else if (priceVal < 0) {
+				log(priceVal);
+				//var validator = $('[name="price"]'); 
+				//idAction.val("submit");
+				//document.forms[0].submit();
+				return false;
 			}
-			idAction.val("submit");
-			document.forms[0].submit();
-			return true;
+			/* 	else if(priceVal < 0 || priceVal > 9999999999){
+					return false;
+				}else if(electricFeeVal < 0 || electricFeeVal > 9999999999){
+					return false;
+				}else if(waterFeeVal < 0 || waterFeeVal > 9999999999){
+					return false;
+				}else if(otherFeeVal < 0 || otherFeeVal > 9999999999){
+					return false;
+				}else if(areaVal < 0 || areaVal > 9999999999){
+					return false;
+				}else if(numOfToiletsVal < 0 || numOfToiletsVal > 9999999999){
+					return false;
+				}else if(numOfPeopleVal < 0 || numOfPeopleVal > 9999999999){
+					return false;
+				} */
+			else {
+				idAction.val("submit");
+				document.forms[0].submit();
+				return true;
+			}
 		}
 		function showAlert(text) {
 			sweetAlert("Lỗi", text, "error");

@@ -64,20 +64,20 @@ public class EditCategoryAction extends Action {
 		CategoryBO categoryBO = new CategoryBO();
 
 		// Tạo ra đối tượng account với dữ liệu từ form
-		Category category = new Category(categoryForm.getCategoryId(), "");
-		category = categoryBO.getById(category);
 		// Lưu lại hành động từ form
 		String action = action = categoryForm.getAction();
 
 		if ("submit".equals(action)) {
 
-			categoryBO.edit(category);
+			categoryBO.edit(new Category(categoryForm.getCategoryId(), categoryForm.getName()));
 
 			// Sửa thành công và chuyển trang
 			return mapping.findForward("success");
 
 		} else {
 
+			Category category = new Category(categoryForm.getCategoryId(), "");
+			category = categoryBO.getById(category);
 			categoryForm.setCategoryId(category.getCategoryId());
 			categoryForm.setName(category.getName());
 

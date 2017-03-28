@@ -10,7 +10,7 @@
 <html>
 <head lang="en">
 <meta charset="UTF-8">
-<title></title>
+<title>Quản lý tài khoản</title>
 <link href="../css/font-awesome.min.css" rel="stylesheet">
 <link href="../css/bootstrap.min.css" rel="stylesheet">
 <link href="../css/compiled.min.css" rel="stylesheet">
@@ -71,11 +71,6 @@
 				<div class="row" style="width: 100%; height: 60px;">
 					<div class="col-lg-8">
 						<h2 class="title-in-admin">Danh sách tài khoản</h2>
-					</div>
-					<div class="col-lg-4 text-right">
-						<html:link styleClass="btn btn-success"
-							action="/admin/add-account-action">
-							<i class="fa fa-language icon-in-button" aria-hidden="true"></i> Thêm mới</html:link>
 					</div>
 				</div>
 				<div class="table-custom">

@@ -8,7 +8,8 @@
 <html>
 <head lang="en">
 <meta charset="UTF-8">
-<title></title>
+<bean:define id="thread" name="viewThreadForm" property="thread"></bean:define>
+<title><bean:write name="thread" property="name" /> - TimTro.Com</title>
 <link href="css/font-awesome.min.css" rel="stylesheet">
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/compiled.min.css" rel="stylesheet">
@@ -87,7 +88,6 @@
 		</div>
 
 	</div>
-	<bean:define id="thread" name="viewThreadForm" property="thread"></bean:define>
 	<div
 		style="
 	background-image: url(<bean:write name="thread" property="imageThumb" />);
@@ -202,7 +202,7 @@
 		<div class="container container-white " style="margin-top: -460px;">
 
 			<h2 class="text-center thread-name">
-				<bean:write name="thread" property="name" />
+				<logic:equal name="thread" property="kindOf" value="false">[TÌM] </logic:equal><bean:write name="thread" property="name" />
 			</h2>
 			<br>
 
@@ -706,6 +706,7 @@
 			$('#btnAddRate').prop('disabled', true); //TO DISABLED
 			$('input[name=newScoreRate]:checked').prop('checked', false); //TO UNCHECK  
 			$('input[name=newScoreRate]').prop('disabled', true); //TO DISABLED  
+			$('#newContentRate').attr('maxlength', '200'); 
 			email = readCookie('email');
 			if (email != undefined && email.length > 6) {
 				$('#btnAddRate').prop('disabled', false); //TO ENABLE

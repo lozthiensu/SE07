@@ -40,9 +40,10 @@ public class SearchThreadAction extends Action {
 		try {
 			page = searchThreadForm.getPage();
 			action = searchThreadForm.getAction();
-			Log.in("Action: " + action + ", page: " + page + ", name: " + searchThreadForm.getName());
+			// Log.in("Action: " + action + ", page: " + page + ", name: " +
+			// searchThreadForm.getName());
 		} catch (Exception e) {
-			Log.in("Post that bai");
+			// Log.in("Post that bai");
 		}
 		if (action == null) {
 			return null;
@@ -72,10 +73,10 @@ public class SearchThreadAction extends Action {
 			thread.setVillage(new Village(searchThreadForm.getVillageId(), 0, ""));
 			thread.setName(searchThreadForm.getName());
 			thread.setKindOf(searchThreadForm.isKindOf());
-			Log.in(searchThreadForm.isKindOf() + " KindOf");
+			// Log.in(searchThreadForm.isKindOf() + " KindOf");
 
-			//Log.in(thread);
-			//Log.in(thread.toString());
+			// Log.in(thread);
+			// Log.in(thread.toString());
 			ArrayList<Thread> threads = new ArrayList<Thread>();
 			threads = threadBO.searchBy(thread, page);
 
@@ -87,7 +88,7 @@ public class SearchThreadAction extends Action {
 			// System.out.println(json);
 
 		} else if (action.equals("autocomplete")) {
-			Log.in("Dang autocomplete: " + searchThreadForm.getName());
+			// Log.in("Dang autocomplete: " + searchThreadForm.getName());
 			PrintWriter out = response.getWriter();
 
 			Thread thread = new Thread();
@@ -111,8 +112,8 @@ public class SearchThreadAction extends Action {
 			thread.setVillage(new Village(searchThreadForm.getVillageId(), 0, ""));
 			thread.setName(searchThreadForm.getName());
 
-			//Log.in(thread);
-			Log.in(thread.toString());
+			// Log.in(thread);
+			// Log.in(thread.toString());
 			ArrayList<Thread> threads = new ArrayList<Thread>();
 			threads = threadBO.searchBy(thread, page);
 
@@ -127,12 +128,12 @@ public class SearchThreadAction extends Action {
 
 			Gson gson = new Gson();
 			String json = gson.toJson(threadAutoCompleteSuggestion);
-			Log.in(json);
+			// Log.in(json);
 			out.println(json);
 			out.flush();
 			System.out.println(json);
 			if (threads.size() == 0) {
-				Log.in("Rong ne: ");
+				// Log.in("Rong ne: ");
 				System.out.println(json);
 			}
 

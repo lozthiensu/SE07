@@ -84,7 +84,7 @@
 
 			</div>
 			<!--Footer-->
-<!-- 			<div class="modal-footer"> 
+			<!-- 			<div class="modal-footer"> 
 				<button type="button" class="btn btn-warning ml-auto"
 					data-dismiss="modal">Đóng</button>
 			</div> -->
@@ -136,9 +136,7 @@
 <div class="modal fade modal-ext" id="modal-register" tabindex="-1"
 	role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog" role="document">
-		<!--Content-->
 		<div class="modal-content">
-			<!--Header-->
 			<div class="modal-header flex-column">
 				<button type="button" class="close" data-dismiss="modal"
 					aria-label="Close">
@@ -148,25 +146,22 @@
 					<i class="fa fa-user"></i> Đăng ký
 				</h3>
 			</div>
-			<!--Body-->
 			<div class="modal-body">
 				<div class="md-form">
 					<i class="fa fa-envelope prefix"></i> <input type="text"
-						id="emailReg"
-						pattern="/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/"
-						class="form-control"> <label for="form2">Email</label><span
-						id="labelEmail"></span>
+						id="emailReg" class="form-control" maxlength="40"> <label
+						for="form2">Email</label><span id="labelEmail"></span>
 				</div>
 
 				<div class="md-form">
 					<i class="fa fa-lock prefix"></i> <input type="password"
-						id="passwordReg" class="form-control"> <label for="form3">Mật
-						khẩu</label>
+						id="passwordReg" class="form-control" maxlength="32"> <label
+						for="form3">Mật khẩu</label>
 				</div>
 
 				<div class="md-form">
 					<i class="fa fa-lock prefix"></i> <input type="password"
-						id="re-passwordReg" class="form-control"> <label
+						id="re-passwordReg" class="form-control" maxlength="32"> <label
 						for="form4">Nhập lại mật khẩu</label>
 				</div>
 
@@ -175,18 +170,7 @@
 						class="btn btn-primary btn-lg green">Đăng ký</button>
 				</div>
 			</div>
-			<!--Footer-->
-<!-- 			<div class="modal-footer">
-				<div class="row">
-					<div class="col-md-12">
-						<button type="button" class="btn btn-warning ml-auto"
-							data-dismiss="modal">Đóng</button>
-					</div>
-				</div>
-
-			</div> -->
 		</div>
-		<!--/.Content-->
 	</div>
 </div>
 
@@ -217,10 +201,13 @@
 		} else if (password.length < 1) {
 			showError("Mật khẩu không được bỏ trống hoặc quá ngắn");
 			return false;
-		}else if (password != re_password) {
+		} else if (password != re_password) {
 			showError("Mật khẩu không khớp");
 			return false;
-		}else if (validateEmail(email) == false) {
+		} else if (password == undefined || password.length < 6) {
+			showAlert("Mật khẩu không được bỏ trống hoặc quá ngắn");
+			return false;
+		} else if (validateEmail(email) == false) {
 			showError("Email không hợp lệ");
 			return false;
 		}
@@ -230,7 +217,7 @@
 			data : "email=" + email + "&password=" + password
 					+ "&action=register",
 			success : function(res) {
-				if (res == "success") { 
+				if (res == "success") {
 					showSuccess("Đăng ký thành công");
 					return true;
 				} else {
@@ -244,8 +231,8 @@
 		});
 	}
 	function validateEmail(email) {
-	    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-	    return re.test(email);
+		var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+		return re.test(email);
 	}
 	function loginAjax() {
 		email = $("#emailLog").val();
@@ -303,25 +290,28 @@
 	function checkEmail() {
 		log("check email");
 		email = $("#emailReg").val();
-		$.ajax({
-			type : "POST",
-			url : "/Mock_SE7/home-account-action.do",
-			data : "email=" + email + "&action=checkEmail",
-			success : function(res) {
-				if (res == "success") {
-					log("tc");
-					$("#labelEmail").html("");
-					return true;
-				} else {
-					log("tb");
-					$("#labelEmail").html("Email đã tồn tại");
-					return false;
-				}
-			},
-			error : function(e) {
-				alert('Error: ' + e);
-			}
-		});
+		$
+				.ajax({
+					type : "POST",
+					url : "/Mock_SE7/home-account-action.do",
+					data : "email=" + email + "&action=checkEmail",
+					success : function(res) {
+						if (res == "success") {
+							log("tc");
+							$("#labelEmail").html("");
+							return true;
+						} else {
+							log("tb");
+							$("#labelEmail")
+									.html(
+											"<font color='red' style='margin-left: 50px'><b>Email đã tồn tại</b></font>");
+							return false;
+						}
+					},
+					error : function(e) {
+						alert('Error: ' + e);
+					}
+				});
 	}
 	function slug(str) {
 		str = str.toLowerCase();
@@ -391,7 +381,9 @@
 									+ ')" class="" >'
 									+ '<div class="row item-noti '+ un +'" style="min-width: 400px;">'
 									+ '	<div class="col-2">'
-									+ '		<img src="'+ obj[i].avatar +'"'
+									+ '		<img src="'
+									+ obj[i].avatar
+									+ '"'
 									+ '			style=" height: 50px; width: 50px; border-radius: 50%;">'
 									+ '	</div>'
 									+ '	<div class="col-10">'

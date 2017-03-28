@@ -8,7 +8,7 @@
 <html>
 <head lang="en">
 <meta charset="UTF-8">
-<title></title>
+<title>Tìm kiếm phòng trọ online chính xác</title>
 <link href="css/font-awesome.min.css" rel="stylesheet">
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/compiled.min.css" rel="stylesheet">
@@ -120,14 +120,13 @@
 			<ul class="navbar-nav ml-auto">
 				<img src="img/avatar.jpg" alt="Hình đại diện" class="rounded-circle"
 					style="width: 40px; height: 40px; display: none;" id="imgAva">
-				<li class="dropdown" id="notificationBag">
-					<span class="badge red" id="numMessUnread" data-toggle="dropdown" aria-haspopup="true"
-					aria-expanded="false"></span>
+				<li class="dropdown" id="notificationBag"><span
+					class="badge red" id="numMessUnread" data-toggle="dropdown"
+					aria-haspopup="true" aria-expanded="false"></span>
 					<div class="dropdown-menu dropdown dropdown-menu-right"
 						aria-labelledby="numMessUnread">
-							<span id="listNoti"></span>
-					</div>
-				</li>
+						<span id="listNoti"></span>
+					</div></li>
 				<li class="nav-item dropdown btn-group" id="menuAcc"
 					style="display: none;"><a
 					class="nav-link dropdown-toggle btn-right-menu-main"
@@ -135,7 +134,7 @@
 					aria-expanded="false"><span id="welcomeText"></span></a>
 					<div class="dropdown-menu dropdown dropdown-menu-right"
 						aria-labelledby="dropdownMenu1">
-							<a class="dropdown-item" href="./user/login.do">Quản lý</a> <a
+						<a class="dropdown-item" href="./user/login.do">Quản lý</a> <a
 							class="dropdown-item" onclick="logout();">Đăng xuất</a>
 					</div></li>
 				<li class="nav-item" id="btnReg"><a
@@ -197,6 +196,15 @@
 		<div class="row">
 			<div class="col-lg-12">
 				<div class="row">
+
+					<div style="display: table; margin: 0 auto;">
+						<fieldset class="form-group">
+							<input type="radio" id="kindOf" name="kindOf" value="true" /> <label
+								for="kindOf">Cho thuê phòng</label> <input type="radio"
+								id="kindOf2" name="kindOf" value="false" /> <label
+								for="kindOf2">Đi tìm phòng</label>
+						</fieldset>
+					</div>
 					<div class="col-lg-12">
 						<div class="md-form">
 							<input type="text" id="name" class="form-control validate"
@@ -557,57 +565,57 @@
 							createCookie('page', 1, 1);
 							$('.mdb-select').material_select();
 							$('#slbProvince')
-							.on(
-									"change",
-									function() {
-										var provinceId = $(this).val();
-										log(provinceId);
-										var str = "action=getDistrict"
-												+ "&provinceId="
-												+ provinceId;
-										log("POST: " + str);
-										$
-												.ajax({
-													type : "POST",
-													url : "/Mock_SE7/search-thread.do",
-													data : str,
-													success : function(
-															response) {
-														log("RES: "
-																+ response);
-														var districts = JSON
-																.parse(response);
-														if (districts != undefined) {
-															var n = districts.length;
-															var stringResults = '<option value="" selected>Không</option>';
-															for (var i = 0; i < n; i++) {
-																stringResults += '<option value="'+districts[i].districtId+'">'
-																		+ districts[i].name
-																		+ '</option>';
-															}
-															$(
-																	'#slbDistrict')
-																	.html(
-																			stringResults);
-															$(
-																	'#slbDistrict')
-																	.material_select();
+									.on(
+											"change",
+											function() {
+												var provinceId = $(this).val();
+												log(provinceId);
+												var str = "action=getDistrict"
+														+ "&provinceId="
+														+ provinceId;
+												log("POST: " + str);
+												$
+														.ajax({
+															type : "POST",
+															url : "/Mock_SE7/search-thread.do",
+															data : str,
+															success : function(
+																	response) {
+																log("RES: "
+																		+ response);
+																var districts = JSON
+																		.parse(response);
+																if (districts != undefined) {
+																	var n = districts.length;
+																	var stringResults = '<option value="" selected>Không</option>';
+																	for (var i = 0; i < n; i++) {
+																		stringResults += '<option value="'+districts[i].districtId+'">'
+																				+ districts[i].name
+																				+ '</option>';
+																	}
+																	$(
+																			'#slbDistrict')
+																			.html(
+																					stringResults);
+																	$(
+																			'#slbDistrict')
+																			.material_select();
 
-															$(
-																	'#slbVillage')
-																	.html(
-																			'<option value="" selected>Không</option>');
-															$(
-																	'#slbVillage')
-																	.material_select();
-														}
-													},
-													error : function(e) {
-														alert('Error: '
-																+ e);
-													}
-												});
-									});
+																	$(
+																			'#slbVillage')
+																			.html(
+																					'<option value="" selected>Không</option>');
+																	$(
+																			'#slbVillage')
+																			.material_select();
+																}
+															},
+															error : function(e) {
+																alert('Error: '
+																		+ e);
+															}
+														});
+											});
 							$('#slbDistrict')
 									.on(
 											"change",
@@ -705,14 +713,22 @@
 			page = parseInt(readCookie('page'));
 			lat = readCookie('lat');
 			lng = readCookie('lng');
+			kindOf = $('#kindOf').is(':checked');
+			log(kindOf);
+			if (kindOf == true) {
+				kindOf = "true";
+			}else{
+				kindOf = "false";
+			}
 			var str = "action=search" + "&wifi=" + wifi + "&waterHeater="
 					+ waterHeater + "&conditioner=" + conditioner + "&fridge="
 					+ fridge + "&attic=" + attic + "&camera=" + camera
-					+ "&object=" + object + "&waterSource=" + waterSource + "&categoryId=" + categoryId
-					+ "&area=" + area + "&price=" + price + "&far=" + far
-					+ "&lat=" + lat + "&lng=" + lng + "&provinceId="
-					+ provinceId + "&districtId=" + districtId + "&villageId="
-					+ villageId + "&name=" + name + "&page=" + page;
+					+ "&object=" + object + "&waterSource=" + waterSource
+					+ "&categoryId=" + categoryId + "&area=" + area + "&price="
+					+ price + "&far=" + far + "&lat=" + lat + "&lng=" + lng
+					+ "&provinceId=" + provinceId + "&kindOf=" + kindOf + "&districtId=" + districtId
+					+ "&villageId=" + villageId + "&name=" + name + "&page="
+					+ page;
 			log("Post " + str);
 			$
 					.ajax({

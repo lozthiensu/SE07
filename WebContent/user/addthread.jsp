@@ -8,7 +8,7 @@
 <html>
 <head lang="en">
 <meta charset="UTF-8">
-<title></title>
+<title>Thêm bài viết mới</title>
 <link href="../css/font-awesome.min.css" rel="stylesheet">
 <link href="../css/bootstrap.min.css" rel="stylesheet">
 <link href="../css/compiled.min.css" rel="stylesheet">
@@ -214,7 +214,7 @@
 
 						<div style="width: calc(100%); display: inline-block;">
 							<html:select name="threadForm" property="categoryId"
-								styleClass="mdb-select" styleId="slbCategory">
+								styleClass="mdb-select" styleId="slbCategory" required>
 								<logic:iterate name="threadForm" property="categories" id="item">
 									<bean:define id="id" name="item" property="categoryId" />
 									<html:option value="${id}">
@@ -596,6 +596,12 @@
 		$(document)
 				.ready(
 						function() {
+
+							$("[name='name']").attr('maxlength', '500');
+							$("[name='address']").attr('maxlength', '500');
+							$("[name='content']").attr('maxlength', '4000');
+							$("[name='direction']").attr('maxlength', '100'); 
+							
 							$('input[type=radio][name=kindOf]').change(
 									function() {
 										if (this.value == 'true') {

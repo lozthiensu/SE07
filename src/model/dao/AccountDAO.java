@@ -126,7 +126,7 @@ public class AccountDAO {
 			pr.setString(4, account.getEmail());
 			pr.setString(5, account.getPassword());
 			pr.setString(6, account.getPhone());
-			pr.setInt(7, account.getStatus());
+			pr.setInt(7, 1);
 			pr.setString(8, "image/avatar.jpg");
 			count = pr.executeUpdate();
 
