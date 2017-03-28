@@ -12,8 +12,11 @@ public class Thread {
 	String content;
 	long price;
 	int electricFee;
+	String electricFeeString;
 	int waterFee;
+	String waterFeeString;
 	int otherFee;
+	String otherFeeString;
 	int area;
 	boolean wifi;
 	boolean waterHeater;
@@ -96,6 +99,30 @@ public class Thread {
 
 	public String getAvatar() {
 		return avatar;
+	}
+
+	public String getElectricFeeString() {
+		return electricFeeString;
+	}
+
+	public void setElectricFeeString(String electricFeeString) {
+		this.electricFeeString = electricFeeString;
+	}
+
+	public String getWaterFeeString() {
+		return waterFeeString;
+	}
+
+	public void setWaterFeeString(String waterFeeString) {
+		this.waterFeeString = waterFeeString;
+	}
+
+	public String getOtherFeeString() {
+		return otherFeeString;
+	}
+
+	public void setOtherFeeString(String otherFeeString) {
+		this.otherFeeString = otherFeeString;
 	}
 
 	public void setAvatar(String avatar) {

@@ -199,9 +199,9 @@
 
 					<div style="display: table; margin: 0 auto;">
 						<fieldset class="form-group">
-							<input type="radio" id="kindOf" name="kindOf" value="true" /> <label
-								for="kindOf">Cho thuê phòng</label> <input type="radio"
-								id="kindOf2" name="kindOf" value="false" /> <label
+							<input type="radio" id="kindOf" name="kindOf" value="true"
+								checked="true" /> <label for="kindOf">Cho thuê phòng</label> <input
+								type="radio" id="kindOf2" name="kindOf" value="false" /> <label
 								for="kindOf2">Đi tìm phòng</label>
 						</fieldset>
 					</div>
@@ -296,12 +296,12 @@
 					<div class="col-lg-3">
 						<select class="mdb-select" id="price" onchange="doAjaxPost()">
 							<option value="0" selected>Không</option>
-							<option value="1">&lt; 500 k</option>
-							<option value="2">500 - 1000 k</option>
-							<option value="3">1000 - 1500 k</option>
-							<option value="4">1500 - 2500 k</option>
-							<option value="5">2500 - 5000 k</option>
-							<option value="6">&gt; 5000 k</option>
+							<option value="1">&lt; 500.000 VNĐ</option>
+							<option value="2">500.000 VNĐ - 1000.000 VNĐ</option>
+							<option value="3">1000.000 VNĐ - 1500.000 VNĐ</option>
+							<option value="4">1500.000 VNĐ - 2500.000 VNĐ</option>
+							<option value="5">2500.000 VNĐ - 5000.000 VNĐ</option>
+							<option value="6">&gt; 5000.000 VNĐ</option>
 						</select> <label>Giá phòng</label>
 					</div>
 					<div class="col-lg-3">
@@ -331,7 +331,7 @@
 						</select> <label>Làng/Xã</label>
 					</div>
 					<div class="col-lg-3">
-						<select class="mdb-select" id="far" onchange="doAjaxPost()">
+						<select class="mdb-select" id="far" onchange="checkDoAjaxPost()">
 							<option value="0" selected>Không</option>
 							<option value="1">&lt; 500 m</option>
 							<option value="2">&lt; 1500 m</option>
@@ -691,6 +691,16 @@
 		$("#name").focusout(function() {
 			doAjaxPost();
 		});
+		function checkDoAjaxPost() {
+			lat = readCookie('lat');
+			lng = readCookie('lng');
+			if(lat == null || lng == null){
+				showError("Bạn chưa chỉ định địa chỉ trên googlemap");
+				$('#far').val("0");
+			}else{
+				doAjaxPost();
+			}
+		}
 		function doAjaxPost() {
 
 			// get the form values
@@ -717,7 +727,7 @@
 			log(kindOf);
 			if (kindOf == true) {
 				kindOf = "true";
-			}else{
+			} else {
 				kindOf = "false";
 			}
 			var str = "action=search" + "&wifi=" + wifi + "&waterHeater="
@@ -726,9 +736,9 @@
 					+ "&object=" + object + "&waterSource=" + waterSource
 					+ "&categoryId=" + categoryId + "&area=" + area + "&price="
 					+ price + "&far=" + far + "&lat=" + lat + "&lng=" + lng
-					+ "&provinceId=" + provinceId + "&kindOf=" + kindOf + "&districtId=" + districtId
-					+ "&villageId=" + villageId + "&name=" + name + "&page="
-					+ page;
+					+ "&provinceId=" + provinceId + "&kindOf=" + kindOf
+					+ "&districtId=" + districtId + "&villageId=" + villageId
+					+ "&name=" + name + "&page=" + page;
 			log("Post " + str);
 			$
 					.ajax({
@@ -773,7 +783,7 @@
 																			+ '</a><span class="score s'+threads[i].avgScoreInt+'" style="margin-top: -15px;"></span> (<strong itemprop="reviewCount">'
 																			+ threads[i].avgScore
 																			+ '</strong>)</div><div class="card-block text-center" style="margin-top: 0px;"><h4 class="card-title"><strong><i class="fa fa-money" style="font-size:25px;color:#000"></i> '
-																			+ threads[i].price
+																			+ threads[i].priceString
 																			+ '</strong></h4><h5><i class="fa fa-area-chart" style="font-size:16px;color:#000"></i> '
 																			+ threads[i].area
 																			+ 'm&#178;</h5><p class="card-text truncase-detail">'
@@ -804,7 +814,7 @@
 											+ '</a><span class="score s'+threads[i].avgScoreInt+'" style="margin-top: -15px;"></span> (<strong itemprop="reviewCount">'
 											+ threads[i].avgScore
 											+ '</strong>)</div><div class="card-block text-center" style="margin-top: 0px;"><h4 class="card-title"><strong><i class="fa fa-money" style="font-size:25px;color:#000"></i> '
-											+ threads[i].price
+											+ threads[i].priceString
 											+ '</strong></h4><h5><i class="fa fa-area-chart" style="font-size:16px;color:#000"></i> '
 											+ threads[i].area
 											+ 'm&#178;</h5><p class="card-text truncase-detail">'
@@ -820,6 +830,8 @@
 											+ ')" class="btn-floating btn-small btn-fb"><i class="fa fa-compress"></i></a></div></div></div>';
 								}
 							}
+							if (threads.length == 0)
+								stringResults = '<br><br><br><span class="text-center" style="    margin: 0 auto;  margin-top: 50px;  font-weight: bold; color: initial;  font-size: 30px;">Không có kết quả phù hợp</span>';
 							$('#resultThreads').html(stringResults);
 							var strPagi = '<nav class="pagination-center">';
 							strPagi += '<ul class="pagination pagination-md pg-amber">';

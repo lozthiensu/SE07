@@ -31,8 +31,21 @@
 	</a>
 	<div class="collapse navbar-collapse" id="navbarNav1">
 		<ul class="navbar-nav mr-auto">
+
 		</ul>
 		<ul class="navbar-nav ml-auto">
+			<a href="./thread-manager-action.do">
+				<button type="button" class="btn btn-elegant hidden-xl-up">
+					<i class="fa fa-globe icon-in-button" style="color: #2C97BE"
+						aria-hidden="true"></i>Bài viết
+				</button>
+			</a>
+			<a href="./rate-manager-action.do">
+				<button type="button" class="btn btn-elegant hidden-xl-up">
+					<i class="fa fa-group icon-in-button" aria-hidden="true"></i>Bình
+					luận
+				</button>
+			</a>
 			<img id="imgAva" src="../img/avatar.jpg" alt="Hình đại diện"
 				class="rounded-circle" style="width: 40px; height: 40px">
 			<li class="nav-item dropdown btn-group"><a
@@ -42,6 +55,7 @@
 					aria-labelledby="dropdownMenu1">
 					<a class="dropdown-item" onclick="logout();">Đăng xuất</a>
 				</div></li>
+
 		</ul>
 	</div>
 	</nav>
@@ -72,11 +86,6 @@
 				<div class="row" style="width: 100%; height: 60px;">
 					<div class="col-lg-8">
 						<h2 class="title-in-admin">Danh sách bài viết</h2>
-					</div>
-					<div class="col-lg-4 text-right">
-						<html:link styleClass="btn btn-success"
-							action="/user/add-thread-action">
-							<i class="fa fa-language icon-in-button" aria-hidden="true"></i> Thêm mới</html:link>
 					</div>
 				</div>
 				<div class="table-custom">

@@ -33,6 +33,18 @@
 		<ul class="navbar-nav mr-auto">
 		</ul>
 		<ul class="navbar-nav ml-auto">
+			<a href="./thread-manager-action.do">
+				<button type="button" class="btn btn-elegant hidden-xl-up">
+					<i class="fa fa-globe icon-in-button" style="color: #2C97BE"
+						aria-hidden="true"></i>Bài viết
+				</button>
+			</a>
+			<a href="./rate-manager-action.do">
+				<button type="button" class="btn btn-elegant hidden-xl-up">
+					<i class="fa fa-group icon-in-button" aria-hidden="true"></i>Bình
+					luận
+				</button>
+			</a>
 			<img id="imgAva" src="../img/avatar.jpg" alt="Hình đại diện"
 				class="rounded-circle" style="width: 40px; height: 40px">
 			<li class="nav-item dropdown btn-group"><a

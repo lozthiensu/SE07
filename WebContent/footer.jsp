@@ -69,12 +69,12 @@
 			<div class="modal-body">
 				<div class="md-form">
 					<i class="fa fa-envelope prefix"></i> <input type="text"
-						id="emailLog" class="form-control"> <label for="form2">Email</label>
+						id="emailLog" class="form-control" maxlength="40"> <label for="form2">Email</label>
 				</div>
 
 				<div class="md-form">
 					<i class="fa fa-lock prefix"></i> <input type="password"
-						id="passwordLog" class="form-control"> <label for="form3">Mật
+						id="passwordLog" class="form-control" maxlength="32"> <label for="form3">Mật
 						khẩu</label>
 				</div>
 				<div class="text-center">
@@ -148,21 +148,27 @@
 			</div>
 			<div class="modal-body">
 				<div class="md-form">
+					<i class="fa fa-user-circle-o prefix"></i> <input type="text"
+						id="nameReg" class="form-control" maxlength="50"> <label
+						for="form2">Họ tên <font color="red">*</font></label><span id="labelName"></span>
+				</div>
+
+				<div class="md-form">
 					<i class="fa fa-envelope prefix"></i> <input type="text"
 						id="emailReg" class="form-control" maxlength="40"> <label
-						for="form2">Email</label><span id="labelEmail"></span>
+						for="form2">Email <font color="red">*</font></label><span id="labelEmail"></span>
 				</div>
 
 				<div class="md-form">
 					<i class="fa fa-lock prefix"></i> <input type="password"
 						id="passwordReg" class="form-control" maxlength="32"> <label
-						for="form3">Mật khẩu</label>
+						for="form3">Mật khẩu <font color="red">*</font></label>
 				</div>
 
 				<div class="md-form">
 					<i class="fa fa-lock prefix"></i> <input type="password"
 						id="re-passwordReg" class="form-control" maxlength="32"> <label
-						for="form4">Nhập lại mật khẩu</label>
+						for="form4">Nhập lại mật khẩu <font color="red">*</font></label>
 				</div>
 
 				<div class="text-center">
@@ -191,11 +197,15 @@
 	passwordReg.onkeyup = validatePassword;
 	/* END CHECK PASSS REGISTER */
 	function registerAjax() {
+		name = $("#nameReg").val();
 		email = $("#emailReg").val();
 		password = $("#passwordReg").val();
 		re_password = $("#re-passwordReg").val();
 
-		if (email.length < 1) {
+		if (name.length < 1) {
+			showError("Họ tên không được bỏ trống hoặc quá ngắn");
+			return false;
+		} else if (email.length < 1) {
 			showError("Email không được bỏ trống hoặc quá ngắn");
 			return false;
 		} else if (password.length < 1) {
@@ -214,7 +224,7 @@
 		$.ajax({
 			type : "POST",
 			url : "/Mock_SE7/home-account-action.do",
-			data : "email=" + email + "&password=" + password
+			data : "email=" + email + "&name=" + name + "&password=" + password
 					+ "&action=register",
 			success : function(res) {
 				if (res == "success") {

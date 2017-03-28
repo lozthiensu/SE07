@@ -94,6 +94,7 @@
 							<i class="fa fa-user prefix" style="font-size: 2rem;"></i>
 						</div>
 						<div style="width: calc(100% - 52px); display: inline-block;">
+							<label for="form3">Quyền hạn <font color="red">*</font></label>
 							<html:select property="level" styleClass="mdb-select"
 								styleId="level">
 								<html:option value="1">Quản trị viên</html:option>
@@ -108,6 +109,7 @@
 								<i class="fa fa-user prefix" style="font-size: 2rem;"></i>
 							</div>
 							<div style="width: calc(100% - 52px); display: inline-block;">
+								<label for="form3">Danh mục <font color="red">*</font></label>
 								<html:select name="accountForm" property="categoryId"
 									styleClass="mdb-select">
 									<option value="" selected>Không</option>
@@ -124,25 +126,25 @@
 						<div class="md-form">
 							<i class="fa fa-user prefix"></i>
 							<html:text property="name" styleClass="form-control"></html:text>
-							<label for="form3">Họ tên</label>
+							<label for="form3">Họ tên <font color="red">*</font></label>
 						</div>
 
 						<div class="md-form">
 							<i class="fa fa-envelope prefix"></i>
 							<html:text property="email" styleClass="form-control"></html:text>
-							<label for="form2">Email</label>
+							<label for="form2">Email <font color="red">*</font></label>
 						</div>
 
 						<div class="md-form">
 							<i class="fa fa-tag prefix"></i>
 							<html:text property="password" styleClass="form-control"></html:text>
-							<label for="form34">Mật khẩu</label>
+							<label for="form34">Mật khẩu <font color="red">*</font></label>
 						</div>
 
 						<div class="md-form">
 							<i class="fa fa-pencil prefix"></i>
 							<html:text property="rePassword" styleClass="form-control"></html:text>
-							<label for="form8">Nhập lại mật khẩu</label>
+							<label for="form8">Nhập lại mật khẩu <font color="red">*</font></label>
 						</div>
 
 						<div class="md-form">
@@ -204,7 +206,10 @@
 			if (level == undefined) {
 				showAlert("Quyền hạn không được bỏ trống");
 				return false;
-			} else if (email == undefined || email.length < 6) {
+			} else if (name == undefined || name.length < 6) {
+				showAlert("Họ tên không được bỏ trống hoặc quá ngắn");
+				return false;
+			}else if (email == undefined || email.length < 6) {
 				showAlert("Email không được bỏ trống hoặc quá ngắn");
 				return false;
 			} else if (password == undefined || password.length < 6) {

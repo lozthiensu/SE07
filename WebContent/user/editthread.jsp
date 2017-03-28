@@ -144,6 +144,18 @@
 		<ul class="navbar-nav mr-auto">
 		</ul>
 		<ul class="navbar-nav ml-auto">
+			<a href="./thread-manager-action.do">
+				<button type="button" class="btn btn-elegant hidden-xl-up">
+					<i class="fa fa-globe icon-in-button" style="color: #2C97BE"
+						aria-hidden="true"></i>Bài viết
+				</button>
+			</a>
+			<a href="./rate-manager-action.do">
+				<button type="button" class="btn btn-elegant hidden-xl-up">
+					<i class="fa fa-group icon-in-button" aria-hidden="true"></i>Bình
+					luận
+				</button>
+			</a>
 			<img id="imgAva" src="../img/avatar.jpg" alt="Hình đại diện"
 				class="rounded-circle" style="width: 40px; height: 40px">
 			<li class="nav-item dropdown btn-group"><a
@@ -160,17 +172,21 @@
 	<div class="row main-board">
 		<div class="col-lg-2 hidden-lg-down side-menu-left">
 			<div class="row dash-board">
-				<button type="button"
-					class="btn btn-elegant button-side-menu-left button-dash-board">
-					<i class="fa fa-globe icon-in-button" style="color: #2C97BE"
-						aria-hidden="true"></i>Bài viết
-				</button>
+				<a href="./thread-manager-action.do">
+					<button type="button"
+						class="btn btn-elegant button-side-menu-left button-dash-board">
+						<i class="fa fa-globe icon-in-button" style="color: #2C97BE"
+							aria-hidden="true"></i>Bài viết
+					</button>
+				</a>
 			</div>
 			<div class="row">
-				<button type="button" class="btn btn-elegant button-side-menu-left">
-					<i class="fa fa-group icon-in-button" aria-hidden="true"></i>Bình
-					luận
-				</button>
+				<a href="./rate-manager-action.do">
+					<button type="button" class="btn btn-elegant button-side-menu-left">
+						<i class="fa fa-group icon-in-button" aria-hidden="true"></i>Bình
+						luận
+					</button>
+				</a>
 			</div>
 		</div>
 		<div class="col-lg-10 col-md-12 col-12 scroll-box">
@@ -213,6 +229,7 @@
 						</div>
 
 						<div style="width: calc(100%); display: inline-block;">
+							<label for="form3">Thể loại <font color="red">*</font></label>
 							<html:select name="threadForm" property="categoryId"
 								styleClass="mdb-select">
 								<logic:iterate name="threadForm" property="categories" id="item">
@@ -222,9 +239,9 @@
 									</html:option>
 								</logic:iterate>
 							</html:select>
-							<label for="form3">Thể loại</label>
 						</div>
 						<div style="width: calc(100%); display: inline-block;">
+							<label for="form3">Tỉnh - Thành phố  <font color="red">*</font></label>
 							<html:select name="threadForm" property="provinceId"
 								styleClass="mdb-select" styleId="slbProvince">
 								<logic:iterate name="threadForm" property="provinces" id="item">
@@ -234,9 +251,9 @@
 									</html:option>
 								</logic:iterate>
 							</html:select>
-							<label for="form3">Tỉnh - Thành phố</label>
 						</div>
 						<div style="width: calc(100%); display: inline-block;">
+							<label for="form3">Quận - Huyện <font color="red">*</font></label>
 							<html:select name="threadForm" property="districtId"
 								styleClass="mdb-select" styleId="slbDistrict">
 								<logic:iterate name="threadForm" property="districts" id="item">
@@ -246,9 +263,9 @@
 									</html:option>
 								</logic:iterate>
 							</html:select>
-							<label for="form3">Quận - Huyện</label>
 						</div>
 						<div style="width: calc(100%); display: inline-block;">
+							<label for="form3">Làng - Xã <font color="red">*</font></label>
 							<html:select name="threadForm" property="villageId"
 								styleClass="mdb-select" styleId="slbVillage">
 								<logic:iterate name="threadForm" property="villages" id="item">
@@ -258,11 +275,10 @@
 									</html:option>
 								</logic:iterate>
 							</html:select>
-							<label for="form3">Làng - Xã</label>
 						</div>
 						<div class="md-form">
 							<html:text property="name" styleClass="form-control"></html:text>
-							<label for="form3">Tên</label>
+							<label for="form3">Tên <font color="red">*</font></label>
 						</div>
 						<%-- 
 						<div class="md-form">
@@ -270,7 +286,7 @@
 							<label for="form3">Địa chỉ</label>
 						</div> --%>
 
-						<label for="form3">Nội dung </label>
+						<label for="form3">Nội dung <font color="red">*</font> </label>
 						<div class="md-form">
 							<html:textarea styleId="content" property="content"
 								styleClass="form-control"></html:textarea>
@@ -278,27 +294,27 @@
 
 						<div class="md-form">
 							<html:text property="price" styleClass="form-control"></html:text>
-							<label for="form3">Giá</label>
+							<label for="form3">Giá <font color="red">*</font></label>
 						</div>
 
 						<div class="md-form">
 							<html:text property="electricFee" styleClass="form-control"></html:text>
-							<label for="form3">Tiền điện</label>
+							<label for="form3">Tiền điện <font color="red">*</font></label>
 						</div>
 
 						<div class="md-form">
 							<html:text property="waterFee" styleClass="form-control"></html:text>
-							<label for="form3">Tiền nước</label>
+							<label for="form3">Tiền nước <font color="red">*</font></label>
 						</div>
 
 						<div class="md-form">
 							<html:text property="otherFee" styleClass="form-control"></html:text>
-							<label for="form3">Phụ phí</label>
+							<label for="form3">Phụ phí <font color="red">*</font></label>
 						</div>
 
 						<div class="md-form">
 							<html:text property="area" styleClass="form-control"></html:text>
-							<label for="form3">Diện tích</label>
+							<label for="form3">Diện tích <font color="red">*</font></label>
 						</div>
 
 						<bean:define id="wifi" name="threadForm" property="wifi"></bean:define>
@@ -373,12 +389,12 @@
 
 						<div class="md-form">
 							<html:text property="numOfToilets" styleClass="form-control"></html:text>
-							<label for="form3">Số toilet</label>
+							<label for="form3">Số toilet <font color="red">*</font></label>
 						</div>
 
 						<div class="md-form">
 							<html:text property="numOfPeople" styleClass="form-control"></html:text>
-							<label for="form3">Số người cho phép</label>
+							<label for="form3">Số người cho phép <font color="red">*</font></label>
 						</div>
 
 						<html:select property="object" styleClass="mdb-select">
@@ -594,19 +610,7 @@
 		$(document)
 				.ready(
 						function() {
-							$.validator
-									.addMethod(
-											"[name='price']",
-											function(value, element) {
-												return parseInt(value) > 0 ;
-											},
-											"Please enter a valid email address.");
-							// Validate signup form
-						    $("[name='threadForm']").validate({
-						        rules: {
-						        	price: "required email",
-						        },
-						    });
+							
 							$("[name='name']").attr('maxlength', '500');
 							$("[name='address']").attr('maxlength', '500');
 							$("[name='content']").attr('maxlength', '4000');
@@ -616,11 +620,30 @@
 							$("[name='price']").attr('min', '0');
 							$("[name='price']").attr('max', '99999999999');
 
-							/* $("[name='price']").on("change", function() {
-								if (parseInt($("[name='price']").val()) < 0) {
-									
-								}
-							}); */
+							$("[name='electricFee']").attr('type', 'number');
+							$("[name='electricFee']").attr('min', '0');
+							$("[name='electricFee']").attr('max', '99999999999');
+
+							$("[name='waterFee']").attr('type', 'number');
+							$("[name='waterFee']").attr('min', '0');
+							$("[name='waterFee']").attr('max', '99999999999');
+
+							$("[name='otherFee']").attr('type', 'number');
+							$("[name='otherFee']").attr('min', '0');
+							$("[name='otherFee']").attr('max', '99999999999');
+							
+							$("[name='area']").attr('type', 'number');
+							$("[name='area']").attr('min', '0');
+							$("[name='area']").attr('max', '99999999999');
+
+							$("[name='numOfToilets']").attr('type', 'number');
+							$("[name='numOfToilets']").attr('min', '0');
+							$("[name='numOfToilets']").attr('max', '99999999999');
+
+							$("[name='numOfPeople']").attr('type', 'number');
+							$("[name='numOfPeople']").attr('min', '0');
+							$("[name='numOfPeople']").attr('max', '99999999999');
+							
 							$("#imgAva").attr("src",
 									"../" + readCookie("avatar"));
 							$("#dropdownMenu1").html(readCookie("email"));
@@ -734,7 +757,15 @@
 														});
 											});
 						});
-		function submitEditForm() {
+	
+		function submitEditForm(e) {
+			$('[name="price"]').parent().next(".validation").remove();
+			$('[name="electricFee"]').parent().next(".validation").remove();
+			$('[name="waterFee"]').parent().next(".validation").remove();
+			$('[name="otherFee"]').parent().next(".validation").remove();
+			$('[name="area"]').parent().next(".validation").remove();
+			$('[name="numOfToilets"]').parent().next(".validation").remove();
+			$('[name="numOfPeople"]').parent().next(".validation").remove();
 			villageId = $('[name="villageId"]').val();
 
 			name = $('[name="name"]').val();
@@ -784,29 +815,35 @@
 			} else if (numOfPeople == false) {
 				showAlert("Số người không hợp lệ");
 				return false;
-			} else if (priceVal < 0) {
-				log(priceVal);
-				//var validator = $('[name="price"]'); 
-				//idAction.val("submit");
-				//document.forms[0].submit();
+			} else if (priceVal < 0 || priceVal > 9999999999) {
+				$('[name="price"]').parent().after("<div class='validation' style='color:red;margin-bottom: 20px;'>Giá tiền phải > 0 và < 1 tỷ</div>");
+				$('[name="price"]').focus();
 				return false;
-			}
-			/* 	else if(priceVal < 0 || priceVal > 9999999999){
-					return false;
-				}else if(electricFeeVal < 0 || electricFeeVal > 9999999999){
-					return false;
-				}else if(waterFeeVal < 0 || waterFeeVal > 9999999999){
-					return false;
-				}else if(otherFeeVal < 0 || otherFeeVal > 9999999999){
-					return false;
-				}else if(areaVal < 0 || areaVal > 9999999999){
-					return false;
-				}else if(numOfToiletsVal < 0 || numOfToiletsVal > 9999999999){
-					return false;
-				}else if(numOfPeopleVal < 0 || numOfPeopleVal > 9999999999){
-					return false;
-				} */
-			else {
+			} else if (electricFeeVal < 0 || electricFeeVal > 9999999999) {
+				$('[name="electricFee"]').parent().after("<div class='validation' style='color:red;margin-bottom: 20px;'>Tiền điện phải > 0 và < 1 tỷ</div>");
+				$('[name="electricFee"]').focus();
+				return false;
+			} else if (waterFeeVal < 0 || waterFeeVal > 9999999999) {
+				$('[name="waterFee"]').parent().after("<div class='validation' style='color:red;margin-bottom: 20px;'>Tiền nước phải > 0 và < 1 tỷ</div>");
+				$('[name="waterFee"]').focus();
+				return false;
+			} else if (otherFeeVal < 0 || otherFeeVal > 9999999999) {
+				$('[name="otherFee"]').parent().after("<div class='validation' style='color:red;margin-bottom: 20px;'>Phụ phí phải > 0 và < 1 tỷ</div>");
+				$('[name="otherFee"]').focus();
+				return false;
+			} else if (areaVal < 0 || areaVal > 9999999999) {
+				$('[name="area"]').parent().after("<div class='validation' style='color:red;margin-bottom: 20px;'>Diện tích phải > 0 và < 1 tỷ</div>");
+				$('[name="area"]').focus();
+				return false;
+			} else if (numOfToiletsVal < 0 || numOfToiletsVal > 9999999999) {
+				$('[name="numOfToilets"]').parent().after("<div class='validation' style='color:red;margin-bottom: 20px;'>Số toilet phải > 0 và < 1 tỷ</div>");
+				$('[name="numOfToilets"]').focus();
+				return false;
+			} else if (numOfPeopleVal < 0 || numOfPeopleVal > 9999999999) {
+				$('[name="numOfPeople"]').parent().after("<div class='validation' style='color:red;margin-bottom: 20px;'>Số người phải > 0 và < 1 tỷ</div>");
+				$('[name="numOfPeople"]').focus();
+				return false;
+			} else {
 				idAction.val("submit");
 				document.forms[0].submit();
 				return true;

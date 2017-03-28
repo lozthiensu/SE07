@@ -47,12 +47,7 @@ public class ThreadDAO {
 							rs.getInt("numOfToilets"), rs.getInt("numOfPeople"), rs.getInt("object"),
 							rs.getInt("villageId"), rs.getString("created"), rs.getInt("viewed"), rs.getInt("status"),
 							rs.getString("imageThumb"));
-					if (threadTemp.getPrice() >= 1000000) {
-						threadTemp.setPriceString(
-								numberFormat.format(((double) (threadTemp.getPrice() / (1.0 * 1000000)))) + " triệu ");
-					} else if (threadTemp.getPrice() > 1000) {
-						threadTemp.setPriceString((threadTemp.getPrice() / 1000) + " ngàn ");
-					}
+					threadTemp.setPriceString(Check.formatTien(threadTemp.getPrice()));
 					threadTemp.setKindOf(rs.getBoolean("kindOf"));
 					if (threadTemp.isKindOf() == false) {
 						threadTemp.setName("[TÌM] " + threadTemp.getName());
@@ -107,12 +102,7 @@ public class ThreadDAO {
 							rs.getInt("numOfToilets"), rs.getInt("numOfPeople"), rs.getInt("object"),
 							rs.getInt("villageId"), rs.getString("created"), rs.getInt("viewed"), rs.getInt("status"),
 							rs.getString("imageThumb"));
-					if (threadTemp.getPrice() >= 1000000) {
-						threadTemp.setPriceString(
-								numberFormat.format(((double) (threadTemp.getPrice() / (1.0 * 1000000)))) + " triệu ");
-					} else if (threadTemp.getPrice() > 1000) {
-						threadTemp.setPriceString((threadTemp.getPrice() / 1000) + " ngàn ");
-					}
+					threadTemp.setPriceString(Check.formatTien(threadTemp.getPrice()));
 					threadTemp.setKindOf(rs.getBoolean("kindOf"));
 					if (threadTemp.isKindOf() == false) {
 						threadTemp.setName("[TÌM] " + threadTemp.getName());
@@ -195,13 +185,10 @@ public class ThreadDAO {
 						rs.getInt("numOfPeople"), rs.getInt("object"), rs.getInt("villageId"), rs.getString("created"),
 						rs.getInt("viewed"), rs.getInt("status"), rs.getString("imageThumb"));
 
-				DecimalFormat numberFormat = new DecimalFormat("#.##");
-				if (threadData.getPrice() >= 1000000) {
-					threadData.setPriceString(
-							numberFormat.format(((double) (threadData.getPrice() / (1.0 * 1000000)))) + " triệu ");
-				} else if (threadData.getPrice() > 1000) {
-					threadData.setPriceString((threadData.getPrice() / 1000) + " ngàn ");
-				}
+				threadData.setPriceString(Check.formatTien(threadData.getPrice()));
+				threadData.setElectricFeeString(Check.formatTien(threadData.getElectricFee()));
+				threadData.setWaterFeeString(Check.formatTien(threadData.getWaterFee()));
+				threadData.setOtherFeeString(Check.formatTien(threadData.getOtherFee()));
 				DecimalFormat df = new DecimalFormat("#.#");
 				String valueStr = df.format(rs.getFloat("avgScore"));
 				valueStr = valueStr.replace(',', '.');
@@ -311,12 +298,7 @@ public class ThreadDAO {
 						rs.getInt("waterSource"), rs.getString("direction"), rs.getInt("numOfToilets"),
 						rs.getInt("numOfPeople"), rs.getInt("object"), rs.getInt("villageId"), rs.getString("created"),
 						rs.getInt("viewed"), rs.getInt("status"), rs.getString("imageThumb"));
-				if (threadTemp.getPrice() >= 1000000) {
-					threadTemp.setPriceString(
-							numberFormat.format(((double) (threadTemp.getPrice() / (1.0 * 1000000)))) + " triệu ");
-				} else if (threadTemp.getPrice() > 1000) {
-					threadTemp.setPriceString((threadTemp.getPrice() / 1000) + " ngàn ");
-				}
+				threadTemp.setPriceString(Check.formatTien(threadTemp.getPrice()));
 				DecimalFormat df = new DecimalFormat("#.#");
 				String valueStr = df.format(rs.getFloat("avgScore"));
 				valueStr = valueStr.replace(',', '.');
@@ -385,12 +367,7 @@ public class ThreadDAO {
 						rs.getInt("numOfPeople"), rs.getInt("object"), rs.getInt("villageId"), rs.getString("created"),
 						rs.getInt("viewed"), rs.getInt("status"), rs.getString("imageThumb"));
 
-				if (threadTemp.getPrice() >= 1000000) {
-					threadTemp.setPriceString(
-							numberFormat.format(((double) (threadTemp.getPrice() / (1.0 * 1000000)))) + " triệu ");
-				} else if (threadTemp.getPrice() > 1000) {
-					threadTemp.setPriceString((threadTemp.getPrice() / 1000) + " ngàn ");
-				}
+				threadTemp.setPriceString(Check.formatTien(threadTemp.getPrice()));
 				DecimalFormat df = new DecimalFormat("#.#");
 				String valueStr = df.format(rs.getFloat("avgScore"));
 				valueStr = valueStr.replace(',', '.');
@@ -665,12 +642,7 @@ public class ThreadDAO {
 						rs.getInt("waterSource"), rs.getString("direction"), rs.getInt("numOfToilets"),
 						rs.getInt("numOfPeople"), rs.getInt("object"), rs.getInt("villageId"), rs.getString("created"),
 						rs.getInt("viewed"), rs.getInt("status"), rs.getString("imageThumb"));
-				if (threadTemp.getPrice() >= 1000000) {
-					threadTemp.setPriceString(
-							numberFormat.format(((double) (threadTemp.getPrice() / (1.0 * 1000000)))) + " triệu ");
-				} else if (threadTemp.getPrice() > 1000) {
-					threadTemp.setPriceString((threadTemp.getPrice() / 1000) + " ngàn ");
-				}
+				threadTemp.setPriceString(Check.formatTien(threadTemp.getPrice()));
 				DecimalFormat df = new DecimalFormat("#.#");
 				String valueStr = df.format(rs.getFloat("avgScore"));
 				valueStr = valueStr.replace(',', '.');
@@ -683,6 +655,7 @@ public class ThreadDAO {
 					threadTemp.setName("[TÌM] " + threadTemp.getName());
 				}
 				temp.add(threadTemp);
+				Log.in(threadTemp.toString());
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -905,12 +878,7 @@ public class ThreadDAO {
 						rs.getInt("waterSource"), rs.getString("direction"), rs.getInt("numOfToilets"),
 						rs.getInt("numOfPeople"), rs.getInt("object"), rs.getInt("villageId"), rs.getString("created"),
 						rs.getInt("viewed"), rs.getInt("status"), rs.getString("imageThumb"));
-				if (threadTemp.getPrice() >= 1000000) {
-					threadTemp.setPriceString(
-							numberFormat.format(((double) (threadTemp.getPrice() / (1.0 * 1000000)))) + " triệu ");
-				} else if (threadTemp.getPrice() > 1000) {
-					threadTemp.setPriceString((threadTemp.getPrice() / 1000) + " ngàn ");
-				}
+				threadTemp.setPriceString(Check.formatTien(threadTemp.getPrice()));
 				DecimalFormat df = new DecimalFormat("#.#");
 				String valueStr = df.format(rs.getFloat("avgScore"));
 				valueStr = valueStr.replace(',', '.');
@@ -1043,12 +1011,7 @@ public class ThreadDAO {
 						rs.getInt("waterSource"), rs.getString("direction"), rs.getInt("numOfToilets"),
 						rs.getInt("numOfPeople"), rs.getInt("object"), rs.getInt("villageId"), rs.getString("created"),
 						rs.getInt("viewed"), rs.getInt("status"), rs.getString("imageThumb"));
-				if (threadTemp.getPrice() >= 1000000) {
-					threadTemp.setPriceString(
-							numberFormat.format(((double) (threadTemp.getPrice() / (1.0 * 1000000)))) + " triệu ");
-				} else if (threadTemp.getPrice() > 1000) {
-					threadTemp.setPriceString((threadTemp.getPrice() / 1000) + " ngàn ");
-				}
+				threadTemp.setPriceString(Check.formatTien(threadTemp.getPrice()));
 				DecimalFormat df = new DecimalFormat("#.#");
 				String valueStr = df.format(rs.getFloat("avgScore"));
 				valueStr = valueStr.replace(',', '.');
@@ -1195,12 +1158,7 @@ public class ThreadDAO {
 						rs.getInt("waterSource"), rs.getString("direction"), rs.getInt("numOfToilets"),
 						rs.getInt("numOfPeople"), rs.getInt("object"), rs.getInt("villageId"), rs.getString("created"),
 						rs.getInt("viewed"), rs.getInt("status"), rs.getString("imageThumb"));
-				if (threadTemp.getPrice() >= 1000000) {
-					threadTemp.setPriceString(
-							numberFormat.format(((double) (threadTemp.getPrice() / (1.0 * 1000000)))) + " triệu ");
-				} else if (threadTemp.getPrice() > 1000) {
-					threadTemp.setPriceString((threadTemp.getPrice() / 1000) + " ngàn ");
-				}
+				threadTemp.setPriceString(Check.formatTien(threadTemp.getPrice()));
 				DecimalFormat df = new DecimalFormat("#.#");
 				String valueStr = df.format(rs.getFloat("avgScore"));
 				valueStr = valueStr.replace(',', '.');

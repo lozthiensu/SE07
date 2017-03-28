@@ -481,18 +481,15 @@
 								</h5>
 								<h5>
 									<font color="#607d8b">Giá điện:</font>
-									<bean:write name="thread" property="electricFee" />
-									đ/kí
+									<bean:write name="thread" property="electricFeeString" />/kí
 								</h5>
 								<h5>
 									<font color="#607d8b">Giá nước:</font>
-									<bean:write name="thread" property="waterFee" />
-									đ/m&sup3;
+									<bean:write name="thread" property="waterFeeString" />/m&sup3;
 								</h5>
 								<h5>
 									<font color="#607d8b">Phụ phí:</font>
-									<bean:write name="thread" property="otherFee" />
-									đ
+									<bean:write name="thread" property="otherFeeString" />
 								</h5>
 								<h5>
 									<font color="#607d8b">Diện tích:</font>
@@ -562,6 +559,10 @@
 								<h5>
 									<font color="#607d8b">Số toilet:</font>
 									<bean:write name="thread" property="numOfToilets" />
+								</h5>
+								<h5>
+									<font color="#607d8b">Số người:</font>
+									<bean:write name="thread" property="numOfPeople" />
 								</h5>
 								<h5>
 									<font color="#607d8b">Hướng phòng:</font>
