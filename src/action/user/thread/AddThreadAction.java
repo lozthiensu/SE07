@@ -109,7 +109,7 @@ public class AddThreadAction extends Action {
 					images.add(new Image(0, threadId, string, threadForm.getName(), false));
 				}
 				imageBO.insert(images);
-				return mapping.findForward("failed");
+				return mapping.findForward("success");
 			}
 			return mapping.findForward("failed");
 		} else { // If don't press submit button

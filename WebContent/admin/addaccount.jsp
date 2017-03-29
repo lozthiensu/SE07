@@ -132,7 +132,8 @@
 						<div class="md-form">
 							<i class="fa fa-envelope prefix"></i>
 							<html:text property="email" styleClass="form-control"></html:text>
-							<label for="form2">Email <font color="red">*</font></label>
+							<label for="form2">Email <font color="red">*</font></label><span
+								id="labelEmail"></span>
 						</div>
 
 						<div class="md-form">
@@ -172,6 +173,10 @@
 	<script type="text/javascript">
 		var idAction = $("#idAction");
 		$(document).ready(function() {
+
+			$("[name='email']").keyup(function() {
+				checkEmail();
+			});
 			$("[name='name']").attr('maxlength', '50');
 			$("[name='email']").attr('maxlength', '40');
 			$("[name='password']").attr('maxlength', '32');
@@ -195,6 +200,33 @@
 				$("#categoryId").hide();
 			}
 		});
+
+		function checkEmail() {
+			log("check email");
+			email = $("[name='email']").val();
+			$
+					.ajax({
+						type : "POST",
+						url : "/Mock_SE7/home-account-action.do",
+						data : "email=" + email + "&action=checkEmail",
+						success : function(res) {
+							if (res == "success") {
+								log("tc");
+								$("#labelEmail").html("");
+								return true;
+							} else {
+								log("tb");
+								$("#labelEmail")
+										.html(
+												"<font color='red' style='margin-left: 50px'><b>Email đã tồn tại</b></font>");
+								return false;
+							}
+						},
+						error : function(e) {
+							alert('Error: ' + e);
+						}
+					});
+		}
 		function submitAddForm() {
 			var level, name, email, password, rePassword, phone;
 			level = $("[name='level']").val();
@@ -209,7 +241,7 @@
 			} else if (name == undefined || name.length < 6) {
 				showAlert("Họ tên không được bỏ trống hoặc quá ngắn");
 				return false;
-			}else if (email == undefined || email.length < 6) {
+			} else if (email == undefined || email.length < 6) {
 				showAlert("Email không được bỏ trống hoặc quá ngắn");
 				return false;
 			} else if (password == undefined || password.length < 6) {

@@ -78,13 +78,14 @@
 						<div class="col-mot">Id</div>
 						<div class="col-bon trun-text">Tên</div>
 						<div class="col-hai">Ngày viết</div>
-						<div class="col-hai">Danh muc</div>
+						<div class="col-hai">Danh mục</div>
+						<div class="col-hai-small">Trạng thái</div>
 						<div class="col-hai">Thao tác</div>
 					</div>
 					<logic:iterate name="threadListForm" property="threads" id="item">
 						<hr>
 						<div
-							class="<logic:equal name="item" property="status" value="0">un-active</logic:equal>">
+							class="">
 							<div class="col-mot">
 								<bean:write name="item" property="threadId" />
 							</div>
@@ -97,25 +98,36 @@
 							<div class="col-hai">
 								<bean:write name="item" property="categoryName" />
 							</div>
+							<div class="col-hai-small">
+								<logic:equal name="item" property="status" value="0">Chưa duyệt</logic:equal>
+							</div>
 							<div class="col-ba">
 								<button
 									onclick="deleteItem(<bean:write name="item" property="threadId" />)"
 									type="button" class="btn btn-action" data-toggle="tooltip"
-									data-placement="top" title="Remove item">
+									data-placement="top" title="Xóa">
 									<i class="fa fa-times red-text icon-btn-action"></i>
 								</button>
 								<button
 									onclick="viewItem(<bean:write name="item" property="threadId" />)"
 									type="button" class="btn btn-action" data-toggle="tooltip"
-									data-placement="top" title="View item">
+									data-placement="top" title="Xem">
 									<i class="fa fa-eye blue-text icon-btn-action"></i>
 								</button>
 								<logic:equal name="item" property="status" value="0">
 									<button
 										onclick="verifyItem(<bean:write name="item" property="threadId" />)"
 										type="button" class="btn btn-action" data-toggle="tooltip"
-										data-placement="top" title="Verify item">
+										data-placement="top" title="Duyệt">
 										<i class="fa  fa-unlock teal-text icon-btn-action"></i>
+									</button>
+								</logic:equal>
+								<logic:equal name="item" property="status" value="1">
+									<button
+										onclick="verifyItem(<bean:write name="item" property="threadId" />)"
+										type="button" class="btn btn-action" data-toggle="tooltip"
+										data-placement="top" title="Hủy duyệt">
+										<i class="fa  fa-lock black-text icon-btn-action"></i>
 									</button>
 								</logic:equal>
 							</div>

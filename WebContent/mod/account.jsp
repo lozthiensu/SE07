@@ -101,7 +101,7 @@
 									<button
 										onclick="lockItem(<bean:write name="item" property="accountId" />)"
 										type="button" class="btn btn-action" data-toggle="tooltip"
-										data-placement="top" title="Verify item">
+										data-placement="top" title="Khóa">
 										<i class="fa  fa-lock red-text icon-btn-action"></i>
 									</button>
 								</logic:equal>
@@ -109,7 +109,7 @@
 									<button
 										onclick="unlockItem(<bean:write name="item" property="accountId" />)"
 										type="button" class="btn btn-action" data-toggle="tooltip"
-										data-placement="top" title="Verify item">
+										data-placement="top" title="Mở khóa">
 										<i class="fa  fa-unlock teal-text icon-btn-action"></i>
 									</button>
 								</logic:equal>

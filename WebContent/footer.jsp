@@ -465,7 +465,7 @@
 	}
 	$(document).ready(function() {
 		getNotification();
-		$("#emailReg").keypress(function() {
+		$("#emailReg").keyup(function() {
 			checkEmail();
 		});
 		$("#emailReg").keyup(function() {
