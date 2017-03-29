@@ -50,14 +50,13 @@
 			<ul class="navbar-nav ml-auto">
 				<img src="img/avatar.jpg" alt="Hình đại diện" class="rounded-circle"
 					style="width: 40px; height: 40px; display: none;" id="imgAva">
-				<li class="dropdown" id="notificationBag">
-					<span class="badge red" id="numMessUnread" data-toggle="dropdown" aria-haspopup="true"
-					aria-expanded="false"></span>
+				<li class="dropdown" id="notificationBag"><span
+					class="badge red" id="numMessUnread" data-toggle="dropdown"
+					aria-haspopup="true" aria-expanded="false"></span>
 					<div class="dropdown-menu dropdown dropdown-menu-right"
 						aria-labelledby="numMessUnread">
-							<span id="listNoti"></span>
-					</div>
-				</li>
+						<span id="listNoti"></span>
+					</div></li>
 				<li class="nav-item dropdown btn-group" id="menuAcc"
 					style="display: none;"><a
 					class="nav-link dropdown-toggle btn-right-menu-main"
@@ -65,7 +64,7 @@
 					aria-expanded="false"><span id="welcomeText"></span></a>
 					<div class="dropdown-menu dropdown dropdown-menu-right"
 						aria-labelledby="dropdownMenu1">
-							<a class="dropdown-item" href="./user/login.do">Quản lý</a> <a
+						<a class="dropdown-item" href="./user/login.do">Quản lý</a> <a
 							class="dropdown-item" onclick="logout();">Đăng xuất</a>
 					</div></li>
 				<li class="nav-item" id="btnReg"><a
@@ -83,25 +82,26 @@
 	</nav>
 	<!--Carousel Wrapper-->
 	<!-- Start WOWSlider.com BODY section -->
-	<div id="wowslider-container1" style="    font-size: 10px;
-    position: fixed;
-    z-index: 1;">
+	<div id="wowslider-container1"
+		style="font-size: 10px; position: fixed; z-index: 1;">
 		<div class="ws_images ">
 			<ul>
 				<logic:iterate name="homeViewForm" property="viewHighest" id="item">
-					<li><img class="blur-bgimage"
-						src="<bean:write name="item" property="imageThumb" />"
-						alt="<bean:write name="item" property="name" />"
-						title="<bean:write name="item" property="name" />"
-						id="wows1_<bean:write name="item" property="threadId" />" /></li>
+					<li><a
+						href="./view-thread-action.do?threadId=<bean:write name="item" property="threadId" />""><img
+							class="blur-bgimage"
+							src="<bean:write name="item" property="imageThumb" />"
+							alt="<bean:write name="item" property="name" />"
+							title="<bean:write name="item" property="name" />"
+							id="wows1_<bean:write name="item" property="threadId" />" /></a></li>
 				</logic:iterate>
 
 			</ul>
 		</div>
-		<div class="ws_script" style="position: absolute; left: -99%">
+		<!-- <div class="ws_script" style="position: absolute; left: -99%">
 			<a href="http://wowslider.com">bootstrap slider</a> by WOWSlider.com
 			v8.7
-		</div>
+		</div> -->
 
 	</div>
 	<script type="text/javascript" src="engine1/wowslider.js"></script>
@@ -110,7 +110,7 @@
 	<!-- End WOWSlider.com BODY section -->
 	<br>
 	<!--Navbar-->
-	<div class="container" style="margin-top:460px; z-index:2;">
+	<div class="container" style="margin-top: 460px; z-index: 2;">
 		<nav
 			class="navbar navbar-toggleable-md navbar-dark green custom-nav-home hidden-md-down">
 		<button class="navbar-toggler navbar-toggler-right" type="button"
@@ -142,7 +142,8 @@
 
 	<!-- another version - flat style with animated hover effect -->
 
-	<div class="container container-white"  style="margin-top:0; z-index:3; background: #fff;">
+	<div class="container container-white"
+		style="margin-top: 0; z-index: 3; background: #fff;">
 		<div class="row">
 			<div class="col-lg-12">
 

@@ -342,7 +342,8 @@
 						</select> <label>Phạm vi</label>
 					</div>
 					<div class="col-lg-3">
-						<select class="mdb-select" id="numOfToilets" onchange="checkDoAjaxPost()">
+						<select class="mdb-select" id="numOfToilets"
+							onchange="checkDoAjaxPost()">
 							<option value="0" selected>Không</option>
 							<option value="1">&lt; 2 cái</option>
 							<option value="2">2 - 5 cái</option>
@@ -352,7 +353,8 @@
 						</select> <label>Số toilet</label>
 					</div>
 					<div class="col-lg-3">
-						<select class="mdb-select" id="numOfPeople" onchange="checkDoAjaxPost()">
+						<select class="mdb-select" id="numOfPeople"
+							onchange="checkDoAjaxPost()">
 							<option value="0" selected>Không</option>
 							<option value="1">&lt; 2 người</option>
 							<option value="2">2 - 5 người</option>
@@ -581,6 +583,10 @@
 		$(document)
 				.ready(
 						function() {
+							$('input[type=radio][name=kindOf]').change(
+									function() {
+										doAjaxPost();
+									});
 							stick();
 							createCookie('page', 1, 1);
 							$('.mdb-select').material_select();
@@ -716,15 +722,20 @@
 						} else {
 							kindOf = "false";
 						}
-						var str = "action=autocomplete" + "&wifi=" + wifi + "&waterHeater="
-						+ waterHeater + "&conditioner=" + conditioner + "&fridge="
-						+ fridge + "&attic=" + attic + "&camera=" + camera
-						+ "&object=" + object + "&waterSource=" + waterSource
-						+ "&categoryId=" + categoryId + "&area=" + area + "&price="
-						+ price + "&far=" + far + "&lat=" + lat + "&lng=" + lng
-						+ "&provinceId=" + provinceId + "&kindOf=" + kindOf
-						+ "&districtId=" + districtId + "&villageId=" + villageId
-						+ "&name=" + name + "&numOfToilets=" + numOfToilets + "&numOfPeople=" + numOfPeople + "&page=1";
+						var str = "action=autocomplete" + "&wifi=" + wifi
+								+ "&waterHeater=" + waterHeater
+								+ "&conditioner=" + conditioner + "&fridge="
+								+ fridge + "&attic=" + attic + "&camera="
+								+ camera + "&object=" + object
+								+ "&waterSource=" + waterSource
+								+ "&categoryId=" + categoryId + "&area=" + area
+								+ "&price=" + price + "&far=" + far + "&lat="
+								+ lat + "&lng=" + lng + "&provinceId="
+								+ provinceId + "&kindOf=" + kindOf
+								+ "&districtId=" + districtId + "&villageId="
+								+ villageId + "&name=" + name
+								+ "&numOfToilets=" + numOfToilets
+								+ "&numOfPeople=" + numOfPeople + "&page=1";
 						$.ajax({
 							type : "POST",
 							url : "/Mock_SE7/search-thread.do",
@@ -750,10 +761,10 @@
 		function checkDoAjaxPost() {
 			lat = readCookie('lat');
 			lng = readCookie('lng');
-			if(lat == null || lng == null){
+			if (lat == null || lng == null) {
 				showError("Bạn chưa chỉ định địa chỉ trên googlemap");
 				$('#far').val("0");
-			}else{
+			} else {
 				doAjaxPost();
 			}
 		}
@@ -796,7 +807,8 @@
 					+ price + "&far=" + far + "&lat=" + lat + "&lng=" + lng
 					+ "&provinceId=" + provinceId + "&kindOf=" + kindOf
 					+ "&districtId=" + districtId + "&villageId=" + villageId
-					+ "&name=" + name + "&numOfToilets=" + numOfToilets + "&numOfPeople=" + numOfPeople + "&page=" + page;
+					+ "&name=" + name + "&numOfToilets=" + numOfToilets
+					+ "&numOfPeople=" + numOfPeople + "&page=" + page;
 			log("Post " + str);
 			$
 					.ajax({

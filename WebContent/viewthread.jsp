@@ -561,7 +561,7 @@
 									<bean:write name="thread" property="numOfToilets" />
 								</h5>
 								<h5>
-									<font color="#607d8b">Số người:</font>
+									<font color="#607d8b">Số người cho phép:</font>
 									<bean:write name="thread" property="numOfPeople" />
 								</h5>
 								<h5>
@@ -802,11 +802,9 @@
 			    zoom: 0
 			});
 		}
-
 		function getCustomPanoramaTileUrl(pano, zoom, tileX, tileY) {
 			return readCookie('activeSrcImage360');
 		}
-
 		function getCustomPanorama(pano, zoom, tileX, tileY) {
 			return {
 				location : {
@@ -832,7 +830,6 @@
 			createCookie('activeNameImage360',content,1);
 		    panorama.setPano(src);
 		} */
-
 		function initMap() {
 			var uluru = {
 				lat : parseFloat('<bean:write name="thread" property="latitude" />'),
@@ -937,7 +934,6 @@
 					});
 				});
 		}
-
 		function editRate(rateId){
 		    var divHtml = $('#content-rate-' + rateId ).html().trim();
 		    log(';' + divHtml + 'a');
@@ -948,7 +944,6 @@
 			    $('#content-rate-' + rateId ).focus();
 		    }
 		}
-
 		function submitEdit(rateId){
 		    content = $('#content-rate-' + rateId ).val().trim();
 		    log(';' + content + 'a');
@@ -977,7 +972,6 @@
 		    $('#rate-' + rateId ).replaceWith(viewableText);
 		    $('#content-rate-' + rateId ).html(html);
 		}
-
 		function initialize() {
 			/* initPano(); */
 			initMap();
@@ -989,9 +983,7 @@
 	</script>
 		<script type="text/javascript">
     (function() {
-
 		var initPhotoSwipeFromDOM = function(gallerySelector) {
-
 			var parseThumbnailElements = function(el) {
 			    var thumbElements = el.childNodes,
 			        numNodes = thumbElements.length,
@@ -1001,19 +993,14 @@
 			        thumbnailEl,
 			        size,
 			        item;
-
 			    for(var i = 0; i < numNodes; i++) {
 			        el = thumbElements[i];
-
 			        // include only element nodes 
 			        if(el.nodeType !== 1) {
 			          continue;
 			        }
-
 			        childElements = el.children;
-
 			        size = el.getAttribute('data-size').split('x');
-
 			        // create slide object
 			        item = {
 						src: el.getAttribute('href'),
@@ -1021,17 +1008,13 @@
 						h: parseInt(size[1], 10),
 						author: el.getAttribute('data-author')
 			        };
-
 			        item.el = el; // save link to element for getThumbBoundsFn
-
 			        if(childElements.length > 0) {
 			          item.msrc = childElements[0].getAttribute('src'); // thumbnail url
 			          if(childElements.length > 1) {
 			              item.title = childElements[1].innerHTML; // caption (contents of figure)
 			          }
 			        }
-
-
 					var mediumSrc = el.getAttribute('data-med');
 		          	if(mediumSrc) {
 		            	size = el.getAttribute('data-med-size').split('x');
@@ -1048,65 +1031,50 @@
 		          		w: item.w,
 		          		h: item.h
 		          	};
-
 			        items.push(item);
 			    }
-
 			    return items;
 			};
-
 			// find nearest parent element
 			var closest = function closest(el, fn) {
 			    return el && ( fn(el) ? el : closest(el.parentNode, fn) );
 			};
-
 			var onThumbnailsClick = function(e) {
 			    e = e || window.event;
 			    e.preventDefault ? e.preventDefault() : e.returnValue = false;
-
 			    var eTarget = e.target || e.srcElement;
-
 			    var clickedListItem = closest(eTarget, function(el) {
 			        return el.tagName === 'A';
 			    });
-
 			    if(!clickedListItem) {
 			        return;
 			    }
-
 			    var clickedGallery = clickedListItem.parentNode;
-
 			    var childNodes = clickedListItem.parentNode.childNodes,
 			        numChildNodes = childNodes.length,
 			        nodeIndex = 0,
 			        index;
-
 			    for (var i = 0; i < numChildNodes; i++) {
 			        if(childNodes[i].nodeType !== 1) { 
 			            continue; 
 			        }
-
 			        if(childNodes[i] === clickedListItem) {
 			            index = nodeIndex;
 			            break;
 			        }
 			        nodeIndex++;
 			    }
-
 			    if(index >= 0) {
 			        openPhotoSwipe( index, clickedGallery );
 			    }
 			    return false;
 			};
-
 			var photoswipeParseHash = function() {
 				var hash = window.location.hash.substring(1),
 			    params = {};
-
 			    if(hash.length < 5) { // pid=1
 			        return params;
 			    }
-
 			    var vars = hash.split('&');
 			    for (var i = 0; i < vars.length; i++) {
 			        if(!vars[i]) {
@@ -1118,36 +1086,27 @@
 			        }           
 			        params[pair[0]] = pair[1];
 			    }
-
 			    if(params.gid) {
 			    	params.gid = parseInt(params.gid, 10);
 			    }
-
 			    return params;
 			};
-
 			var openPhotoSwipe = function(index, galleryElement, disableAnimation, fromURL) {
 			    var pswpElement = document.querySelectorAll('.pswp')[0],
 			        gallery,
 			        options,
 			        items;
-
 				items = parseThumbnailElements(galleryElement);
-
 			    // define options (if needed)
 			    options = {
-
 			        galleryUID: galleryElement.getAttribute('data-pswp-uid'),
-
 			        getThumbBoundsFn: function(index) {
 			            // See Options->getThumbBoundsFn section of docs for more info
 			            var thumbnail = items[index].el.children[0],
 			                pageYScroll = window.pageYOffset || document.documentElement.scrollTop,
 			                rect = thumbnail.getBoundingClientRect(); 
-
 			            return {x:rect.left, y:rect.top + pageYScroll, w:rect.width};
 			        },
-
 			        addCaptionHTMLFn: function(item, captionEl, isFake) {
 						if(!item.title) {
 							captionEl.children[0].innerText = '';
@@ -1158,8 +1117,6 @@
 			        }
 					
 			    };
-
-
 			    if(fromURL) {
 			    	if(options.galleryPIDs) {
 			    		// parse real index when custom PIDs are used 
@@ -1176,19 +1133,14 @@
 			    } else {
 			    	options.index = parseInt(index, 10);
 			    }
-
 			    // exit if index not found
 			    if( isNaN(options.index) ) {
 			    	return;
 			    }
-
-
-
 				var radios = document.getElementsByName('gallery-style');
 				for (var i = 0, length = radios.length; i < length; i++) {
 				    if (radios[i].checked) {
 				        if(radios[i].id == 'radio-all-controls') {
-
 				        } else if(radios[i].id == 'radio-minimal-black') {
 				        	options.mainClass = 'pswp--minimal--dark';
 					        options.barsSize = {top:0,bottom:0};
@@ -1202,27 +1154,20 @@
 				        break;
 				    }
 				}
-
 			    if(disableAnimation) {
 			        options.showAnimationDuration = 0;
 			    }
-
 			    // Pass data to PhotoSwipe and initialize it
 			    gallery = new PhotoSwipe( pswpElement, PhotoSwipeUI_Default, items, options);
-
 			    // see: http://photoswipe.com/documentation/responsive-images.html
 				var realViewportWidth,
 				    useLargeImages = false,
 				    firstResize = true,
 				    imageSrcWillChange;
-
 				gallery.listen('beforeResize', function() {
-
 					var dpiRatio = window.devicePixelRatio ? window.devicePixelRatio : 1;
 					dpiRatio = Math.min(dpiRatio, 2.5);
 				    realViewportWidth = gallery.viewportSize.x * dpiRatio;
-
-
 				    if(realViewportWidth >= 1200 || (!gallery.likelyTouchDevice && realViewportWidth > 800) || screen.width > 1200 ) {
 				    	if(!useLargeImages) {
 				    		useLargeImages = true;
@@ -1235,19 +1180,14 @@
 				        	imageSrcWillChange = true;
 				    	}
 				    }
-
 				    if(imageSrcWillChange && !firstResize) {
 				        gallery.invalidateCurrItems();
 				    }
-
 				    if(firstResize) {
 				        firstResize = false;
 				    }
-
 				    imageSrcWillChange = false;
-
 				});
-
 				gallery.listen('gettingData', function(index, item) {
 				    if( useLargeImages ) {
 				        item.src = item.o.src;
@@ -1259,28 +1199,22 @@
 				        item.h = item.m.h;
 				    }
 				});
-
 			    gallery.init();
 			};
-
 			// select all gallery elements
 			var galleryElements = document.querySelectorAll( gallerySelector );
 			for(var i = 0, l = galleryElements.length; i < l; i++) {
 				galleryElements[i].setAttribute('data-pswp-uid', i+1);
 				galleryElements[i].onclick = onThumbnailsClick;
 			}
-
 			// Parse URL and open gallery if it contains #&pid=3&gid=1
 			var hashData = photoswipeParseHash();
 			if(hashData.pid && hashData.gid) {
 				openPhotoSwipe( hashData.pid,  galleryElements[ hashData.gid - 1 ], true, true );
 			}
 		};
-
 		initPhotoSwipeFromDOM('.demo-gallery');
-
 	})();
-
 	</script>
 
 	</div>

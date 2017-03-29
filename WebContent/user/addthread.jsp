@@ -229,7 +229,7 @@
 						</div>
 
 						<div style="width: calc(100%); display: inline-block;">
-							<label for="form3">Thể loại  <font color="red">*</font></label>
+							<label for="form3">Thể loại <font color="red">*</font></label>
 							<html:select name="threadForm" property="categoryId"
 								styleClass="mdb-select" styleId="slbCategory">
 								<logic:iterate name="threadForm" property="categories" id="item">
@@ -241,7 +241,7 @@
 							</html:select>
 						</div>
 						<div style="width: calc(100%); display: inline-block;">
-							<label for="form3">Tỉnh - Thành phố  <font color="red">*</font></label>
+							<label for="form3">Tỉnh - Thành phố <font color="red">*</font></label>
 							<html:select name="threadForm" property="provinceId"
 								styleClass="mdb-select" styleId="slbProvince">
 								<logic:iterate name="threadForm" property="provinces" id="item">
@@ -277,15 +277,13 @@
 							</html:select>
 						</div>
 						<div class="md-form">
-							<html:text property="name" styleClass="form-control"
-								value=""></html:text>
+							<html:text property="name" styleClass="form-control" value=""></html:text>
 							<label for="form3">Tên <font color="red">*</font></label>
 						</div>
 
 						<label for="form3">Nội dung <font color="red">*</font></label>
 						<div class="md-form">
-							<html:textarea styleId="content" property="content"
-								value=""
+							<html:textarea styleId="content" property="content" value=""
 								styleClass="form-control"></html:textarea>
 						</div>
 
@@ -377,7 +375,7 @@
 							<html:option value="3">Nước máy</html:option>
 							<html:option value="4">Không xác định</html:option>
 						</html:select>
-						<label>Nguồn nước  <font color="red">*</font></label>
+						<label>Nguồn nước <font color="red">*</font></label>
 
 						<div class="md-form">
 							<html:text property="direction" styleClass="form-control"></html:text>
@@ -386,7 +384,7 @@
 
 						<div class="md-form">
 							<html:text property="numOfToilets" styleClass="form-control"></html:text>
-							<label for="form3">Số toilet  <font color="red">*</font></label>
+							<label for="form3">Số toilet <font color="red">*</font></label>
 						</div>
 
 						<div class="md-form">
@@ -924,12 +922,70 @@
 			camera = $('#camera').is(':checked');
 			object = $('#object').val();
 			waterSource = $('[name="waterSource"]').val(); 
-			area = $('#area').val();
 			far = $('#far').val();
 			provinceId = $('#slbProvince').val();
 			districtId = $('#slbDistrict').val();
 			villageId = $('#slbVillage').val();
 			categoryId = $('#slbCategory').val();
+			
+			numOfToilets = $('[name="numOfToilets"]').val();
+			numOfPeople = $('[name="numOfPeople"]').val();
+			price = $('[name="price"]').val();[name="numOfPeople"]
+			area = $('[name="area"]').val();
+			areaInt = parseInt(area);
+			log(area + "asdsdads" + areaInt);
+			if(areaInt < 15){
+				area = 1;
+			}else if(areaInt >= 15 && areaInt < 25){
+				area = 2;
+			}else if(areaInt >= 25 && areaInt < 35){
+				area = 3;
+			}else if(areaInt >= 35 && areaInt < 50){
+				area = 4;
+			}else if(areaInt > 50){
+				area = 5;
+				log("asdsdads");
+			}
+			priceInt = parseInt(price);
+			if(priceInt < 500000){
+				price = 1;
+			}else if(priceInt >= 500000 && priceInt < 1000000){
+				price = 2;
+			}else if(priceInt >= 1000000 && priceInt < 1500000){
+				price = 3;
+			}else if(priceInt >= 1500000 && priceInt < 2500000){
+				price = 4;
+			}else if(priceInt >= 2500000 && priceInt < 5000000){
+				price = 5;
+			}else if(priceInt > 5000000){
+				price = 6;
+			}
+			numOfToiletsInt = parseInt(numOfToilets);
+			if(numOfToiletsInt < 2){
+				numOfToilets = 1;
+			}else if(numOfToiletsInt >= 2 && numOfToiletsInt < 5){
+				numOfToilets = 2;
+			}else if(numOfToiletsInt >= 5 && numOfToiletsInt < 10){
+				numOfToilets = 3;
+			}else if(numOfToiletsInt >= 10 && numOfToiletsInt < 20){
+				numOfToilets = 4;
+			}else if(numOfToiletsInt >= 20){
+				numOfToilets = 5;
+			}
+			numOfPeopleInt = parseInt(numOfPeople);
+			if(numOfPeopleInt < 2){
+				numOfPeople = 1;
+			}else if(numOfPeopleInt >= 2 && numOfPeopleInt < 5){
+				numOfPeople = 2;
+			}else if(numOfPeopleInt >= 5 && numOfPeopleInt < 10){
+				numOfPeople = 3;
+			}else if(numOfPeopleInt >= 10 && numOfPeopleInt < 20){
+				numOfPeople = 4;
+			}else if(numOfPeopleInt >= 20){
+				numOfPeople = 5;
+			}
+			
+			
 			name = $('[name="name"]').val();
 			accountId = $('[name="accountId"]').val();
 			page = 1;
@@ -954,7 +1010,7 @@
 					+ "&categoryId=" + categoryId + "&far=" + 6 + "&lat=" + lat
 					+ "&lng=" + lng + "&provinceId=" + provinceId
 					+ "&districtId=" + districtId + "&kindOf=" + kindOf
-					+ "&villageId=" + villageId + "&name=" + "&page=" + page + "&accountId=" + accountId;
+					+ "&villageId=" + villageId + "&area=" + area + "&price=" + price + "&numOfToilets=" + numOfToilets + "&numOfPeople=" + numOfPeople + "&name=" + "&page=" + page + "&accountId=" + accountId;
 			log("Post " + str);
 			$
 					.ajax({

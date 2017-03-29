@@ -786,7 +786,7 @@ public class ThreadDAO {
 			else
 				filter += " AND  ";
 			count++;
-			filter += " kindOf = 1 ";
+			filter += " kindOf = 0 ";
 		}
 		if (thread.isKindOf() == false) {
 			if (count == 0)
@@ -794,7 +794,7 @@ public class ThreadDAO {
 			else
 				filter += " AND  ";
 			count++;
-			filter += " kindOf = 0 ";
+			filter += " kindOf = 1 ";
 		}
 		if (thread.getWaterSource() > 0) {
 			if (count == 0)
@@ -826,15 +826,15 @@ public class ThreadDAO {
 			else
 				filter += " AND  ";
 			count++;
-			if (thread.getArea() == 1) {
+			if (thread.getArea() < 15) {
 				filter += " area < 15";
-			} else if (thread.getArea() == 2) {
+			} else if (thread.getArea() >= 15 && thread.getArea() < 25) {
 				filter += " area between 15 and 25 ";
-			} else if (thread.getArea() == 3) {
+			} else if (thread.getArea() >= 25 && thread.getArea() < 35) {
 				filter += " area between 25 and 35 ";
-			} else if (thread.getArea() == 4) {
+			} else if (thread.getArea() >= 35 && thread.getArea() < 50) {
 				filter += " area between 35 and 50 ";
-			} else if (thread.getArea() == 5) {
+			} else if (thread.getArea() > 50) {
 				filter += " area > 50 ";
 			}
 		}
@@ -844,17 +844,19 @@ public class ThreadDAO {
 			else
 				filter += " AND  ";
 			count++;
-			if (thread.getNumOfToilets() == 1) {
+
+			if (thread.getNumOfToilets() < 2) {
 				filter += " numOfToilets < 2";
-			} else if (thread.getNumOfToilets() == 2) {
+			} else if (thread.getNumOfToilets() >= 2 && thread.getNumOfToilets() < 5) {
 				filter += " numOfToilets between 2 and 5 ";
-			} else if (thread.getNumOfToilets() == 3) {
+			} else if (thread.getNumOfToilets() >= 5 && thread.getNumOfToilets() < 10) {
 				filter += " numOfToilets between 5 and 10 ";
-			} else if (thread.getNumOfToilets() == 4) {
+			} else if (thread.getNumOfToilets() >= 10 && thread.getNumOfToilets() < 20) {
 				filter += " numOfToilets between 10 and 20 ";
-			} else if (thread.getNumOfToilets() == 5) {
-				filter += " numOfToilets > 30 ";
+			} else if (thread.getNumOfToilets() > 20) {
+				filter += " numOfToilets > 20 ";
 			}
+			
 		}
 		if (thread.getAccountId() > 0) {
 			if (count == 0)
@@ -870,44 +872,52 @@ public class ThreadDAO {
 			else
 				filter += " AND  ";
 			count++;
-			if (thread.getNumOfPeople() == 1) {
+			
+			if (thread.getNumOfPeople() < 2) {
 				filter += " numOfPeople < 2";
-			} else if (thread.getNumOfPeople() == 2) {
+			} else if (thread.getNumOfPeople() >= 2 && thread.getNumOfPeople() < 5) {
 				filter += " numOfPeople between 2 and 5 ";
-			} else if (thread.getNumOfPeople() == 3) {
+			} else if (thread.getNumOfPeople() >= 5 && thread.getNumOfPeople() < 10) {
 				filter += " numOfPeople between 5 and 10 ";
-			} else if (thread.getNumOfPeople() == 4) {
+			} else if (thread.getNumOfPeople() >= 10 && thread.getNumOfPeople() < 20) {
 				filter += " numOfPeople between 10 and 20 ";
-			} else if (thread.getNumOfPeople() == 5) {
+			} else if (thread.getNumOfPeople() > 20) {
 				filter += " numOfPeople > 20 ";
 			}
+			
+			Log.in(filter);
+			// cho nay in ra filter
 		}
-		if (thread.getPrice() > 0) {
+		if (thread.getPrice() > 1) {
 			if (count == 0)
 				filter += " WHERE ";
 			else
 				filter += " AND  ";
 			count++;
-			if (thread.getPrice() == 1) {
+			
+			if (thread.getPrice() < 500000) {
 				filter += " price < 500000";
-			} else if (thread.getPrice() == 2) {
+			} else if (thread.getPrice() >= 500000 && thread.getPrice() < 1000000) {
 				filter += " price between 500000 and 1000000 ";
-			} else if (thread.getPrice() == 3) {
+			} else if (thread.getPrice() >= 1000000 && thread.getPrice() < 1500000) {
 				filter += " price between 1000000 and 1500000 ";
-			} else if (thread.getPrice() == 4) {
+			} else if (thread.getPrice() >= 1500000 && thread.getPrice() < 2500000) {
 				filter += " price between 1500000 and 2500000 ";
-			} else if (thread.getPrice() == 5) {
+			} else if (thread.getPrice() >= 2500000 && thread.getPrice() < 5000000) {
 				filter += " price between 2500000 and 5000000 ";
-			} else if (thread.getPrice() == 6) {
+			} else if (thread.getPrice() > 5000000) {
 				filter += " price > 5000000 ";
 			}
+			
+			Log.in(filter);
+			// cho nay in ra filter
 		}
-		if (thread.getFar() > 0 && thread.getLatitude() > 0 && thread.getLongitude() > 0) {
+		if (thread.getLatitude() > 0 && thread.getLongitude() > 0) {
 			int meter = 0;
 			if (count == 0)
 				filter += " WHERE ";
 			else
-				filter += " AND  ";
+				filter += " AND ";
 			if (thread.getFar() == 1) {
 				meter = 500;
 			} else if (thread.getFar() == 2) {
@@ -963,10 +973,9 @@ public class ThreadDAO {
 		filter += " and status = 1 ";
 		PreparedStatement pr = null;
 
-
 		/* Phan trang ket qua tim kiem duoc */
-		filter += "  group by Thread.accountId  order by Thread.accountId offset " + 0 + " rows fetch next " + Pagination.itemPerPageView
-				+ " row only";
+		filter += "  group by Thread.accountId  order by Thread.accountId offset " + 0 + " rows fetch next "
+				+ Pagination.itemPerPageView + " row only";
 		ArrayList<Thread> temp = new ArrayList<Thread>();
 		try {
 			String sql = "select Thread.accountId from Thread inner join Village on Village.villageId = Thread.villageId inner join District on District.districtId = Village.districtId inner join Province on Province.provinceId = District.provinceId inner join (select Thread.threadId, avg(Cast(Rate.score as Float)) as avgScore, avg(Rate.score) as avgScoreInt from Thread left join Rate on Thread.threadId = Rate.threadId group by Thread.threadId) temp on Thread.threadId = temp.threadId  "
