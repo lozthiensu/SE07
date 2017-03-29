@@ -48,24 +48,20 @@ create table Village
 --DBCC CHECKIDENT (Village, RESEED, 0); 
 INSERT INTO Village(districtId, name) VALUES(1, N'Tịnh Bình');
 INSERT INTO Village(districtId, name) VALUES(1, N'Tịnh Sơn');
-INSERT INTO Village(districtId, name) VALUES(1, N'Tịnh Trà');
 INSERT INTO Village(districtId, name) VALUES(1, N'Tịnh Sơn');
-INSERT INTO Village(districtId, name) VALUES(1, N'Tịnh Bắc');
 INSERT INTO Village(districtId, name) VALUES(1, N'Tịnh Thiện');
-INSERT INTO Village(districtId, name) VALUES(1, N'Tịnh Hòa');
 INSERT INTO Village(districtId, name) VALUES(2, N'Trà Bình');
 INSERT INTO Village(districtId, name) VALUES(2, N'Trà Xuân');
-INSERT INTO Village(districtId, name) VALUES(2, N'Trà Hợi');
 INSERT INTO Village(districtId, name) VALUES(2, N'Trà Ðú');
-INSERT INTO Village(districtId, name) VALUES(2, N'Trà Cao');
-INSERT INTO Village(districtId, name) VALUES(2, N'Trà Hợi');
+INSERT INTO Village(districtId, name) VALUES(3, N'Khuê Mỹ');
+INSERT INTO Village(districtId, name) VALUES(3, N'Mỹ An');
 INSERT INTO Village(districtId, name) VALUES(3, N'Hoà Hải');
-INSERT INTO Village(districtId, name) VALUES(3, N'Hoà Vang');
-INSERT INTO Village(districtId, name) VALUES(3, N'Hoà Tan');
-INSERT INTO Village(districtId, name) VALUES(3, N'Hoà Hợp');
-INSERT INTO Village(districtId, name) VALUES(3, N'Hoà Thuận');
-INSERT INTO Village(districtId, name) VALUES(3, N'Hoà Bình');
-INSERT INTO Village(districtId, name) VALUES(3, N'Hoà Xuân');
+INSERT INTO Village(districtId, name) VALUES(3, N'Hoà Quý');
+INSERT INTO Village(districtId, name) VALUES(4, N'An Hải Bắc');
+INSERT INTO Village(districtId, name) VALUES(4, N'An Hải Đông');
+INSERT INTO Village(districtId, name) VALUES(4, N'An Hải Tây');
+INSERT INTO Village(districtId, name) VALUES(4, N'Mân Thái');
+INSERT INTO Village(districtId, name) VALUES(4, N'Nại Hiên Đông');
 
 
 --Tao bang loai tin
@@ -75,7 +71,7 @@ Create table Category
 	name nvarchar(50),
 	constraint pk_Category primary key (categoryId)
 )
---DBCC CHECKIDENT (Category, RESEED, 0); 
+--DBCC CHECKIDENT (Category, RESEED, 4); 
 INSERT INTO Category(name) VALUES(N'Cho thuê phòng trọ');
 INSERT INTO Category(name) VALUES(N'Nhà cho thuê');
 INSERT INTO Category(name) VALUES(N'Cho thuê căn hộ');
@@ -183,7 +179,8 @@ create table Thread
 	CONSTRAINT fk_Village_Thread FOREIGN KEY (villageId)
 	REFERENCES Village(villageId)
 )
-DBCC CHECKIDENT (Thread, RESEED, 0); 
+DBCC CHECKIDENT (Thread, RESEED, 0);
+DBCC CHECKIDENT (Notification, RESEED, 0); 
 
 create table Image
 (
@@ -196,7 +193,7 @@ create table Image
 	CONSTRAINT fk_Thread_Image FOREIGN KEY (threadId)
 	REFERENCES Thread(threadId)
 )
-DBCC CHECKIDENT (Image, RESEED, 0); 
+  
 
 create table Rate
 (

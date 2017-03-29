@@ -278,14 +278,14 @@
 						</div>
 						<div class="md-form">
 							<html:text property="name" styleClass="form-control"
-								value="Baif vieets thws as asdjknas anasd asnasdk a"></html:text>
+								value=""></html:text>
 							<label for="form3">Tên <font color="red">*</font></label>
 						</div>
 
 						<label for="form3">Nội dung <font color="red">*</font></label>
 						<div class="md-form">
 							<html:textarea styleId="content" property="content"
-								value="Noi dung baif vieets thws as asdjknas anasd asnasdk a"
+								value=""
 								styleClass="form-control"></html:textarea>
 						</div>
 

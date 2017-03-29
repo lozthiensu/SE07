@@ -18,9 +18,11 @@ public class DashBoard {
 	ArrayList<Chart> chartThread;
 	ArrayList<Chart> chartRate;
 	ArrayList<Chart> pieThread;
+	ArrayList<ChartThreadRate> chartThreadRates;
 	String jsonThread;
 	String jsonRate;
 	String jsonPie;
+	String jsonThreadRate;
 
 	public DashBoard() {
 		super();
@@ -172,6 +174,22 @@ public class DashBoard {
 
 	public void setPieThread(ArrayList<Chart> pieThread) {
 		this.pieThread = pieThread;
+	}
+
+	public ArrayList<ChartThreadRate> getChartThreadRates() {
+		return chartThreadRates;
+	}
+
+	public void setChartThreadRates(ArrayList<ChartThreadRate> chartThreadRates) {
+		this.chartThreadRates = chartThreadRates;
+	}
+
+	public String getJsonThreadRate() {
+		return jsonThreadRate;
+	}
+
+	public void setJsonThreadRate(String jsonThreadRate) {
+		this.jsonThreadRate = jsonThreadRate;
 	}
 
 }

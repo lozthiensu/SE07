@@ -525,9 +525,9 @@ public class ThreadDAO {
 				filter += " price between 1000000 and 1500000 ";
 			} else if (thread.getPrice() == 4) {
 				filter += " price between 1500000 and 2500000 ";
-			} else if (thread.getPrice() == 4) {
-				filter += " price between 2500000 and 5000000 ";
 			} else if (thread.getPrice() == 5) {
+				filter += " price between 2500000 and 5000000 ";
+			} else if (thread.getPrice() == 6) {
 				filter += " price > 5000000 ";
 			}
 		}

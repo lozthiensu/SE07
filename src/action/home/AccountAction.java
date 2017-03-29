@@ -43,6 +43,7 @@ public class AccountAction extends Action {
 		LoginBO loginBO = new LoginBO();
 		NotificationBO notificationBO = new NotificationBO();
 
+		account.setName(accountHomeForm.getName());
 		account.setEmail(accountHomeForm.getEmail());
 		account.setPassword(accountHomeForm.getPassword());
 		account.setLevel(3);

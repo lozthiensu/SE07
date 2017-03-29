@@ -59,6 +59,7 @@ public class DashBoardAction extends Action {
 		dashBoard.setJsonThread(gson.toJson(dashBoard.getChartThread()));
 		dashBoard.setJsonRate(gson.toJson(dashBoard.getChartRate()));
 		dashBoard.setJsonPie(gson.toJson(dashBoard.getPieThread()));
+		dashBoard.setJsonThreadRate(gson.toJson(dashBoard.getChartThreadRates()));
 
 		dashBoardForm.setDashBoard(dashBoard);
 

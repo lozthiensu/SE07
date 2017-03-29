@@ -39,9 +39,7 @@ public class CompareAction extends Action {
 		int thread2Id = compareForm.getThread2Id();
 		
 		if (thread1Id <= 0 || thread2Id <= 0) {
-			Log.in("Thread 1: " + thread1Id);
-			Log.in("Thread 2: " + thread2Id);
-		//	return mapping.findForward("failed");
+			return mapping.findForward("failed");
 		}
 		
 		Thread thread = new Thread();
@@ -51,13 +49,15 @@ public class CompareAction extends Action {
 
 		thread = threadBO.getById(thread);
 		thread2 = threadBO.getById(thread2);
+
+		if(thread.getStatus() == 0)
+			thread = new Thread();
+		if(thread2.getStatus() == 0)
+			thread2 = new Thread();
 		
 		compareForm.setThread(thread);
 		compareForm.setThread2(thread2);
-		
 
-		Log.in("Thread 1: " + thread.toString());
-		Log.in("Thread 2: " + thread2.toString());
 		return mapping.findForward("compared");
 
 	}

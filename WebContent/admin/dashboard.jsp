@@ -85,7 +85,8 @@
 
 							<!--Card Data-->
 							<div class="admin-up">
-								<i class="fa  fa-user-circle-o blue darken-3" style="background-color: #EF5350 !important;"></i>
+								<i class="fa  fa-user-circle-o blue darken-3"
+									style="background-color: #EF5350 !important;"></i>
 								<div class="data">
 									<p>Tài khoản</p>
 									<h3>
@@ -125,7 +126,8 @@
 
 							<!--Card Data-->
 							<div class="admin-up">
-								<i class="fa  fa-newspaper-o deep-purple darken-4" style=" background-color: #00BFA5 !important;"></i>
+								<i class="fa  fa-newspaper-o deep-purple darken-4"
+									style="background-color: #00BFA5 !important;"></i>
 								<div class="data">
 									<p>Bài viết</p>
 									<bean:write name="dashBoard" property="numOfThread" />
@@ -163,7 +165,8 @@
 
 							<!--Card Data-->
 							<div class="admin-up">
-								<i class="fa fa-comments-o indigo" style="background: #FF9100!important"></i>
+								<i class="fa fa-comments-o indigo"
+									style="background: #FF9100 !important"></i>
 								<div class="data">
 									<p>Đánh giá</p>
 									<h3>
@@ -198,17 +201,9 @@
 
 				</div>
 				<div class="row">
-					<div class="col-lg-3">
-						<div class="card mb-r" style="margin: 15px;">
-							<div class="card-block">
-								<h4 class="h4-responsive text-center mb-1">Thống kê theo danh mục</h4>
-								<canvas id="seo" height="151" width="303"
-									style="width: 337px; height: 168px;"></canvas>
-							</div>
-						</div>
-					</div>
-					<div class="col-lg-9">
-						<div class="card mb-r" style="margin: 15px; width: calc(100% - 30px);">
+					<div class="col-lg-12">
+						<div class="card mb-r"
+							style="margin: 15px; width: calc(100% - 30px);">
 							<div class="card-block">
 								<div class="view right hm-white-slight"
 									style="margin-left: 0px !important;">
@@ -217,6 +212,18 @@
 									<div class="text-center">Biểu đồ thống kê bài viết</div>
 
 								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="card mb-r" style="margin: 15px; width: calc(100% - 30px);"> 
+							<div class="card-block">
+								<h4 class="h4-responsive text-center mb-1">Thống kê theo
+									danh mục</h4>
+								<canvas id="seo" height="151" width="303"
+									style="width: 337px; height: 168px;"></canvas>
 							</div>
 						</div>
 					</div>
@@ -341,35 +348,50 @@
 				objRate = JSON.parse(jsonRate.replace(/&quot;/g, '"'));
 				jsonPie = '<bean:write name="dashBoard" property="jsonPie" />';
 				objPie = JSON.parse(jsonPie.replace(/&quot;/g, '"'));
-				labelThread = [];
+				jsonThreadRate = '<bean:write name="dashBoard" property="jsonThreadRate" />';
+				objThreadRate = JSON.parse(jsonThreadRate.replace(/&quot;/g,
+						'"'));
+				objThreadRate = objThreadRate.reverse();
+
+				labelChart = [];
 				dataThread = [];
-				for (i = 0; i < objThread.length; i++) {
-					labelThread.push(objThread[i].label);
-					dataThread.push(objThread[i].data);
-				}
-				labelRate = [];
 				dataRate = [];
-				for (i = 0; i < objRate.length; i++) {
-					labelRate.push(objRate[i].label);
-					dataRate.push(objRate[i].data);
+				for (i = 0; i < objThreadRate.length; i++) {
+					labelChart.push(objThreadRate[i].label);
+					dataThread.push(objThreadRate[i].num1);
+					dataRate.push(objThreadRate[i].num2);
 				}
 				labelPie = [];
 				var dataPie1 = [];
 				for (i = 0; i < objPie.length; i++) {
 					dataPie1.push({
 						value : objPie[i].data,
-						color : '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6),
-						highlight : '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6),
+						color : '#'
+								+ (0x1000000 + (Math.random()) * 0xffffff)
+										.toString(16).substr(1, 6),
+						highlight : '#'
+								+ (0x1000000 + (Math.random()) * 0xffffff)
+										.toString(16).substr(1, 6),
 						label : objPie[i].label
 					});
 				}
 				var data = {
-					labels : labelThread,
+					labels : labelChart,
 					datasets : [ {
 						label : "My First dataset",
-						fillColor : "rgba(139, 159, 250,0.8)",
-						strokeColor : "rgba(92,184,92,1)",
-						pointColor : "rgba(220,220,220,1)",
+						fillColor : "rgba(247, 201, 138,0.2)",
+						strokeColor : "#FF9100",
+						pointColor : "#754403",
+						pointStrokeColor : "#0f0",
+						pointHighlightFill : "#000",
+						pointHighlightStroke : "rgba(0,0,255,.15)",
+						data : dataRate,
+						backgroundColor : "#fff !important;"
+					}, {
+						label : "My First dataset",
+						fillColor : "rgba(133, 214, 203,0.2)",
+						strokeColor : "#00BFA5",
+						pointColor : "#024c42",
 						pointStrokeColor : "#0f0",
 						pointHighlightFill : "#000",
 						pointHighlightStroke : "rgba(0,0,255,.15)",

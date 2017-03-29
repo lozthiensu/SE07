@@ -10,7 +10,8 @@
 <meta charset="UTF-8">
 <bean:define id="thread" name="compareForm" property="thread"></bean:define>
 <bean:define id="thread2" name="compareForm" property="thread2"></bean:define>
-<title><bean:write name="thread" property="name" /> vs <bean:write name="thread2" property="name" /> - TimTro.Com</title>
+<title><bean:write name="thread" property="name" /> vs <bean:write
+		name="thread2" property="name" /> - TimTro.Com</title>
 <link href="css/font-awesome.min.css" rel="stylesheet">
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/compiled.min.css" rel="stylesheet">
@@ -126,6 +127,21 @@
 		</div>
 		<div class="row row-compare">
 			<div class="col-lg-4">
+				<strong>Bài viết</strong>
+			</div>
+			<div class="col-lg-4">
+				<a
+					href="./view-thread-action.do?threadId=<bean:write name="thread" property="threadId" />"
+					target="_blank"><bean:write name="thread" property="name" /></a>
+			</div>
+			<div class="col-lg-4">
+				<a
+					href="./view-thread-action.do?threadId=<bean:write name="thread2" property="threadId" />"
+					target="_blank"><bean:write name="thread2" property="name" /></a>
+			</div>
+		</div>
+		<div class="row row-compare">
+			<div class="col-lg-4">
 				<strong>Giá</strong>
 			</div>
 			<div class="col-lg-4">
@@ -173,12 +189,12 @@
 				<strong>Giá điện</strong>
 			</div>
 			<div class="col-lg-4">
-				<bean:write name="thread" property="electricFee" />
-				đ
+				<bean:write name="thread" property="electricFeeString" />
+				/kí
 			</div>
 			<div class="col-lg-4">
-				<bean:write name="thread2" property="electricFee" />
-				đ
+				<bean:write name="thread2" property="electricFeeString" />
+				/kí
 			</div>
 		</div>
 		<div class="row row-compare">
@@ -186,12 +202,12 @@
 				<strong>Giá nước</strong>
 			</div>
 			<div class="col-lg-4">
-				<bean:write name="thread" property="waterFee" />
-				đ
+				<bean:write name="thread" property="waterFeeString" />
+				/m&sup3;
 			</div>
 			<div class="col-lg-4">
-				<bean:write name="thread2" property="waterFee" />
-				đ
+				<bean:write name="thread2" property="waterFeeString" />
+				/m&sup3;
 			</div>
 		</div>
 		<div class="row row-compare">
@@ -199,12 +215,10 @@
 				<strong>Phụ phí</strong>
 			</div>
 			<div class="col-lg-4">
-				<bean:write name="thread" property="otherFee" />
-				đ
+				<bean:write name="thread" property="otherFeeString" />
 			</div>
 			<div class="col-lg-4">
-				<bean:write name="thread2" property="otherFee" />
-				đ
+				<bean:write name="thread2" property="otherFeeString" />
 			</div>
 		</div>
 		<div class="row row-compare">
@@ -351,10 +365,10 @@
 				<strong>Nguồn nước</strong>
 			</div>
 			<div class="col-lg-4">
-				<bean:write name="thread" property="waterSource" />
+				<bean:write name="thread" property="waterSourceString" />
 			</div>
 			<div class="col-lg-4">
-				<bean:write name="thread2" property="waterSource" />
+				<bean:write name="thread2" property="waterSourceString" />
 			</div>
 		</div>
 		<div class="row row-compare">
