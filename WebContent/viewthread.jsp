@@ -419,7 +419,7 @@
 						<logic:equal name="thread" property="old" value="true">
 							<button type="button"
 								class="btn btn-danger waves-effect waves-light">
-								<b>Tin đã quá lâu</b>
+								<b>Tin cũ / Hết phòng</b>
 							</button>
 						</logic:equal>
 						<logic:equal name="thread" property="old" value="false">
@@ -792,7 +792,7 @@
 			});
 			
 		}
-		var panorama;
+/* 		var panorama;
  		function initPano() {
 			panorama = new google.maps.StreetViewPanorama(document
 					.getElementById('map'), {
@@ -831,7 +831,7 @@
 			createCookie('activeSrcImage360',src,1);
 			createCookie('activeNameImage360',content,1);
 		    panorama.setPano(src);
-		}
+		} */
 
 		function initMap() {
 			var uluru = {
@@ -979,7 +979,7 @@
 		}
 
 		function initialize() {
-			initPano();
+			/* initPano(); */
 			initMap();
 		}
 	</script>

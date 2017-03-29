@@ -411,6 +411,8 @@
 									+ '	</div>' + '	</div>' + '</div>' + '</a>';
 						}
 						$('#numMessUnread').html(unRead);
+						if(n == 0)
+							str = "Không có thông báo";
 						$('#listNoti').html(str);
 					},
 					error : function(e) {
@@ -427,12 +429,32 @@
 			success : function(res) {
 				if (res == "success") {
 					getNotification();
-					var curentUrl = window.location.href;
-					var index = curentUrl.lastIndexOf("/");
-					var url = curentUrl.substring(0, index);
-					window.location.href = url
-							+ "/view-thread-action.do?threadId=" + threadId
-							+ '#rate-' + rateId;
+					$
+					.ajax({
+						type : "POST",
+						url : "/Mock_SE7/search-thread.do",
+						data : "threadId=" + threadId + "&action=checkThreadStatus",
+						success : function(res) {
+							log(res);
+							if (res == "success") {
+								var strRate = "";
+								if(rateId > 0)
+									strRate = '#rate-' + rateId;
+								var curentUrl = window.location.href;
+								var index = curentUrl.lastIndexOf("/");
+								var url = curentUrl.substring(0, index);
+								window.location.href = url
+								+ "/view-thread-action.do?threadId=" + threadId
+								+ strRate;
+							} else {
+								showError("Bài viết chưa được duyệt, xin hãy chờ!");
+								return false;
+							}
+						},
+						error : function(e) {
+							alert('Error: ' + e);
+						}
+					});
 				}
 			},
 			error : function(e) {

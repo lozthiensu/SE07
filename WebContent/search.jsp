@@ -341,6 +341,26 @@
 							<option value="6">&lt; 20000 m</option>
 						</select> <label>Phạm vi</label>
 					</div>
+					<div class="col-lg-3">
+						<select class="mdb-select" id="numOfToilets" onchange="checkDoAjaxPost()">
+							<option value="0" selected>Không</option>
+							<option value="1">&lt; 2 cái</option>
+							<option value="2">2 - 5 cái</option>
+							<option value="3">5 - 10 cái</option>
+							<option value="4">10 - 20 cái</option>
+							<option value="5">&gt; 20 cái</option>
+						</select> <label>Số toilet</label>
+					</div>
+					<div class="col-lg-3">
+						<select class="mdb-select" id="numOfPeople" onchange="checkDoAjaxPost()">
+							<option value="0" selected>Không</option>
+							<option value="1">&lt; 2 người</option>
+							<option value="2">2 - 5 người</option>
+							<option value="3">5 - 10 người</option>
+							<option value="4">10 - 20 người</option>
+							<option value="5">&gt; 20 người</option>
+						</select> <label>Số người cho phép</label>
+					</div>
 					<div class="col-lg-12">
 						<div class="pac-card" id="pac-card">
 							<div>
@@ -668,11 +688,47 @@
 		$('#name').autocomplete(
 				{
 					lookup : function(query, done) {
+
+						// get the form values
+						wifi = $('#wifi').is(':checked');
+						waterHeater = $('#waterHeater').is(':checked');
+						conditioner = $('#conditioner').is(':checked');
+						fridge = $('#fridge').is(':checked');
+						attic = $('#attic').is(':checked');
+						camera = $('#camera').is(':checked');
+						object = $('#object').val();
+						waterSource = $('#waterSource').val();
+						area = $('#area').val();
+						price = $('#price').val();
+						far = $('#far').val();
+						provinceId = $('#slbProvince').val();
+						districtId = $('#slbDistrict').val();
+						villageId = $('#slbVillage').val();
+						categoryId = $('#slbCategory').val();
+						numOfToilets = $('#numOfToilets').val();
+						numOfPeople = $('#numOfPeople').val();
 						name = $("#name").val();
+						lat = readCookie('lat');
+						lng = readCookie('lng');
+						kindOf = $('#kindOf').is(':checked');
+						if (kindOf == true) {
+							kindOf = "true";
+						} else {
+							kindOf = "false";
+						}
+						var str = "action=autocomplete" + "&wifi=" + wifi + "&waterHeater="
+						+ waterHeater + "&conditioner=" + conditioner + "&fridge="
+						+ fridge + "&attic=" + attic + "&camera=" + camera
+						+ "&object=" + object + "&waterSource=" + waterSource
+						+ "&categoryId=" + categoryId + "&area=" + area + "&price="
+						+ price + "&far=" + far + "&lat=" + lat + "&lng=" + lng
+						+ "&provinceId=" + provinceId + "&kindOf=" + kindOf
+						+ "&districtId=" + districtId + "&villageId=" + villageId
+						+ "&name=" + name + "&numOfToilets=" + numOfToilets + "&numOfPeople=" + numOfPeople + "&page=1";
 						$.ajax({
 							type : "POST",
 							url : "/Mock_SE7/search-thread.do",
-							data : "action=autocomplete&name=" + name,
+							data : str,
 							success : function(res) {
 								result = JSON.parse(res);
 								done(result);
@@ -719,6 +775,8 @@
 			districtId = $('#slbDistrict').val();
 			villageId = $('#slbVillage').val();
 			categoryId = $('#slbCategory').val();
+			numOfToilets = $('#numOfToilets').val();
+			numOfPeople = $('#numOfPeople').val();
 			name = $("#name").val();
 			page = parseInt(readCookie('page'));
 			lat = readCookie('lat');
@@ -738,7 +796,7 @@
 					+ price + "&far=" + far + "&lat=" + lat + "&lng=" + lng
 					+ "&provinceId=" + provinceId + "&kindOf=" + kindOf
 					+ "&districtId=" + districtId + "&villageId=" + villageId
-					+ "&name=" + name + "&page=" + page;
+					+ "&name=" + name + "&numOfToilets=" + numOfToilets + "&numOfPeople=" + numOfPeople + "&page=" + page;
 			log("Post " + str);
 			$
 					.ajax({

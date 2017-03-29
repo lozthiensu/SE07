@@ -821,31 +821,31 @@
 				showAlert("Số người không hợp lệ");
 				return false;
 			} else if (priceVal < 0 || priceVal > 9999999999) {
-				$('[name="price"]').parent().after("<div class='validation' style='color:red;margin-bottom: 20px;'>Giá tiền phải > 0 và < 1 tỷ</div>");
+				$('[name="price"]').parent().after("<div class='validation' style='color:red;margin-bottom: 20px;'>Giá tiền phải >= 0 và < 1 tỷ</div>");
 				$('[name="price"]').focus();
 				return false;
 			} else if (electricFeeVal < 0 || electricFeeVal > 9999999999) {
-				$('[name="electricFee"]').parent().after("<div class='validation' style='color:red;margin-bottom: 20px;'>Tiền điện phải > 0 và < 1 tỷ</div>");
+				$('[name="electricFee"]').parent().after("<div class='validation' style='color:red;margin-bottom: 20px;'>Tiền điện phải >= 0 và < 1 tỷ</div>");
 				$('[name="electricFee"]').focus();
 				return false;
 			} else if (waterFeeVal < 0 || waterFeeVal > 9999999999) {
-				$('[name="waterFee"]').parent().after("<div class='validation' style='color:red;margin-bottom: 20px;'>Tiền nước phải > 0 và < 1 tỷ</div>");
+				$('[name="waterFee"]').parent().after("<div class='validation' style='color:red;margin-bottom: 20px;'>Tiền nước phải >= 0 và < 1 tỷ</div>");
 				$('[name="waterFee"]').focus();
 				return false;
 			} else if (otherFeeVal < 0 || otherFeeVal > 9999999999) {
-				$('[name="otherFee"]').parent().after("<div class='validation' style='color:red;margin-bottom: 20px;'>Phụ phí phải > 0 và < 1 tỷ</div>");
+				$('[name="otherFee"]').parent().after("<div class='validation' style='color:red;margin-bottom: 20px;'>Phụ phí phải >= 0 và < 1 tỷ</div>");
 				$('[name="otherFee"]').focus();
 				return false;
 			} else if (areaVal < 0 || areaVal > 9999999999) {
-				$('[name="area"]').parent().after("<div class='validation' style='color:red;margin-bottom: 20px;'>Diện tích phải > 0 và < 1 tỷ</div>");
+				$('[name="area"]').parent().after("<div class='validation' style='color:red;margin-bottom: 20px;'>Diện tích phải >= 0 và < 1 tỷ</div>");
 				$('[name="area"]').focus();
 				return false;
 			} else if (numOfToiletsVal < 0 || numOfToiletsVal > 9999999999) {
-				$('[name="numOfToilets"]').parent().after("<div class='validation' style='color:red;margin-bottom: 20px;'>Số toilet phải > 0 và < 1 tỷ</div>");
+				$('[name="numOfToilets"]').parent().after("<div class='validation' style='color:red;margin-bottom: 20px;'>Số toilet phải >= 0 và < 1 tỷ</div>");
 				$('[name="numOfToilets"]').focus(); 
 				return false;
 			} else if (numOfPeopleVal < 0 || numOfPeopleVal > 9999999999) {
-				$('[name="numOfPeople"]').parent().after("<div class='validation' style='color:red;margin-bottom: 20px;'>Số người phải > 0 và < 1 tỷ</div>");
+				$('[name="numOfPeople"]').parent().after("<div class='validation' style='color:red;margin-bottom: 20px;'>Số người phải >= 0 và < 1 tỷ</div>");
 				$('[name="numOfPeople"]').focus();
 				return false;
 			}else{
@@ -912,6 +912,7 @@
 		function doAjaxPost() {
 			sendNotification = $('#sendNotification').is(':checked');
 			if(sendNotification == false){
+				$('#sendNotification').removeAttr('checked');
 				return false;
 			}
 			// get the form values
@@ -930,9 +931,15 @@
 			villageId = $('#slbVillage').val();
 			categoryId = $('#slbCategory').val();
 			name = $('[name="name"]').val();
+			accountId = $('[name="accountId"]').val();
 			page = 1;
 			lat = $('[name="latitude"]').val();
 			lng = $('[name="longitude"]').val();
+			if(lat == 0.0 && lng == 0.0){
+				showError("Chức năng chỉ hoạt động khi đã chọn địa chỉ trên googlemap");
+				 $('#sendNotification').removeAttr('checked');
+				return false;
+			}
 			kindOf = $('#kindOf').is(':checked');
 			log(kindOf);
 			if (kindOf == true) {
@@ -947,7 +954,7 @@
 					+ "&categoryId=" + categoryId + "&far=" + 6 + "&lat=" + lat
 					+ "&lng=" + lng + "&provinceId=" + provinceId
 					+ "&districtId=" + districtId + "&kindOf=" + kindOf
-					+ "&villageId=" + villageId + "&name=" + "&page=" + page;
+					+ "&villageId=" + villageId + "&name=" + "&page=" + page + "&accountId=" + accountId;
 			log("Post " + str);
 			$
 					.ajax({
@@ -991,6 +998,9 @@
 			url = url.substring(0, index);
 			window.open(url + "/view-thread-action.do?threadId=" + id);
 		};
+		function showError(text) {
+			sweetAlert("Lỗi", text, "error");
+		}
 	</script>
 </body>
 

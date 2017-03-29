@@ -81,7 +81,9 @@ public class AddThreadAction extends Action {
 		threadForm.setDistricts(districtBO.getList(province));
 		District district = new District(threadForm.getDistrictId(), 0, "");
 		threadForm.setVillages(villageBO.getList(district));
+		threadForm.setFar(6);
 
+		Log.in(threadForm.toString());
 		if ("submit".equals(action)) { // If press submit button
 			int threadId = threadBO.add(threadForm);
 			if (threadId > 0) {// If add thread success
@@ -97,6 +99,7 @@ public class AddThreadAction extends Action {
 						notification.setAccountIdPush(account.getAccountId());
 						notificationBO.add(notification);
 					}
+					Log.in(threads.toString());
 				}
 				// Add images for thread was added
 				ArrayList<Image> images = new ArrayList<Image>();
@@ -106,7 +109,7 @@ public class AddThreadAction extends Action {
 					images.add(new Image(0, threadId, string, threadForm.getName(), false));
 				}
 				imageBO.insert(images);
-				return mapping.findForward("success");
+				return mapping.findForward("failed");
 			}
 			return mapping.findForward("failed");
 		} else { // If don't press submit button

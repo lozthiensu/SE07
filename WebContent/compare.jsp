@@ -153,28 +153,6 @@
 		</div>
 		<div class="row row-compare">
 			<div class="col-lg-4">
-				<strong>Lượt xem</strong>
-			</div>
-			<div class="col-lg-4">
-				<bean:write name="thread" property="viewed" />
-			</div>
-			<div class="col-lg-4">
-				<bean:write name="thread2" property="viewed" />
-			</div>
-		</div>
-		<div class="row row-compare">
-			<div class="col-lg-4">
-				<strong>Lượt đánh giá</strong>
-			</div>
-			<div class="col-lg-4">
-				<bean:write name="thread" property="rateNum" />
-			</div>
-			<div class="col-lg-4">
-				<bean:write name="thread2" property="rateNum" />
-			</div>
-		</div>
-		<div class="row row-compare">
-			<div class="col-lg-4">
 				<strong>Địa chỉ</strong>
 			</div>
 			<div class="col-lg-4">
@@ -384,6 +362,17 @@
 		</div>
 		<div class="row row-compare">
 			<div class="col-lg-4">
+				<strong>Số người cho phép</strong>
+			</div>
+			<div class="col-lg-4">
+				<bean:write name="thread" property="numOfPeople" />
+			</div>
+			<div class="col-lg-4">
+				<bean:write name="thread2" property="numOfPeople" />
+			</div>
+		</div>
+		<div class="row row-compare">
+			<div class="col-lg-4">
 				<strong>Hướng phòng</strong>
 			</div>
 			<div class="col-lg-4">
@@ -399,10 +388,7 @@
 	<script type="text/javascript" src="js/tether.min.js"></script>
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="js/mdb.min.js"></script>
-	<script type="text/javascript" src="js/owl.carousel.min.js"></script>
-	<script type="text/javascript" src="js/jquery.raty-fa.js"></script>
 
-	<!-- <script type="text/javascript" src="js/lightbox-plus-jquery.min.js"></script> -->
 
 	<jsp:include page="footer.jsp" />
 	<script>
@@ -434,65 +420,10 @@
 			stick();
 		});
 		$(document).ready(function() {
-			$('#btnAddRate').prop('disabled', true); //TO DISABLED
 			email = readCookie('email');
-			log(email);
-			if (email != undefined && email.length > 6) {
-				$('#btnAddRate').prop('disabled', false); //TO DISABLED
-				$("#welcomeToRate").html("");
-			} else {
-				$('#btnAddRate').prop('disabled', true); //TO DISABLED
-				$("#welcomeToRate").html("Chức năng yêu cầu đăng nhập");
-			}
-			log($("#threadOld").val());
-			if ($("#threadOld").val() == 'true') {
-				log(true + "ne");
-				$('.infoThread').css({
-					'filter' : 'blur(2px)',
-					'-webkit-filter' : 'blur(2px)',
-					'-moz-filter' : 'blur(2px)',
-					'-o-filter' : 'blur(2px)',
-					'-ms-filter' : 'blur(2px)'
-				});
-				$('#btnAddRate').prop('disabled', true); //TO DISABLEDnewContentRate
-				$('#newContentRate').prop('disabled', true); //TO DISABLED
-			} else {
-				log(false + "ne");
-				$('.infoThread').css({
-					'filter' : 'blur(0px)',
-					'-webkit-filter' : 'blur(0px)',
-					'-moz-filter' : 'blur(0px)',
-					'-o-filter' : 'blur(0px)',
-					'-ms-filter' : 'blur(0px)'
-				});
-				$('#btnAddRate').prop('disabled', false); //TO DISABLEDnewContentRate
-				$('#newContentRate').prop('disabled', false); //TO DISABLED
-			}
 		});
 	</script>
 	<script>
-		function initMap() {
-			var uluru = {
-				lat : 1,
-				lng : 1
-			};
-			var map = new google.maps.Map(document.getElementById('map2'), {
-				zoom : 16,
-				center : uluru
-			});
-			var marker = new google.maps.Marker({
-				position : uluru,
-				map : map
-			});
-		}
-
-		function initialize() {
-			initPano();
-			initMap();
-		}
-	</script>
-	<script async defer
-		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-H_xa-vjvVRk59cgxAFSBHwj2huBV-B4&callback=initialize">
 		
 	</script>
 </body>

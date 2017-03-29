@@ -218,8 +218,8 @@ Configuration 1.3//EN" "http://struts.apache.org/dtds/struts-config_1_3.dtd">
 
 
 		<!-- User thread delete -->
-		<action input="/index.jsp" name="deleteThreadForm" path="/user/delete-thread-action"
-			scope="request" type="action.user.thread.DeleteThreadAction">
+		<action input="/index.jsp" name="deleteThreadForm" path="/user/change-thread-action"
+			scope="request" type="action.user.thread.ChangeThreadAction">
 			<forward name="deleted" path="/user/thread-manager-action.do"
 				redirect="true" />
 			<forward name="failed" path="/user/thread-manager-action.do"
@@ -247,6 +247,16 @@ Configuration 1.3//EN" "http://struts.apache.org/dtds/struts-config_1_3.dtd">
 			scope="request" type="action.user.rate.RateListAction">
 			<forward name="success" path="/user/rate.jsp" />
 			<forward name="failed" path="/index.jsp" redirect="true" />
+		</action>
+
+
+		<!-- User thread change available -->
+		<action input="/index.jsp" name="deleteThreadForm" path="/user/delete-thread-action"
+			scope="request" type="action.user.thread.DeleteThreadAction">
+			<forward name="deleted" path="/user/thread-manager-action.do"
+				redirect="true" />
+			<forward name="failed" path="/user/thread-manager-action.do"
+				redirect="true" />
 		</action>
 
 		<!-- KET THUC ACTION CHO USER -->

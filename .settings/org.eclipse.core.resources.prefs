@@ -21,6 +21,7 @@ encoding//src/action/mod/thread/ThreadListAction.java=UTF-8
 encoding//src/action/mod/thread/VerifyThreadAction.java=UTF-8
 encoding//src/action/user/rate/RateListAction.java=UTF-8
 encoding//src/action/user/thread/AddThreadAction.java=UTF-8
+encoding//src/action/user/thread/ChangeThreadAction.java=UTF-8
 encoding//src/action/user/thread/DeleteThreadAction.java=UTF-8
 encoding//src/action/user/thread/EditThreadAction.java=UTF-8
 encoding//src/action/user/thread/ThreadListAction.java=UTF-8

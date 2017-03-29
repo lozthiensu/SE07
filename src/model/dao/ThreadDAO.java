@@ -48,6 +48,7 @@ public class ThreadDAO {
 							rs.getInt("villageId"), rs.getString("created"), rs.getInt("viewed"), rs.getInt("status"),
 							rs.getString("imageThumb"));
 					threadTemp.setPriceString(Check.formatTien(threadTemp.getPrice()));
+					threadTemp.setAvailable(rs.getBoolean("available"));
 					threadTemp.setKindOf(rs.getBoolean("kindOf"));
 					if (threadTemp.isKindOf() == false) {
 						threadTemp.setName("[TÌM] " + threadTemp.getName());
@@ -103,6 +104,7 @@ public class ThreadDAO {
 							rs.getInt("villageId"), rs.getString("created"), rs.getInt("viewed"), rs.getInt("status"),
 							rs.getString("imageThumb"));
 					threadTemp.setPriceString(Check.formatTien(threadTemp.getPrice()));
+					threadTemp.setAvailable(rs.getBoolean("available"));
 					threadTemp.setKindOf(rs.getBoolean("kindOf"));
 					if (threadTemp.isKindOf() == false) {
 						threadTemp.setName("[TÌM] " + threadTemp.getName());
@@ -205,6 +207,7 @@ public class ThreadDAO {
 				threadData.setPhone(rs.getString("phone"));
 				threadData.setAvatar(rs.getString("avatar"));
 				threadData.setKindOf(rs.getBoolean("kindOf"));
+				threadData.setAvailable(rs.getBoolean("available"));
 				/*
 				 * if (threadData.isKindOf() == false) {
 				 * threadData.setName("[TÌM] " + threadData.getName()); }
@@ -221,7 +224,7 @@ public class ThreadDAO {
 
 				threadData.setWaterSourceString(waterSourceString);
 				try {
-					if (Check.old(rs.getString("created"))) {
+					if (Check.old(rs.getString("created")) || threadData.isAvailable() == false) {
 						threadData.setOld(true);
 					} else {
 						threadData.setOld(false);
@@ -306,6 +309,7 @@ public class ThreadDAO {
 				threadTemp.setTotal(totalPage);
 				threadTemp.setAvgScore(Float.parseFloat(valueStr));
 				threadTemp.setAvgScoreInt((int) threadTemp.getAvgScore());
+				threadTemp.setAvailable(rs.getBoolean("available"));
 				threadTemp.setKindOf(rs.getBoolean("kindOf"));
 				if (threadTemp.isKindOf() == false) {
 					threadTemp.setName("[TÌM] " + threadTemp.getName());
@@ -372,6 +376,7 @@ public class ThreadDAO {
 				String valueStr = df.format(rs.getFloat("avgScore"));
 				valueStr = valueStr.replace(',', '.');
 
+				threadTemp.setAvailable(rs.getBoolean("available"));
 				threadTemp.setAvgScore(Float.parseFloat(valueStr));
 				threadTemp.setAvgScoreInt((int) threadTemp.getAvgScore());
 				threadTemp.setKindOf(rs.getBoolean("kindOf"));
@@ -511,6 +516,50 @@ public class ThreadDAO {
 				filter += " area > 50 ";
 			}
 		}
+		if (thread.getNumOfToilets() > 0) {
+			if (count == 0)
+				filter += " WHERE ";
+			else
+				filter += " AND  ";
+			count++;
+			if (thread.getNumOfToilets() == 1) {
+				filter += " numOfToilets < 2";
+			} else if (thread.getNumOfToilets() == 2) {
+				filter += " numOfToilets between 2 and 5 ";
+			} else if (thread.getNumOfToilets() == 3) {
+				filter += " numOfToilets between 5 and 10 ";
+			} else if (thread.getNumOfToilets() == 4) {
+				filter += " numOfToilets between 10 and 20 ";
+			} else if (thread.getNumOfToilets() == 5) {
+				filter += " numOfToilets > 30 ";
+			}
+		}
+		if (thread.getAccountId() > 0) {
+			if (count == 0)
+				filter += " WHERE ";
+			else
+				filter += " AND  ";
+			count++;
+			filter += " accountId != " + thread.getAccountId();
+		}
+		if (thread.getNumOfPeople() > 0) {
+			if (count == 0)
+				filter += " WHERE ";
+			else
+				filter += " AND  ";
+			count++;
+			if (thread.getNumOfPeople() == 1) {
+				filter += " numOfPeople < 2";
+			} else if (thread.getNumOfPeople() == 2) {
+				filter += " numOfPeople between 2 and 5 ";
+			} else if (thread.getNumOfPeople() == 3) {
+				filter += " numOfPeople between 5 and 10 ";
+			} else if (thread.getNumOfPeople() == 4) {
+				filter += " numOfPeople between 10 and 20 ";
+			} else if (thread.getNumOfPeople() == 5) {
+				filter += " numOfPeople > 20 ";
+			}
+		}
 		if (thread.getPrice() > 0) {
 			if (count == 0)
 				filter += " WHERE ";
@@ -531,7 +580,7 @@ public class ThreadDAO {
 				filter += " price > 5000000 ";
 			}
 		}
-		if (thread.getFar() > 0) {
+		if (thread.getFar() > 0 && thread.getLatitude() > 0 && thread.getLongitude() > 0) {
 			int meter = 0;
 			if (count == 0)
 				filter += " WHERE ";
@@ -648,6 +697,7 @@ public class ThreadDAO {
 				valueStr = valueStr.replace(',', '.');
 				threadTemp.setAvgScore(Float.parseFloat(valueStr));
 				threadTemp.setAvgScoreInt((int) threadTemp.getAvgScore());
+				threadTemp.setAvailable(rs.getBoolean("available"));
 				threadTemp.setTotalPage(totalPage);
 				threadTemp.setPage(page);
 				threadTemp.setKindOf(rs.getBoolean("kindOf"));
@@ -682,7 +732,6 @@ public class ThreadDAO {
 		int offset = 0, total = 0, totalPage = 0;
 
 		ResultSet rs = null;
-
 		String filter = "";
 		int count = 0;
 		if (thread.isWifi() == true) {
@@ -789,6 +838,50 @@ public class ThreadDAO {
 				filter += " area > 50 ";
 			}
 		}
+		if (thread.getNumOfToilets() > 0) {
+			if (count == 0)
+				filter += " WHERE ";
+			else
+				filter += " AND  ";
+			count++;
+			if (thread.getNumOfToilets() == 1) {
+				filter += " numOfToilets < 2";
+			} else if (thread.getNumOfToilets() == 2) {
+				filter += " numOfToilets between 2 and 5 ";
+			} else if (thread.getNumOfToilets() == 3) {
+				filter += " numOfToilets between 5 and 10 ";
+			} else if (thread.getNumOfToilets() == 4) {
+				filter += " numOfToilets between 10 and 20 ";
+			} else if (thread.getNumOfToilets() == 5) {
+				filter += " numOfToilets > 30 ";
+			}
+		}
+		if (thread.getAccountId() > 0) {
+			if (count == 0)
+				filter += " WHERE ";
+			else
+				filter += " AND  ";
+			count++;
+			filter += " accountId != " + thread.getAccountId();
+		}
+		if (thread.getNumOfPeople() > 0) {
+			if (count == 0)
+				filter += " WHERE ";
+			else
+				filter += " AND  ";
+			count++;
+			if (thread.getNumOfPeople() == 1) {
+				filter += " numOfPeople < 2";
+			} else if (thread.getNumOfPeople() == 2) {
+				filter += " numOfPeople between 2 and 5 ";
+			} else if (thread.getNumOfPeople() == 3) {
+				filter += " numOfPeople between 5 and 10 ";
+			} else if (thread.getNumOfPeople() == 4) {
+				filter += " numOfPeople between 10 and 20 ";
+			} else if (thread.getNumOfPeople() == 5) {
+				filter += " numOfPeople > 20 ";
+			}
+		}
 		if (thread.getPrice() > 0) {
 			if (count == 0)
 				filter += " WHERE ";
@@ -803,13 +896,13 @@ public class ThreadDAO {
 				filter += " price between 1000000 and 1500000 ";
 			} else if (thread.getPrice() == 4) {
 				filter += " price between 1500000 and 2500000 ";
-			} else if (thread.getPrice() == 4) {
-				filter += " price between 2500000 and 5000000 ";
 			} else if (thread.getPrice() == 5) {
+				filter += " price between 2500000 and 5000000 ";
+			} else if (thread.getPrice() == 6) {
 				filter += " price > 5000000 ";
 			}
 		}
-		if (thread.getFar() > 0) {
+		if (thread.getFar() > 0 && thread.getLatitude() > 0 && thread.getLongitude() > 0) {
 			int meter = 0;
 			if (count == 0)
 				filter += " WHERE ";
@@ -837,9 +930,27 @@ public class ThreadDAO {
 			lngUp = lng + epxilong;
 			latDown = lat - epxilong;
 			lngDown = lng - epxilong;
+			// Log.in("Met: " + meter + ", Ex: " + epxilong + "Lat: " + lat + ",
+			// Lng: " + lng);
 			filter += " Thread.latitude between " + latDown + " and " + latUp + " and Thread.longitude between "
 					+ lngDown + " and " + lngUp + "";
 			count++;
+		}
+		if (thread.getProvinceId() > 0) {
+			if (count == 0)
+				filter += " WHERE ";
+			else
+				filter += " AND  ";
+			count++;
+			filter += " Province.provinceId = " + thread.getProvinceId();
+		}
+		if (thread.getDistrictId() > 0) {
+			if (count == 0)
+				filter += " WHERE ";
+			else
+				filter += " AND  ";
+			count++;
+			filter += " District.districtId = " + thread.getDistrictId();
 		}
 		if (thread.getVillageId() > 0) {
 			if (count == 0)
@@ -850,51 +961,26 @@ public class ThreadDAO {
 			filter += " Village.villageId = " + thread.getVillageId();
 		}
 		filter += " and status = 1 ";
+		PreparedStatement pr = null;
 
-		/* END COUNT */
 
 		/* Phan trang ket qua tim kiem duoc */
-
-		filter += " order by threadId offset " + 0 + " rows fetch next " + Pagination.itemPerPageView + " row only";
+		filter += "  group by Thread.accountId  order by Thread.accountId offset " + 0 + " rows fetch next " + Pagination.itemPerPageView
+				+ " row only";
 		ArrayList<Thread> temp = new ArrayList<Thread>();
-		PreparedStatement pr = null;
 		try {
-
-			String sql = "select Thread.*, temp.avgScore from Thread inner join Village on Village.villageId = Thread.villageId inner join District on District.districtId = Village.districtId inner join Province on Province.provinceId = District.provinceId inner join (select Thread.threadId, avg(Cast(Rate.score as Float)) as avgScore, avg(Rate.score) as avgScoreInt from Thread left join Rate on Thread.threadId = Rate.threadId group by Thread.threadId) temp on Thread.threadId = temp.threadId  "
+			String sql = "select Thread.accountId from Thread inner join Village on Village.villageId = Thread.villageId inner join District on District.districtId = Village.districtId inner join Province on Province.provinceId = District.provinceId inner join (select Thread.threadId, avg(Cast(Rate.score as Float)) as avgScore, avg(Rate.score) as avgScoreInt from Thread left join Rate on Thread.threadId = Rate.threadId group by Thread.threadId) temp on Thread.threadId = temp.threadId  "
 					+ filter;
+			Log.in("SQL di push: " + sql);
 			pr = SQLServer.connection.prepareStatement(sql);
-
-			// Thực hiện
 			rs = pr.executeQuery();
-			// Lấy kết quả đưa vào accountData
 			DecimalFormat numberFormat = new DecimalFormat("#.##");
 			while (rs.next()) {
-				Thread threadTemp = new Thread(rs.getInt("threadId"), rs.getInt("categoryId"), rs.getInt("accountId"),
-						rs.getString("name"), rs.getString("address"), rs.getDouble("latitude"),
-						rs.getDouble("longitude"), rs.getString("content"), rs.getLong("price"),
-						rs.getInt("electricFee"), rs.getInt("waterFee"), rs.getInt("otherFee"), rs.getInt("area"),
-						rs.getBoolean("wifi"), rs.getBoolean("waterHeater"), rs.getBoolean("conditioner"),
-						rs.getBoolean("fridge"), rs.getBoolean("attic"), rs.getBoolean("camera"),
-						rs.getInt("waterSource"), rs.getString("direction"), rs.getInt("numOfToilets"),
-						rs.getInt("numOfPeople"), rs.getInt("object"), rs.getInt("villageId"), rs.getString("created"),
-						rs.getInt("viewed"), rs.getInt("status"), rs.getString("imageThumb"));
-				threadTemp.setPriceString(Check.formatTien(threadTemp.getPrice()));
-				DecimalFormat df = new DecimalFormat("#.#");
-				String valueStr = df.format(rs.getFloat("avgScore"));
-				valueStr = valueStr.replace(',', '.');
-
-				// Log.in(df.format(rs.getFloat("avgScore")) + " " + valueStr);
-				threadTemp.setAvgScore(Float.parseFloat(valueStr));
-				threadTemp.setAvgScoreInt((int) threadTemp.getAvgScore());
-				threadTemp.setTotalPage(totalPage);
-				threadTemp.setPage(1);
-				threadTemp.setKindOf(rs.getBoolean("kindOf"));
-				if (threadTemp.isKindOf() == false) {
-					threadTemp.setName("[TÌM] " + threadTemp.getName());
-				}
+				Thread threadTemp = new Thread();
+				threadTemp.setAccountId(rs.getInt("accountId"));
 				temp.add(threadTemp);
+				Log.in(threadTemp.toString());
 			}
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally { // Close connect
@@ -919,7 +1005,7 @@ public class ThreadDAO {
 		int count = 0;
 		try {
 
-			String sql = "update Thread set categoryId=?, name=?, address=?, latitude=?, longitude=?, content=?, price=?, electricFee=?, waterFee=?, otherFee=?, area=?, wifi=?, waterHeater=?, conditioner=?, fridge=?, attic=?, camera=?, waterSource=?, direction=?, numOfToilets=?, numOfPeople=?, object=?, villageId=?, kindOf=?, imageThumb=? where threadId=?";
+			String sql = "update Thread set categoryId=?, name=?, address=?, latitude=?, longitude=?, content=?, price=?, electricFee=?, waterFee=?, otherFee=?, area=?, wifi=?, waterHeater=?, conditioner=?, fridge=?, attic=?, camera=?, waterSource=?, direction=?, numOfToilets=?, numOfPeople=?, object=?, villageId=?, kindOf=?, imageThumb=?, status = 0 where threadId=?";
 			pr = SQLServer.connection.prepareStatement(sql);
 			pr.setInt(1, thread.getCategoryId());
 			pr.setString(2, thread.getName());
@@ -944,7 +1030,6 @@ public class ThreadDAO {
 			pr.setInt(21, thread.getNumOfPeople());
 			pr.setInt(22, thread.getObject());
 			pr.setInt(23, thread.getVillageId());
-			Log.in("Lang " + thread.getVillageId());
 			pr.setBoolean(24, thread.isKindOf());
 			pr.setString(25, thread.getImageThumb());
 			pr.setInt(26, thread.getThreadId());
@@ -1017,6 +1102,8 @@ public class ThreadDAO {
 				valueStr = valueStr.replace(',', '.');
 
 				threadTemp.setTotal(totalPage);
+				threadTemp.setAvailable(rs.getBoolean("available"));
+				threadTemp.setAvailable(rs.getBoolean("available"));
 				threadTemp.setAvgScore(Float.parseFloat(valueStr));
 				threadTemp.setAvgScoreInt((int) threadTemp.getAvgScore());
 				threadTemp.setCategoryName(rs.getString("categoryName"));
@@ -1165,6 +1252,7 @@ public class ThreadDAO {
 
 				threadTemp.setTotal(totalPage);
 				threadTemp.setAvgScore(Float.parseFloat(valueStr));
+				threadTemp.setAvailable(rs.getBoolean("available"));
 				threadTemp.setAvgScoreInt((int) threadTemp.getAvgScore());
 				threadTemp.setCategoryName(rs.getString("categoryName"));
 				threadTemp.setKindOf(rs.getBoolean("kindOf"));
@@ -1197,7 +1285,7 @@ public class ThreadDAO {
 		int count = 0;
 		try {
 
-			String sql = "update Thread set status = 1 where threadId = ?";
+			String sql = "update Thread set status = status ^ 1 where threadId = ?";
 			pr = SQLServer.connection.prepareStatement(sql);
 
 			pr.setInt(1, thread.getThreadId());
@@ -1215,4 +1303,31 @@ public class ThreadDAO {
 		}
 		return count > 0 ? true : false;
 	}
+
+	public boolean changeAvailable(Thread thread) {
+		// Open connect
+		SQLServer.connect();
+		PreparedStatement pr = null;
+		int count = 0;
+		try {
+
+			String sql = "update Thread set available = available ^ 1 where threadId = ?";
+			pr = SQLServer.connection.prepareStatement(sql);
+
+			pr.setInt(1, thread.getThreadId());
+
+			count = pr.executeUpdate();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally { // Close connect
+			try {
+				pr.close();
+			} catch (Exception e) {
+			}
+			SQLServer.disconnect();
+		}
+		return count > 0 ? true : false;
+	}
+
 }

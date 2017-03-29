@@ -55,6 +55,7 @@ public class Thread {
 	String avatar;
 	String phone;
 	String email;
+	boolean available;
 
 	public Thread() {
 		super();
@@ -107,6 +108,14 @@ public class Thread {
 
 	public void setElectricFeeString(String electricFeeString) {
 		this.electricFeeString = electricFeeString;
+	}
+
+	public boolean isAvailable() {
+		return available;
+	}
+
+	public void setAvailable(boolean available) {
+		this.available = available;
 	}
 
 	public String getWaterFeeString() {

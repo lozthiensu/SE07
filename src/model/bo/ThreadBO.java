@@ -63,4 +63,8 @@ public class ThreadBO {
 	public boolean verify(Thread thread) {
 		return threadDAO.verify(thread);
 	}
+
+	public boolean changeAvailable(Thread thread) {
+		return threadDAO.changeAvailable(thread);
+	}
 }

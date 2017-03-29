@@ -92,48 +92,67 @@
 					</div>
 				</div>
 				<div class="table-custom">
-					<div>
+					<div class="header-table">
 						<div class="col-mot">Id</div>
 						<div class="col-bon trun-text">Tên</div>
-						<div class="col-hai">Ngày viết</div>
+						<div class="col-hai-small">Ngày viết</div>
 						<div class="col-hai">Danh muc</div>
-						<div class="col-hai">Thao tác</div>
+						<div class="col-hai-small">Trạng thái</div>
+						<div class="col-ba-thaotac">Thao tác</div>
 					</div>
 					<logic:iterate name="threadListForm" property="threads" id="item">
 						<hr>
-						<div
-							class="<logic:equal name="item" property="status" value="0">un-active</logic:equal>">
+						<div class="">
 							<div class="col-mot">
 								<bean:write name="item" property="threadId" />
 							</div>
 							<div class="col-bon trun-text">
 								<bean:write name="item" property="name" />
 							</div>
-							<div class="col-hai">
+							<div class="col-hai-small">
 								<bean:write name="item" property="created" />
 							</div>
 							<div class="col-hai">
 								<bean:write name="item" property="categoryName" />
 							</div>
-							<div class="col-ba">
+							<div class="col-hai-small">
+								<logic:equal name="item" property="status" value="0">Chưa duyệt</logic:equal>
+							</div>
+							<div class="col-ba-thaotac">
 								<button
 									onclick="editItem(<bean:write name="item" property="threadId" />)"
 									type="button" class="btn btn-action" data-toggle="tooltip"
-									data-placement="top" title="Edit item">
+									data-placement="top" title="Sửa">
 									<i class="fa fa-pencil teal-text icon-btn-action"></i>
 								</button>
 								<button
 									onclick="deleteItem(<bean:write name="item" property="threadId" />)"
 									type="button" class="btn btn-action" data-toggle="tooltip"
-									data-placement="top" title="Remove item">
+									data-placement="top" title="Xóa">
 									<i class="fa fa-times red-text icon-btn-action"></i>
 								</button>
 								<button
 									onclick="viewItem(<bean:write name="item" property="threadId" />)"
 									type="button" class="btn btn-action" data-toggle="tooltip"
-									data-placement="top" title="View item">
+									data-placement="top" title="Xem">
 									<i class="fa fa-eye blue-text icon-btn-action"></i>
 								</button>
+								<logic:equal name="item" property="available" value="true">
+									<button
+										onclick="changeItem(<bean:write name="item" property="threadId" />)"
+										type="button" class="btn btn-action" data-toggle="tooltip"
+										data-placement="top" title="Khóa">
+										<i class="fa fa-lock black-text icon-btn-action"></i>
+									</button>
+								</logic:equal>
+								<logic:equal name="item" property="available" value="false">
+									<button
+										onclick="changeItem(<bean:write name="item" property="threadId" />)"
+										type="button" class="btn btn-action" data-toggle="tooltip"
+										data-placement="top" title="Mở khóa">
+										<i class="fa fa-unlock green-text icon-btn-action"></i>
+									</button>
+								</logic:equal>
 							</div>
 						</div>
 					</logic:iterate>
@@ -220,6 +239,14 @@
 			var index = curentUrl.lastIndexOf("/");
 			var url = curentUrl.substring(0, index);
 			window.location.href = url + "/edit-thread-action.do?threadId="+id; 
+		};
+		
+		//hàm sửa item
+		function changeItem(id){
+			var curentUrl = window.location.href;
+			var index = curentUrl.lastIndexOf("/");
+			var url = curentUrl.substring(0, index);
+			window.location.href = url + "/change-thread-action.do?threadId="+id; 
 		};
 		//Hàm xóa item
 		function deleteItem(id) {swal({

@@ -52,6 +52,7 @@ body {
 	/** IE6+, Firefox 7+, Opera 11+, Chrome, Safari **/
 	-o-text-overflow: ellipsis; /** Opera 9 & 10 **/
 	width: 100%;
+	margin-bottom: -5px;
 	/* note that this width will have to be smaller to see the effect */
 }
 
@@ -75,8 +76,8 @@ body {
 	box-shadow: none;
 	text-align: left;
 	padding: 20px 30px;
-	    position: absolute;
-	    width: 100%
+	position: absolute;
+	width: 100%
 }
 
 .icon-in-button {
@@ -127,21 +128,39 @@ body {
 	display: table;
 	margin: 0 auto;
 }
-.scroll-box{
-    overflow: hidden;
+
+.scroll-box {
+	overflow: hidden;
 }
+
 ::-webkit-scrollbar {
-    width: 0px;  /* remove scrollbar space */
-    background: transparent;  /* optional: just make scrollbar invisible */
+	width: 0px; /* remove scrollbar space */
+	background: transparent; /* optional: just make scrollbar invisible */
 }
 /* optional: show position indicator in red */
 ::-webkit-scrollbar-thumb {
-   /*  background: #FF0000; */
+	/*  background: #FF0000; */
+	
 }
 
-
-.un-active{
+.un-active {
 	background: #ccc;
-    padding: 7px;
-    margin: -7px;
+	padding: 7px;
+	margin: -7px;
+}
+
+.col-ba-thaotac {
+	display: inline-block;
+	width: 220px;
+}
+
+.col-hai-small {
+	display: inline-block;
+	width: 100px;
+}
+
+.header-table {
+	background: #ccc;
+	padding: 10px;
+	margin-bottom: -15px;
 }

@@ -54,6 +54,9 @@ public class SearchThreadAction extends Action {
 			Thread thread = new Thread();
 			ThreadBO threadBO = new ThreadBO();
 
+			thread.setAccountId(searchThreadForm.getAccountId());
+			Log.in(thread.getAccountId() + "Phai khac tia khoan");
+			
 			thread.setWifi(searchThreadForm.isWifi());
 			thread.setCategoryId(searchThreadForm.getCategoryId());
 			thread.setWaterHeater(searchThreadForm.isWaterHeater());
@@ -73,6 +76,9 @@ public class SearchThreadAction extends Action {
 			thread.setVillage(new Village(searchThreadForm.getVillageId(), 0, ""));
 			thread.setName(searchThreadForm.getName());
 			thread.setKindOf(searchThreadForm.isKindOf());
+			thread.setNumOfToilets(searchThreadForm.getNumOfToilets());
+			thread.setNumOfPeople(searchThreadForm.getNumOfPeople());
+
 			// Log.in(searchThreadForm.isKindOf() + " KindOf");
 
 			// Log.in(thread);
@@ -93,7 +99,6 @@ public class SearchThreadAction extends Action {
 
 			Thread thread = new Thread();
 			ThreadBO threadBO = new ThreadBO();
-
 			thread.setWifi(searchThreadForm.isWifi());
 			thread.setWaterHeater(searchThreadForm.isWaterHeater());
 			thread.setConditioner(searchThreadForm.isConditioner());
@@ -107,21 +112,27 @@ public class SearchThreadAction extends Action {
 			thread.setLongitude(searchThreadForm.getLng());
 			thread.setArea(searchThreadForm.getArea());
 			thread.setPrice(searchThreadForm.getPrice());
+			thread.setKindOf(searchThreadForm.isKindOf());
 			thread.setProvince(new Province(searchThreadForm.getProvinceId(), ""));
 			thread.setDistrict(new District(searchThreadForm.getDistrictId(), 0, ""));
 			thread.setVillage(new Village(searchThreadForm.getVillageId(), 0, ""));
 			thread.setName(searchThreadForm.getName());
+			thread.setNumOfToilets(searchThreadForm.getNumOfToilets());
+			thread.setNumOfPeople(searchThreadForm.getNumOfPeople());
 
 			// Log.in(thread);
 			// Log.in(thread.toString());
 			ArrayList<Thread> threads = new ArrayList<Thread>();
+			Log.in("QUERY AUTO");
 			threads = threadBO.searchBy(thread, page);
+			Log.in("QUERY AUTO");
 
 			ArrayList<ThreadAutoCompleteItem> threadAutoCompleteItems = new ArrayList<ThreadAutoCompleteItem>();
 			ThreadAutoCompleteSuggestion threadAutoCompleteSuggestion = new ThreadAutoCompleteSuggestion();
 
 			for (Thread threadItem : threads) {
-				threadAutoCompleteItems.add(new ThreadAutoCompleteItem(threadItem.getName(), threadItem.getName()));
+				String name = threadItem.getName().replace("[TÌM] ", "");
+				threadAutoCompleteItems.add(new ThreadAutoCompleteItem(name, name));
 			}
 
 			threadAutoCompleteSuggestion.setSuggestions(threadAutoCompleteItems);
@@ -131,7 +142,7 @@ public class SearchThreadAction extends Action {
 			// Log.in(json);
 			out.println(json);
 			out.flush();
-			System.out.println(json);
+			//System.out.println(json);
 			if (threads.size() == 0) {
 				// Log.in("Rong ne: ");
 				System.out.println(json);
@@ -171,6 +182,27 @@ public class SearchThreadAction extends Action {
 			out.flush();
 			// System.out.println(json);
 
+		} else if (action.equals("checkThreadStatus")) { 
+			int threadId = 0;
+			try {
+				threadId = searchThreadForm.getThreadId();
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+			Log.in(threadId);
+			ThreadBO threadBO = new ThreadBO();
+			Thread threadCheck = new Thread();
+			threadCheck.setThreadId(threadId);
+			threadCheck = threadBO.getById(threadCheck);
+			Log.in(threadCheck.toString());
+			PrintWriter out = response.getWriter();
+			if(threadCheck.getStatus() != 0){
+				out.print("success");
+				out.flush();
+			}else{
+				out.print("failed");
+				out.flush();
+			}
 		}
 		return null;
 	}

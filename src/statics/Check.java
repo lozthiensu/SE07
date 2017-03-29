@@ -73,7 +73,7 @@ public class Check {
 		NumberFormat formatter = new DecimalFormat("###,###,###,###,###");
 		String resp = formatter.format(number);
 		resp = resp.replaceAll(",", ".");
-		return " " + resp.toString() + " VNĐ";
+		return " " + resp.toString() + " VNĐ/tháng";
 	}
 	
 	public static String formatTien(int number) {

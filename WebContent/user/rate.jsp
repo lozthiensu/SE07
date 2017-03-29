@@ -89,7 +89,7 @@
 					</div>
 				</div>
 				<div class="table-custom">
-					<div>
+					<div class="header-table">
 						<div class="col-mot">Id</div>
 						<div class="col-bon trun-text">Nội dung</div>
 						<div class="col-hai">Ngày viết</div>
