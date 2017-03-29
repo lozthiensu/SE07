@@ -77,6 +77,7 @@
 		<div class="col-lg-10 scroll-box">
 			<bean:define id="dashBoard" name="dashBoardForm" property="dashBoard"></bean:define>
 			<div class="main-content hoverable" style="overflow-y: scroll;">
+				<br>
 				<div class="row" style="width: calc(100%); margin-left: 0px;">
 					<!--First column-->
 					<div class="col-md-4 mb-1">
@@ -218,7 +219,8 @@
 				</div>
 				<div class="row">
 					<div class="col-lg-12">
-						<div class="card mb-r" style="margin: 15px; width: calc(100% - 30px);"> 
+						<div class="card mb-r"
+							style="margin: 15px; width: calc(100% - 30px);">
 							<div class="card-block">
 								<h4 class="h4-responsive text-center mb-1">Thống kê theo
 									danh mục</h4>

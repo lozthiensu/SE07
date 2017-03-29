@@ -202,28 +202,21 @@
 			var level, name, email, password, rePassword, phone;
 			level = $("[name='level']").val();
 			name = $("[name='name']").val();
-			email = $("[name='email']").val();
 			password = $("[name='password']").val();
 			rePassword = $("[name='rePassword']").val();
 			phone = $("[name='phone']").val();
-			log(validatePhone(phone));
+			log(validatePhone(phone) + "false");
 			if (level == undefined) {
 				showAlert("Quyền hạn không được bỏ trống");
 				return false;
 			} else if (name == undefined || name.length <= 6) {
 				showAlert("Họ tên không được bỏ trống hoặc quá ngắn");
 				return false;
-			}  else if (email == undefined || email.length <= 6) {
-				showAlert("Email không được bỏ trống hoặc quá ngắn");
-				return false;
 			} else if (password.length > 0 && password.length < 6) {
 				showAlert("Mật khẩu quá ngắn");
 				return false;
 			} else if (rePassword != password) {
 				showAlert("Mật khẩu không khớp");
-				return false;
-			} else if (validateEmail(email) == false) {
-				showAlert("Email không hợp lệ");
 				return false;
 			} else if (validatePhone(phone) == false) {
 				showAlert("Điện thoại không hợp lệ");
@@ -236,8 +229,8 @@
 		}
 		function validatePhone(phone) {
 			var phoneRe = /^[0-9]{1,11}$/;
-			var digits = phone.replace(/\D/g, "");
-			return phoneRe.test(digits);
+			//var digits = phone.replace(/\D/g, "");
+			return phoneRe.test(phone);
 		}
 		function validateEmail(email) {
 			var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;

@@ -69,13 +69,14 @@
 			<div class="modal-body">
 				<div class="md-form">
 					<i class="fa fa-envelope prefix"></i> <input type="text"
-						id="emailLog" class="form-control" maxlength="40"> <label for="form2">Email</label>
+						id="emailLog" class="form-control" maxlength="40"> <label
+						for="form2">Email</label>
 				</div>
 
 				<div class="md-form">
 					<i class="fa fa-lock prefix"></i> <input type="password"
-						id="passwordLog" class="form-control" maxlength="32"> <label for="form3">Mật
-						khẩu</label>
+						id="passwordLog" class="form-control" maxlength="32"> <label
+						for="form3">Mật khẩu</label>
 				</div>
 				<div class="text-center">
 					<button class="btn btn-primary btn-lg green" onclick="loginAjax();">Đăng
@@ -150,13 +151,15 @@
 				<div class="md-form">
 					<i class="fa fa-user-circle-o prefix"></i> <input type="text"
 						id="nameReg" class="form-control" maxlength="50"> <label
-						for="form2">Họ tên <font color="red">*</font></label><span id="labelName"></span>
+						for="form2">Họ tên <font color="red">*</font></label><span
+						id="labelName"></span>
 				</div>
 
 				<div class="md-form">
 					<i class="fa fa-envelope prefix"></i> <input type="text"
 						id="emailReg" class="form-control" maxlength="40"> <label
-						for="form2">Email <font color="red">*</font></label><span id="labelEmail"></span>
+						for="form2">Email <font color="red">*</font></label><span
+						id="labelEmail"></span>
 				</div>
 
 				<div class="md-form">
@@ -496,12 +499,34 @@
 		};
 		var count = Object.keys(cmpOBJ).length;
 		if (count <= 1) {
-			cmpOBJ.push(myObj);
-			showSuccess("Đã thêm vào giỏ so sánh");
+			var them = true;
+			for (var key in cmpOBJ) {
+				if (cmpOBJ[key].id == threadId) {
+					them = false;
+					break;
+				}
+			}
+			if (them == true) {
+				cmpOBJ.push(myObj);
+				showSuccess("Đã thêm vào giỏ so sánh");
+			} else {
+				showError("Đã tồn tại trong giỏ");
+			}
 		} else {
-			cmpOBJ.splice(0, 1);
-			cmpOBJ.push(myObj);
-			showSuccess("Đã thêm vào giỏ so sánh");
+			var them = true;
+			for (var key in cmpOBJ) {
+				if (cmpOBJ[key].id == threadId) {
+					them = false;
+					break;
+				}
+			}
+			if (them == true) {
+				cmpOBJ.splice(0, 1);
+				cmpOBJ.push(myObj);
+				showSuccess("Đã thêm vào giỏ so sánh");
+			} else {
+				showError("Đã tồn tại trong giỏ");
+			}
 		}
 		createCookie("cmpJSON", JSON.stringify(cmpOBJ), 1);
 	}

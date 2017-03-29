@@ -246,7 +246,7 @@
 									</logic:iterate>
 								</div>
 							</div>
-							<div class="row">
+							<%-- <div class="row">
 								<logic:iterate name="viewThreadForm" property="images360"
 									id="item">
 									<div class="col-lg-3">
@@ -263,11 +263,11 @@
 									</div>
 								</logic:iterate>
 							</div>
-							<br> <br>
+							<br> <br> --%>
 
 
 							<div class="row infoThread">
-								<div id="map" class="z-depth-1"></div>
+								<!-- <div id="map" class="z-depth-1"></div> -->
 								<div id="map2" class="z-depth-1"></div>
 							</div>
 							<div class="breadcrumb flat"
