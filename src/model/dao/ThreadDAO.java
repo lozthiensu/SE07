@@ -215,11 +215,11 @@ public class ThreadDAO {
 				String waterSourceString = "Không xác định";
 				if (threadData.getWaterSource() == 1)
 					waterSourceString = "Giếng đào";
-				else if (threadData.getWaterSource() == 1)
+				else if (threadData.getWaterSource() == 2)
 					waterSourceString = "Giếng đóng-khoan";
-				else if (threadData.getWaterSource() == 1)
+				else if (threadData.getWaterSource() == 3)
 					waterSourceString = "Nước máy";
-				else if (threadData.getWaterSource() == 1)
+				else if (threadData.getWaterSource() == 4)
 					waterSourceString = "Không xác định";
 
 				threadData.setWaterSourceString(waterSourceString);

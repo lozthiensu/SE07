@@ -241,7 +241,7 @@
 							</html:select>
 						</div>
 						<div style="width: calc(100%); display: inline-block;">
-							<label for="form3">Tỉnh - Thành phố  <font color="red">*</font></label>
+							<label for="form3">Tỉnh - Thành phố <font color="red">*</font></label>
 							<html:select name="threadForm" property="provinceId"
 								styleClass="mdb-select" styleId="slbProvince">
 								<logic:iterate name="threadForm" property="provinces" id="item">
@@ -286,7 +286,8 @@
 							<label for="form3">Địa chỉ</label>
 						</div> --%>
 
-						<label for="form3">Nội dung <font color="red">*</font> </label>
+						<label for="form3">Nội dung <font color="red">*</font>
+						</label>
 						<div class="md-form">
 							<html:textarea styleId="content" property="content"
 								styleClass="form-control"></html:textarea>
@@ -819,16 +820,32 @@
 				$('[name="price"]').parent().after("<div class='validation' style='color:red;margin-bottom: 20px;'>Giá tiền phải > 0 và < 1 tỷ</div>");
 				$('[name="price"]').focus();
 				return false;
+			} else if ((priceVal % 1000) != 0) {
+				$('[name="price"]').parent().after("<div class='validation' style='color:red;margin-bottom: 20px;'>Giá tiền phải là bội của 1000</div>");
+				$('[name="price"]').focus();
+				return false;
 			} else if (electricFeeVal < 0 || electricFeeVal > 9999999999) {
 				$('[name="electricFee"]').parent().after("<div class='validation' style='color:red;margin-bottom: 20px;'>Tiền điện phải > 0 và < 1 tỷ</div>");
+				$('[name="electricFee"]').focus();
+				return false;
+			} else if ((electricFeeVal % 100) != 0) {
+				$('[name="electricFee"]').parent().after("<div class='validation' style='color:red;margin-bottom: 20px;'>Tiền điện phải là bội của 100</div>");
 				$('[name="electricFee"]').focus();
 				return false;
 			} else if (waterFeeVal < 0 || waterFeeVal > 9999999999) {
 				$('[name="waterFee"]').parent().after("<div class='validation' style='color:red;margin-bottom: 20px;'>Tiền nước phải > 0 và < 1 tỷ</div>");
 				$('[name="waterFee"]').focus();
 				return false;
-			} else if (otherFeeVal < 0 || otherFeeVal > 9999999999) {
+			}  else if ((waterFeeVal % 100) != 0) {
+				$('[name="waterFee"]').parent().after("<div class='validation' style='color:red;margin-bottom: 20px;'>Tiền nước phải là bội của 100</div>");
+				$('[name="waterFee"]').focus();
+				return false;
+			}else if (otherFeeVal < 0 || otherFeeVal > 9999999999) {
 				$('[name="otherFee"]').parent().after("<div class='validation' style='color:red;margin-bottom: 20px;'>Phụ phí phải > 0 và < 1 tỷ</div>");
+				$('[name="otherFee"]').focus();
+				return false;
+			}  else if ( (otherFeeVal % 1000) != 0 ) {
+				$('[name="otherFee"]').parent().after("<div class='validation' style='color:red;margin-bottom: 20px;'>Phụ phí phải là bội của 1000</div>");
 				$('[name="otherFee"]').focus();
 				return false;
 			} else if (areaVal < 0 || areaVal > 9999999999) {
